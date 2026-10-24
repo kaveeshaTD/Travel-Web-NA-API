@@ -1,3 +1,7 @@
 <Solution>
-  <Project Path="TravelWebAPI/TravelWebAPI.csproj" />
+  <Project Path="TravelWebAPI.Api/TravelWebAPI.Api.csproj" />
+  <Project Path="TravelWebAPI.Application/TravelWebAPI.Application.csproj" />
+  <Project Path="TravelWebAPI.Domain/TravelWebAPI.Domain.csproj" />
+  <Project Path="TravelWebAPI.Infrastructure/TravelWebAPI.Infrastructure.csproj" />
+  <Project Path="TravelWebAPI.Tests/TravelWebAPI.Tests.csproj" />
 </Solution>

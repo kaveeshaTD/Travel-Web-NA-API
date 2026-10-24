@@ -1,0 +1,5 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <ItemGroup>
+    <ProjectReference Include="..\TravelWebAPI.Domain\TravelWebAPI.Domain.csproj" />
+  </ItemGroup>
+</Project>

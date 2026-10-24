@@ -1,0 +1,2724 @@
+{
+  "settings": {
+    "name": "Ceylon Roads",
+    "tagline": "Private driver & tours across Sri Lanka",
+    "driverName": "Nuwan Dissanayake",
+    "driverRole": "Guide, driver & owner",
+    "phone": "+94 77 123 4567",
+    "whatsappNumber": "94771234567",
+    "email": "hello@ceylonroads.example",
+    "address": "Katunayake, Negombo, Sri Lanka",
+    "socials": [
+      {
+        "label": "Facebook",
+        "href": "https://facebook.com/"
+      },
+      {
+        "label": "Instagram",
+        "href": "https://instagram.com/"
+      },
+      {
+        "label": "TripAdvisor",
+        "href": "https://tripadvisor.com/"
+      }
+    ],
+    "trust": {
+      "yearsExperience": 12,
+      "tripsCompleted": 2400,
+      "rating": 4.9,
+      "licensed": "SLTDA licensed driver"
+    },
+    "languages": [
+      "English",
+      "Sinhala"
+    ],
+    "licenses": [
+      "SLTDA Chauffeur-Guide License (mock)",
+      "Commercial vehicle insurance (mock)"
+    ],
+    "currencyRates": {
+      "USD": 1,
+      "EUR": 0.92,
+      "GBP": 0.79,
+      "LKR": 300
+    }
+  },
+  "users": [
+    {
+      "id": "u-admin",
+      "name": "Nuwan Dissanayake",
+      "email": "admin@ceylonroads.example",
+      "password": "Admin@12345",
+      "role": "admin",
+      "phone": "+94 77 123 4567",
+      "country": "Sri Lanka",
+      "status": "active",
+      "createdAt": "2025-11-09T09:30:00.000Z"
+    },
+    {
+      "id": "u-emma",
+      "name": "Emma Wilson",
+      "email": "emma.wilson@example.com",
+      "password": "Customer123",
+      "role": "customer",
+      "phone": "+44 7700 900123",
+      "country": "United Kingdom",
+      "status": "active",
+      "createdAt": "2026-04-09T09:30:00.000Z"
+    },
+    {
+      "id": "u-markus",
+      "name": "Markus Weber",
+      "email": "markus.weber@example.com",
+      "password": "Customer123",
+      "role": "customer",
+      "phone": "+49 151 2345678",
+      "country": "Germany",
+      "status": "active",
+      "createdAt": "2026-06-09T09:30:00.000Z"
+    },
+    {
+      "id": "u-priya",
+      "name": "Priya Nair",
+      "email": "priya.nair@example.com",
+      "password": "Customer123",
+      "role": "customer",
+      "phone": "+91 98765 43210",
+      "country": "India",
+      "status": "active",
+      "createdAt": "2026-07-09T09:30:00.000Z"
+    },
+    {
+      "id": "u-jack",
+      "name": "Jack Miller",
+      "email": "jack.miller@example.com",
+      "password": "Customer123",
+      "role": "customer",
+      "phone": "+61 412 345 678",
+      "country": "Australia",
+      "status": "inactive",
+      "createdAt": "2026-02-09T09:30:00.000Z"
+    }
+  ],
+  "services": [
+    {
+      "id": "airport",
+      "title": "Airport Pickup & Drop",
+      "description": "Start and end your trip stress-free. Your driver tracks your flight and waits in arrivals with a name board.",
+      "details": [
+        "Bandaranaike International Airport (BIA), Katunayake",
+        "Flight tracking, no extra charge for delays",
+        "Free 60 minutes waiting time",
+        "Fixed price, no meter surprises"
+      ],
+      "icon": "plane",
+      "image": "img:airport"
+    },
+    {
+      "id": "day-trip",
+      "title": "Day Trips",
+      "description": "Explore a highlight and be back by evening: Sigiriya, Kandy, Galle, safaris and more.",
+      "details": [
+        "Up to 10 hours with one driver",
+        "Flexible stops for photos and meals",
+        "Local tips on timing and tickets",
+        "Pick-up from any hotel"
+      ],
+      "icon": "sun",
+      "image": "img:sigiriya"
+    },
+    {
+      "id": "multi-day",
+      "title": "Multi-Day Round Tours",
+      "description": "Travel the island in one vehicle with one trusted driver, following one of our routes or your own.",
+      "details": [
+        "From 2 to 14+ days",
+        "Driver accommodation arranged by us",
+        "Help booking hotels on request",
+        "Daily flexibility to change plans"
+      ],
+      "icon": "route",
+      "image": "img:train"
+    },
+    {
+      "id": "custom",
+      "title": "Custom Trips & Chauffeur Hire",
+      "description": "Hire a car and chauffeur by the day, or tell us your dream route and we will shape it with you.",
+      "details": [
+        "Daily rate with included kilometres",
+        "Any itinerary, any pace",
+        "Child seats on request",
+        "English-speaking driver"
+      ],
+      "icon": "compass",
+      "image": "img:tea"
+    }
+  ],
+  "vehicles": [
+    {
+      "id": "car",
+      "type": "car",
+      "name": "Toyota Prius (Red)",
+      "description": "Quiet, economical hybrid with air conditioning. Perfect for couples and small families on airport transfers and day trips.",
+      "image": "img:vehicle-car",
+      "seats": 3,
+      "luggage": 2,
+      "ac": true,
+      "pricePerKmUsd": 0.45,
+      "pricePerDayUsd": 65
+    },
+    {
+      "id": "van",
+      "type": "van",
+      "name": "Toyota KDH Van",
+      "description": "Spacious air-conditioned KDH van with plenty of luggage room, ideal for families and small groups.",
+      "image": "img:vehicle-van",
+      "seats": 8,
+      "luggage": 8,
+      "ac": true,
+      "pricePerKmUsd": 0.6,
+      "pricePerDayUsd": 85
+    }
+  ],
+  "destinations": [
+    {
+      "id": "negombo",
+      "name": "Negombo",
+      "region": "West Coast",
+      "lat": 7.2008,
+      "lng": 79.8737,
+      "description": "A relaxed fishing town and beach resort right next to the airport, with a lively fish market, old Dutch fort and canals. The ideal first or last night.",
+      "bestTime": "December to April",
+      "travelTimeFromAirport": "15 minutes",
+      "images": [
+        "img:negombo",
+        "img:palms"
+      ],
+      "featured": false
+    },
+    {
+      "id": "colombo",
+      "name": "Colombo",
+      "region": "West Coast",
+      "lat": 6.9271,
+      "lng": 79.8612,
+      "description": "Sri Lanka's commercial capital: colonial architecture, Galle Face Green at sunset, Pettah markets, museums and a fast-growing food scene.",
+      "bestTime": "December to March",
+      "travelTimeFromAirport": "45 minutes",
+      "images": [
+        "img:colombo",
+        "img:market"
+      ],
+      "featured": false
+    },
+    {
+      "id": "sigiriya",
+      "name": "Sigiriya",
+      "region": "Cultural Triangle",
+      "lat": 7.957,
+      "lng": 80.7603,
+      "description": "The 5th-century Lion Rock fortress rising 200 m above the jungle, with ancient frescoes, a mirror wall and sweeping views from the summit.",
+      "bestTime": "January to April, July to September",
+      "travelTimeFromAirport": "4 hours",
+      "images": [
+        "img:sigiriya",
+        "img:jungle"
+      ],
+      "featured": true
+    },
+    {
+      "id": "dambulla",
+      "name": "Dambulla",
+      "region": "Cultural Triangle",
+      "lat": 7.8567,
+      "lng": 80.6489,
+      "description": "A UNESCO-listed cave temple complex with five caves holding more than 150 Buddha statues and vivid ceiling paintings.",
+      "bestTime": "January to April, July to September",
+      "travelTimeFromAirport": "3.5 hours",
+      "images": [
+        "img:temple",
+        "img:buddha"
+      ],
+      "featured": false
+    },
+    {
+      "id": "polonnaruwa",
+      "name": "Polonnaruwa",
+      "region": "Cultural Triangle",
+      "lat": 7.9403,
+      "lng": 81.0188,
+      "description": "The medieval capital with beautifully preserved ruins, the Gal Vihara rock carvings and lakeside cycling routes.",
+      "bestTime": "January to September",
+      "travelTimeFromAirport": "4.5 hours",
+      "images": [
+        "img:ruins",
+        "img:temple"
+      ],
+      "featured": false
+    },
+    {
+      "id": "kandy",
+      "name": "Kandy",
+      "region": "Hill Country",
+      "lat": 7.2906,
+      "lng": 80.6337,
+      "description": "The last royal capital set around a lake, home to the Temple of the Tooth, cultural dance shows and botanical gardens.",
+      "bestTime": "December to April",
+      "travelTimeFromAirport": "3 hours",
+      "images": [
+        "img:kandy",
+        "img:lake"
+      ],
+      "featured": true
+    },
+    {
+      "id": "nuwara-eliya",
+      "name": "Nuwara Eliya",
+      "region": "Hill Country",
+      "lat": 6.9497,
+      "lng": 80.7891,
+      "description": "Little England among rolling tea estates, waterfalls and cool mountain air. Visit a tea factory and Horton Plains nearby.",
+      "bestTime": "March to May",
+      "travelTimeFromAirport": "5.5 hours",
+      "images": [
+        "img:nuwara-eliya",
+        "img:tea"
+      ],
+      "featured": true
+    },
+    {
+      "id": "ella",
+      "name": "Ella",
+      "region": "Hill Country",
+      "lat": 6.8667,
+      "lng": 81.0466,
+      "description": "A laid-back mountain village known for the Nine Arches Bridge, Little Adam's Peak and one of the world's most scenic train rides.",
+      "bestTime": "January to March",
+      "travelTimeFromAirport": "7 hours",
+      "images": [
+        "img:ella",
+        "img:train"
+      ],
+      "featured": true
+    },
+    {
+      "id": "udawalawe",
+      "name": "Udawalawe",
+      "region": "South",
+      "lat": 6.4747,
+      "lng": 80.8886,
+      "description": "A compact national park where herds of wild elephants are almost guaranteed on a morning or afternoon jeep safari.",
+      "bestTime": "May to September",
+      "travelTimeFromAirport": "5 hours",
+      "images": [
+        "img:elephant"
+      ],
+      "featured": false
+    },
+    {
+      "id": "yala",
+      "name": "Yala National Park",
+      "region": "South-East",
+      "lat": 6.3724,
+      "lng": 81.5185,
+      "description": "Sri Lanka's most famous wildlife park with one of the world's highest densities of leopards, plus elephants, sloth bears and birds.",
+      "bestTime": "February to July",
+      "travelTimeFromAirport": "6.5 hours",
+      "images": [
+        "img:safari",
+        "img:leopard"
+      ],
+      "featured": true
+    },
+    {
+      "id": "galle",
+      "name": "Galle",
+      "region": "South Coast",
+      "lat": 6.0535,
+      "lng": 80.221,
+      "description": "A UNESCO-listed Dutch fort town of cobbled streets, boutiques, cafes and a lighthouse, with ocean sunsets from the ramparts.",
+      "bestTime": "December to April",
+      "travelTimeFromAirport": "1 hour 45 minutes (expressway)",
+      "images": [
+        "img:galle",
+        "img:unawatuna"
+      ],
+      "featured": true
+    },
+    {
+      "id": "unawatuna",
+      "name": "Unawatuna",
+      "region": "South Coast",
+      "lat": 6.0174,
+      "lng": 80.2489,
+      "description": "A sheltered golden bay with calm swimming, snorkelling and beach cafes, close to Galle.",
+      "bestTime": "December to April",
+      "travelTimeFromAirport": "2 hours",
+      "images": [
+        "img:unawatuna",
+        "img:palms"
+      ],
+      "featured": false
+    },
+    {
+      "id": "mirissa",
+      "name": "Mirissa",
+      "region": "South Coast",
+      "lat": 5.9483,
+      "lng": 80.4716,
+      "description": "A surf and sunset beach town and the best base for whale and dolphin watching trips, plus Coconut Tree Hill.",
+      "bestTime": "November to April",
+      "travelTimeFromAirport": "2.5 hours",
+      "images": [
+        "img:mirissa",
+        "img:whale"
+      ],
+      "featured": true
+    },
+    {
+      "id": "trincomalee",
+      "name": "Trincomalee",
+      "region": "East Coast",
+      "lat": 8.5874,
+      "lng": 81.2152,
+      "description": "A deep natural harbour on the east coast with quiet white-sand beaches at Uppuveli and Nilaveli, snorkelling, Koneswaram Temple and Pigeon Island.",
+      "bestTime": "April to September",
+      "travelTimeFromAirport": "5 hours 30 minutes",
+      "images": [
+        "img:trincomalee",
+        "img:beach"
+      ],
+      "featured": true
+    }
+  ],
+  "packages": [
+    {
+      "id": "cultural-triangle",
+      "name": "Cultural Triangle",
+      "tagline": "Ancient kingdoms, rock fortresses and cave temples",
+      "durationDays": 3,
+      "route": [
+        "Airport",
+        "Sigiriya",
+        "Dambulla",
+        "Polonnaruwa"
+      ],
+      "highlights": [
+        "Climb Sigiriya Lion Rock",
+        "Dambulla cave temple",
+        "Cycle the ruins of Polonnaruwa",
+        "Village jeep safari"
+      ],
+      "interests": [
+        "culture",
+        "nature"
+      ],
+      "priceUsd": 330,
+      "image": "img:sigiriya",
+      "gallery": [
+        "img:sigiriya",
+        "img:temple",
+        "img:ruins",
+        "img:jungle"
+      ],
+      "itinerary": [
+        {
+          "day": 1,
+          "title": "Airport to Sigiriya",
+          "description": "Pick-up at BIA and scenic drive north with a stop at a spice garden. Sunset view of the Lion Rock."
+        },
+        {
+          "day": 2,
+          "title": "Sigiriya and Dambulla",
+          "description": "Early climb of Sigiriya Rock before the heat, then the Dambulla cave temples in the afternoon."
+        },
+        {
+          "day": 3,
+          "title": "Polonnaruwa and return",
+          "description": "Explore the medieval ruins of Polonnaruwa by bike, then return to Colombo or the airport."
+        }
+      ],
+      "included": [
+        "Private air-conditioned vehicle and driver",
+        "Fuel, tolls and parking",
+        "Driver accommodation and meals",
+        "Bottled water daily"
+      ],
+      "excluded": [
+        "Hotel accommodation",
+        "Entrance tickets (Sigiriya, Polonnaruwa, Dambulla)",
+        "Personal expenses and tips",
+        "Travel insurance"
+      ],
+      "featured": true,
+      "destinationIds": [
+        "sigiriya",
+        "dambulla",
+        "polonnaruwa"
+      ],
+      "active": true
+    },
+    {
+      "id": "hill-country",
+      "name": "Hill Country Escape",
+      "tagline": "Tea plantations, waterfalls and the famous Ella train",
+      "durationDays": 4,
+      "route": [
+        "Airport",
+        "Kandy",
+        "Nuwara Eliya",
+        "Ella"
+      ],
+      "highlights": [
+        "Temple of the Tooth in Kandy",
+        "Tea factory visit",
+        "Scenic train Nuwara Eliya to Ella",
+        "Nine Arches Bridge"
+      ],
+      "interests": [
+        "nature",
+        "culture"
+      ],
+      "priceUsd": 460,
+      "image": "img:nuwara-eliya",
+      "gallery": [
+        "img:nuwara-eliya",
+        "img:train",
+        "img:waterfall",
+        "img:kandy"
+      ],
+      "itinerary": [
+        {
+          "day": 1,
+          "title": "Airport to Kandy",
+          "description": "Drive to Kandy with a visit to a the Pinnawala elephant orphanage en route. Evening cultural dance show."
+        },
+        {
+          "day": 2,
+          "title": "Kandy to Nuwara Eliya",
+          "description": "Morning at the Temple of the Tooth and botanical gardens, then through tea country to Nuwara Eliya."
+        },
+        {
+          "day": 3,
+          "title": "Nuwara Eliya to Ella",
+          "description": "Tea factory tour, then take the famous scenic train to Ella while your driver meets you there."
+        },
+        {
+          "day": 4,
+          "title": "Ella and departure",
+          "description": "Sunrise at Little Adam's Peak and the Nine Arches Bridge, then onward transfer to your next stop."
+        }
+      ],
+      "included": [
+        "Private air-conditioned vehicle and driver",
+        "Fuel, tolls and parking",
+        "Driver accommodation and meals",
+        "Bottled water daily"
+      ],
+      "excluded": [
+        "Hotel accommodation",
+        "Train tickets and entrance fees",
+        "Personal expenses and tips",
+        "Travel insurance"
+      ],
+      "featured": true,
+      "destinationIds": [
+        "kandy",
+        "nuwara-eliya",
+        "ella"
+      ],
+      "active": true
+    },
+    {
+      "id": "south-coast-beaches",
+      "name": "South Coast Beaches",
+      "tagline": "Fort towns, golden bays and whale watching",
+      "durationDays": 4,
+      "route": [
+        "Airport",
+        "Galle",
+        "Unawatuna",
+        "Mirissa"
+      ],
+      "highlights": [
+        "Galle Fort sunset walk",
+        "Swim at Unawatuna",
+        "Whale watching from Mirissa",
+        "Coconut Tree Hill"
+      ],
+      "interests": [
+        "beach",
+        "culture"
+      ],
+      "priceUsd": 380,
+      "image": "img:mirissa",
+      "gallery": [
+        "img:mirissa",
+        "img:galle",
+        "img:whale",
+        "img:unawatuna"
+      ],
+      "itinerary": [
+        {
+          "day": 1,
+          "title": "Airport to Galle",
+          "description": "Fast expressway drive south. Afternoon exploring Galle Fort and sunset on the ramparts."
+        },
+        {
+          "day": 2,
+          "title": "Unawatuna",
+          "description": "Beach day at Unawatuna with optional snorkelling and a turtle hatchery stop."
+        },
+        {
+          "day": 3,
+          "title": "Mirissa",
+          "description": "Morning whale-watching boat trip, afternoon at Coconut Tree Hill and the beach."
+        },
+        {
+          "day": 4,
+          "title": "Return",
+          "description": "Relaxed drive back to the airport or onward to your next destination."
+        }
+      ],
+      "included": [
+        "Private air-conditioned vehicle and driver",
+        "Fuel, tolls and parking",
+        "Driver accommodation and meals",
+        "Bottled water daily"
+      ],
+      "excluded": [
+        "Hotel accommodation",
+        "Whale-watching boat ticket",
+        "Personal expenses and tips",
+        "Travel insurance"
+      ],
+      "featured": true,
+      "destinationIds": [
+        "galle",
+        "unawatuna",
+        "mirissa"
+      ],
+      "active": true
+    },
+    {
+      "id": "wildlife-safari",
+      "name": "Wildlife Safari",
+      "tagline": "Leopards in Yala and elephants in Udawalawe",
+      "durationDays": 3,
+      "route": [
+        "Airport",
+        "Udawalawe",
+        "Yala"
+      ],
+      "highlights": [
+        "Elephant herds at Udawalawe",
+        "Leopard spotting in Yala",
+        "Birdlife and crocodiles",
+        "Sunrise jeep safari"
+      ],
+      "interests": [
+        "wildlife",
+        "nature"
+      ],
+      "priceUsd": 360,
+      "image": "img:leopard",
+      "gallery": [
+        "img:leopard",
+        "img:elephant",
+        "img:safari",
+        "img:jungle"
+      ],
+      "itinerary": [
+        {
+          "day": 1,
+          "title": "Airport to Udawalawe",
+          "description": "Drive south and enjoy an afternoon jeep safari among wild elephants."
+        },
+        {
+          "day": 2,
+          "title": "Udawalawe to Yala",
+          "description": "Visit the elephant transit home, then travel to Yala for an evening safari."
+        },
+        {
+          "day": 3,
+          "title": "Dawn safari and return",
+          "description": "Early-morning safari for the best leopard chances, then return to the airport or coast."
+        }
+      ],
+      "included": [
+        "Private air-conditioned vehicle and driver",
+        "Fuel, tolls and parking",
+        "Driver accommodation and meals",
+        "Bottled water daily"
+      ],
+      "excluded": [
+        "Hotel accommodation",
+        "Safari jeep and park entrance fees",
+        "Personal expenses and tips",
+        "Travel insurance"
+      ],
+      "featured": false,
+      "destinationIds": [
+        "udawalawe",
+        "yala"
+      ],
+      "active": true
+    },
+    {
+      "id": "highlights-7",
+      "name": "7-Day Highlights",
+      "tagline": "The best of culture, hills and coast in one week",
+      "durationDays": 7,
+      "route": [
+        "Airport",
+        "Sigiriya",
+        "Kandy",
+        "Nuwara Eliya",
+        "Ella",
+        "Galle"
+      ],
+      "highlights": [
+        "Sigiriya Rock",
+        "Kandy Temple of the Tooth",
+        "Tea country and train ride",
+        "Galle Fort and beaches"
+      ],
+      "interests": [
+        "culture",
+        "nature",
+        "beach"
+      ],
+      "priceUsd": 790,
+      "image": "img:ella",
+      "gallery": [
+        "img:ella",
+        "img:sigiriya",
+        "img:tea",
+        "img:galle"
+      ],
+      "itinerary": [
+        {
+          "day": 1,
+          "title": "Airport to Sigiriya",
+          "description": "Pick-up and drive north through the countryside."
+        },
+        {
+          "day": 2,
+          "title": "Sigiriya",
+          "description": "Climb the Lion Rock and enjoy a village safari."
+        },
+        {
+          "day": 3,
+          "title": "Dambulla to Kandy",
+          "description": "Visit the Dambulla caves then drive to Kandy and see the evening ritual at the Temple of the Tooth."
+        },
+        {
+          "day": 4,
+          "title": "Kandy to Nuwara Eliya",
+          "description": "Scenic drive through tea plantations and a tea factory visit."
+        },
+        {
+          "day": 5,
+          "title": "Nuwara Eliya to Ella",
+          "description": "Take the legendary scenic train, then explore Ella."
+        },
+        {
+          "day": 6,
+          "title": "Ella to Galle",
+          "description": "Down to the south coast via Mirissa for a beach stop and sunset in Galle Fort."
+        },
+        {
+          "day": 7,
+          "title": "Galle to airport",
+          "description": "Expressway drive back to the airport for your flight."
+        }
+      ],
+      "included": [
+        "Private air-conditioned vehicle and driver",
+        "Fuel, tolls and parking",
+        "Driver accommodation and meals",
+        "Bottled water daily"
+      ],
+      "excluded": [
+        "Hotel accommodation",
+        "Entrance tickets and train fares",
+        "Personal expenses and tips",
+        "Travel insurance"
+      ],
+      "featured": true,
+      "destinationIds": [
+        "sigiriya",
+        "kandy",
+        "nuwara-eliya",
+        "ella",
+        "galle"
+      ],
+      "active": true
+    },
+    {
+      "id": "grand-tour-14",
+      "name": "14-Day Grand Tour",
+      "tagline": "The complete island circuit at an unhurried pace",
+      "durationDays": 14,
+      "route": [
+        "Airport",
+        "Sigiriya",
+        "Polonnaruwa",
+        "Kandy",
+        "Nuwara Eliya",
+        "Ella",
+        "Yala",
+        "Mirissa",
+        "Galle",
+        "Colombo"
+      ],
+      "highlights": [
+        "All UNESCO cultural highlights",
+        "Hill country and scenic train",
+        "Yala leopard safari",
+        "South coast beaches and whales"
+      ],
+      "interests": [
+        "culture",
+        "nature",
+        "wildlife",
+        "beach"
+      ],
+      "priceUsd": 1590,
+      "image": "img:kandy",
+      "gallery": [
+        "img:kandy",
+        "img:safari",
+        "img:beach",
+        "img:temple"
+      ],
+      "itinerary": [
+        {
+          "day": 1,
+          "title": "Arrival in Negombo",
+          "description": "Airport pick-up and rest at a beach hotel in Negombo."
+        },
+        {
+          "day": 2,
+          "title": "Negombo to Sigiriya",
+          "description": "Drive to the Cultural Triangle with stops en route."
+        },
+        {
+          "day": 3,
+          "title": "Sigiriya",
+          "description": "Climb Sigiriya Rock and explore the area."
+        },
+        {
+          "day": 4,
+          "title": "Polonnaruwa",
+          "description": "Explore the ancient city and nearby villages."
+        },
+        {
+          "day": 5,
+          "title": "Dambulla to Kandy",
+          "description": "Cave temples then on to Kandy."
+        },
+        {
+          "day": 6,
+          "title": "Kandy",
+          "description": "Temple of the Tooth, botanical gardens and a cultural show."
+        },
+        {
+          "day": 7,
+          "title": "Kandy to Nuwara Eliya",
+          "description": "Tea plantations and waterfalls en route."
+        },
+        {
+          "day": 8,
+          "title": "Nuwara Eliya",
+          "description": "Horton Plains World's End hike at sunrise."
+        },
+        {
+          "day": 9,
+          "title": "Ella",
+          "description": "Scenic train ride and the Nine Arches Bridge."
+        },
+        {
+          "day": 10,
+          "title": "Ella to Yala",
+          "description": "Travel to the south-east and take an evening safari."
+        },
+        {
+          "day": 11,
+          "title": "Yala to Mirissa",
+          "description": "Morning safari then down to the coast."
+        },
+        {
+          "day": 12,
+          "title": "Mirissa",
+          "description": "Whale watching and beach time."
+        },
+        {
+          "day": 13,
+          "title": "Galle",
+          "description": "Explore Galle Fort and relax at Unawatuna."
+        },
+        {
+          "day": 14,
+          "title": "Galle to airport",
+          "description": "Return to Colombo or the airport for departure."
+        }
+      ],
+      "included": [
+        "Private air-conditioned vehicle and driver",
+        "Fuel, tolls and parking",
+        "Driver accommodation and meals",
+        "Bottled water daily"
+      ],
+      "excluded": [
+        "Hotel accommodation",
+        "Entrance tickets, safari and train fares",
+        "Personal expenses and tips",
+        "Travel insurance"
+      ],
+      "featured": false,
+      "destinationIds": [
+        "sigiriya",
+        "polonnaruwa",
+        "kandy",
+        "nuwara-eliya",
+        "ella",
+        "yala",
+        "mirissa",
+        "galle",
+        "colombo"
+      ],
+      "active": true
+    }
+  ],
+  "gallery": [
+    {
+      "id": "g1",
+      "src": "img:sigiriya",
+      "alt": "Sigiriya Lion Rock rising above the jungle",
+      "caption": "Sigiriya Lion Rock",
+      "aspect": 0.75
+    },
+    {
+      "id": "g2",
+      "src": "img:train",
+      "alt": "Blue train crossing the Nine Arches Bridge near Ella",
+      "caption": "Train near Ella",
+      "aspect": 1.5
+    },
+    {
+      "id": "g3",
+      "src": "img:beach",
+      "alt": "Golden beach with palm trees in Mirissa",
+      "caption": "Mirissa beach",
+      "aspect": 1.33
+    },
+    {
+      "id": "g4",
+      "src": "img:tea",
+      "alt": "Green tea plantation hills in Nuwara Eliya",
+      "caption": "Tea country",
+      "aspect": 0.8
+    },
+    {
+      "id": "g5",
+      "src": "img:elephant",
+      "alt": "Wild elephants at Udawalawe National Park",
+      "caption": "Elephants of Udawalawe",
+      "aspect": 1.4
+    },
+    {
+      "id": "g6",
+      "src": "img:temple",
+      "alt": "Golden Buddha statues in Dambulla cave temple",
+      "caption": "Dambulla cave temple",
+      "aspect": 1
+    },
+    {
+      "id": "g7",
+      "src": "img:galle",
+      "alt": "Galle Fort lighthouse at sunset",
+      "caption": "Galle Fort",
+      "aspect": 0.7
+    },
+    {
+      "id": "g8",
+      "src": "img:leopard",
+      "alt": "Leopard resting on a tree in Yala",
+      "caption": "Leopard in Yala",
+      "aspect": 1.3
+    },
+    {
+      "id": "g9",
+      "src": "img:kandy",
+      "alt": "Kandy Lake and Temple of the Tooth",
+      "caption": "Kandy Lake",
+      "aspect": 1.6
+    },
+    {
+      "id": "g10",
+      "src": "img:waterfall",
+      "alt": "Waterfall in the hill country",
+      "caption": "Hill country waterfall",
+      "aspect": 0.65
+    },
+    {
+      "id": "g11",
+      "src": "img:whale",
+      "alt": "Blue whale breaching off Mirissa",
+      "caption": "Whale watching",
+      "aspect": 1.2
+    },
+    {
+      "id": "g12",
+      "src": "img:ella",
+      "alt": "Nine Arches Bridge in Ella with a train crossing",
+      "caption": "Nine Arches Bridge, Ella",
+      "aspect": 1.5
+    },
+    {
+      "id": "g13",
+      "src": "img:trincomalee",
+      "alt": "Empty white sand beach at Uppuveli, Trincomalee",
+      "caption": "Uppuveli, Trincomalee",
+      "aspect": 1.4
+    },
+    {
+      "id": "g14",
+      "src": "img:vehicle-car",
+      "alt": "Red Toyota Prius hybrid car",
+      "caption": "The Prius",
+      "aspect": 1.5
+    },
+    {
+      "id": "g15",
+      "src": "img:vehicle-van",
+      "alt": "White Toyota KDH van",
+      "caption": "The KDH van",
+      "aspect": 1.5
+    }
+  ],
+  "reviews": [
+    {
+      "id": "r1",
+      "name": "Emma & Tom",
+      "country": "United Kingdom",
+      "countryCode": "GB",
+      "rating": 5,
+      "photo": "img:avatar-1",
+      "tripType": "7-Day Highlights",
+      "comment": "Nuwan made our honeymoon unforgettable. Always on time, spotless car and brilliant suggestions for hidden spots. We felt completely safe the entire trip.",
+      "date": "2026-03-14",
+      "status": "published",
+      "userId": null
+    },
+    {
+      "id": "r2",
+      "name": "Markus Weber",
+      "country": "Germany",
+      "countryCode": "DE",
+      "rating": 5,
+      "photo": "img:avatar-2",
+      "tripType": "Airport Transfer",
+      "comment": "Landed at 2am and he was waiting with a sign despite a delayed flight. Smooth ride to our hotel and a fair price. Highly recommended.",
+      "date": "2026-02-02",
+      "status": "published",
+      "userId": null
+    },
+    {
+      "id": "r3",
+      "name": "Sophie Laurent",
+      "country": "France",
+      "countryCode": "FR",
+      "rating": 5,
+      "photo": "img:avatar-3",
+      "tripType": "Cultural Triangle",
+      "comment": "His knowledge of Sigiriya and Polonnaruwa was excellent. He suggested going early to avoid crowds and it was perfect.",
+      "date": "2026-01-19",
+      "status": "published",
+      "userId": null
+    },
+    {
+      "id": "r4",
+      "name": "Jack Miller",
+      "country": "Australia",
+      "countryCode": "AU",
+      "rating": 4,
+      "photo": "img:avatar-4",
+      "tripType": "Hill Country",
+      "comment": "Great driver on the winding mountain roads. The train ride from Kandy to Ella was a highlight he helped us book. Only wish we had more days!",
+      "date": "2025-12-28",
+      "status": "published",
+      "userId": null
+    },
+    {
+      "id": "r5",
+      "name": "Priya Nair",
+      "country": "India",
+      "countryCode": "IN",
+      "rating": 5,
+      "photo": "img:avatar-5",
+      "tripType": "14-Day Grand Tour",
+      "comment": "Two weeks with our family of five in the van. Patient with the kids, flexible with our plans, and excellent food recommendations.",
+      "date": "2025-11-30",
+      "status": "published",
+      "userId": null
+    },
+    {
+      "id": "r6",
+      "name": "Anna Petrova",
+      "country": "Russia",
+      "countryCode": "RU",
+      "rating": 5,
+      "photo": "img:avatar-6",
+      "tripType": "South Coast Beaches",
+      "comment": "Whale watching in Mirissa and sunset in Galle Fort were magical. He knew all the best, quiet beaches.",
+      "date": "2025-11-11",
+      "status": "published",
+      "userId": null
+    },
+    {
+      "id": "r7",
+      "name": "Liam O'Connor",
+      "country": "Ireland",
+      "countryCode": "IE",
+      "rating": 5,
+      "photo": "img:avatar-7",
+      "tripType": "Wildlife Safari",
+      "comment": "We saw a leopard in Yala thanks to his connections with the best safari guides. Comfortable car, cold water every day.",
+      "date": "2025-10-05",
+      "status": "published",
+      "userId": null
+    },
+    {
+      "id": "r8",
+      "name": "Hannah Becker",
+      "country": "United States",
+      "countryCode": "US",
+      "rating": 4,
+      "photo": "img:avatar-8",
+      "tripType": "Custom Trip",
+      "comment": "Planned our route over WhatsApp before we even arrived, which made everything easy. Would book again.",
+      "date": "2025-09-17",
+      "status": "published",
+      "userId": null
+    },
+    {
+      "id": "r-pending-1",
+      "name": "Oliver Grant",
+      "country": "United Kingdom",
+      "countryCode": "GB",
+      "rating": 5,
+      "photo": "",
+      "tripType": "Airport Transfer",
+      "comment": "Smooth pickup at 3am, friendly and on time. Would book again for our next visit.",
+      "date": "2026-10-21",
+      "status": "pending",
+      "userId": null
+    },
+    {
+      "id": "r-pending-2",
+      "name": "Lena Fischer",
+      "country": "Germany",
+      "countryCode": "DE",
+      "rating": 4,
+      "photo": "",
+      "tripType": "Hill Country",
+      "comment": "Great trip through the tea country, only the weather was not on our side.",
+      "date": "2026-10-23",
+      "status": "pending",
+      "userId": null
+    },
+    {
+      "id": "r-rejected-1",
+      "name": "Test User",
+      "country": "Nowhere",
+      "countryCode": "",
+      "rating": 1,
+      "photo": "",
+      "tripType": "Custom Trip",
+      "comment": "asdf asdf asdf asdf asdf asdf",
+      "date": "2026-10-04",
+      "status": "rejected",
+      "userId": null
+    }
+  ],
+  "faqs": [
+    {
+      "id": "f1",
+      "question": "How do I pay and is a deposit required?",
+      "answer": "No online payment is taken at the moment. After you submit a booking request, the driver confirms the price and arrangements by WhatsApp or email. Payment is normally made in cash (LKR, USD, EUR or GBP) at the end of the service; a small deposit may be requested for longer tours."
+    },
+    {
+      "id": "f2",
+      "question": "What is your cancellation policy?",
+      "answer": "Airport transfers can be cancelled free of charge up to 24 hours before pickup. Multi-day tours can be cancelled free up to 7 days before the start date. Please contact us as early as possible if your plans change."
+    },
+    {
+      "id": "f3",
+      "question": "Do you provide child seats?",
+      "answer": "Yes, child and booster seats are available on request at no extra charge. Please mention the child's age in your booking notes so we can bring the right seat."
+    },
+    {
+      "id": "f4",
+      "question": "How much luggage can the vehicle carry?",
+      "answer": "The Toyota Prius fits about 2 large suitcases plus small bags, and the KDH van about 8 large suitcases. If you travel with surfboards, golf clubs or other large items, tell us so we can recommend the right vehicle."
+    },
+    {
+      "id": "f5",
+      "question": "What if my flight is delayed?",
+      "answer": "Your driver tracks your flight number and adjusts the pickup time automatically. There is no extra charge for delays, and 60 minutes of waiting time after landing is included."
+    },
+    {
+      "id": "f6",
+      "question": "Is it safe to travel by road in Sri Lanka?",
+      "answer": "Roads can be busy and winding, so an experienced local driver makes a big difference. Vehicles are regularly serviced, insured and licensed, and the driver never rushes or drives tired."
+    },
+    {
+      "id": "f7",
+      "question": "Can I change the itinerary during the trip?",
+      "answer": "Absolutely. Our private tours are flexible; you can add stops, stay longer somewhere you love or skip something. Large changes may affect the final price and we will always tell you first."
+    },
+    {
+      "id": "f8",
+      "question": "Do you also help with hotels and tickets?",
+      "answer": "We can recommend and help book hotels, safaris and train tickets. Entrance fees and accommodation are not included in the transport price unless the package says so."
+    }
+  ],
+  "tips": {
+    "regions": [
+      {
+        "id": "south-west",
+        "region": "South & West Coast",
+        "summary": "Beach season runs December to April, with calm seas and sunny days. Southwest monsoon brings rain from May to September.",
+        "months": [
+          {
+            "suitability": "great",
+            "note": "Dry, sunny, calm seas"
+          },
+          {
+            "suitability": "great",
+            "note": "Dry, sunny, calm seas"
+          },
+          {
+            "suitability": "great",
+            "note": "Hot and dry"
+          },
+          {
+            "suitability": "good",
+            "note": "Hot, first showers"
+          },
+          {
+            "suitability": "poor",
+            "note": "Monsoon begins, rough seas"
+          },
+          {
+            "suitability": "poor",
+            "note": "Heavy rain, rough seas"
+          },
+          {
+            "suitability": "poor",
+            "note": "Rainy, rough seas"
+          },
+          {
+            "suitability": "fair",
+            "note": "Showers, easing"
+          },
+          {
+            "suitability": "fair",
+            "note": "Mixed weather"
+          },
+          {
+            "suitability": "fair",
+            "note": "Inter-monsoon rains"
+          },
+          {
+            "suitability": "good",
+            "note": "Improving, whale season starts"
+          },
+          {
+            "suitability": "great",
+            "note": "Dry, sunny, peak season"
+          }
+        ]
+      },
+      {
+        "id": "cultural-triangle",
+        "region": "Cultural Triangle",
+        "summary": "Hot and dry from May to September and good through February to April. Heavy rain in October to December.",
+        "months": [
+          {
+            "suitability": "good",
+            "note": "Cooler, occasional rain"
+          },
+          {
+            "suitability": "great",
+            "note": "Dry and pleasant"
+          },
+          {
+            "suitability": "great",
+            "note": "Dry, getting hot"
+          },
+          {
+            "suitability": "good",
+            "note": "Very hot, some showers"
+          },
+          {
+            "suitability": "good",
+            "note": "Hot and dry"
+          },
+          {
+            "suitability": "good",
+            "note": "Hot and dry"
+          },
+          {
+            "suitability": "great",
+            "note": "Dry, clear skies"
+          },
+          {
+            "suitability": "great",
+            "note": "Dry, clear skies"
+          },
+          {
+            "suitability": "good",
+            "note": "Hot and dry"
+          },
+          {
+            "suitability": "poor",
+            "note": "Heavy rain"
+          },
+          {
+            "suitability": "poor",
+            "note": "Heavy rain"
+          },
+          {
+            "suitability": "fair",
+            "note": "Rain easing"
+          }
+        ]
+      },
+      {
+        "id": "hill-country",
+        "region": "Hill Country",
+        "summary": "Cool and misty year-round. Driest from January to March; March to May is ideal for Nuwara Eliya.",
+        "months": [
+          {
+            "suitability": "great",
+            "note": "Dry, crisp mornings"
+          },
+          {
+            "suitability": "great",
+            "note": "Dry, clear views"
+          },
+          {
+            "suitability": "great",
+            "note": "Dry and mild"
+          },
+          {
+            "suitability": "good",
+            "note": "Mild, some showers"
+          },
+          {
+            "suitability": "fair",
+            "note": "Rain begins"
+          },
+          {
+            "suitability": "fair",
+            "note": "Misty and wet"
+          },
+          {
+            "suitability": "fair",
+            "note": "Misty and wet"
+          },
+          {
+            "suitability": "good",
+            "note": "Drier spells"
+          },
+          {
+            "suitability": "good",
+            "note": "Mixed weather"
+          },
+          {
+            "suitability": "poor",
+            "note": "Heavy afternoon rain"
+          },
+          {
+            "suitability": "poor",
+            "note": "Heavy rain"
+          },
+          {
+            "suitability": "fair",
+            "note": "Rain easing, cool"
+          }
+        ]
+      },
+      {
+        "id": "east-south-east",
+        "region": "East & Yala",
+        "summary": "Opposite to the west coast: the east is best from April to September. Yala safaris are best from February to July.",
+        "months": [
+          {
+            "suitability": "poor",
+            "note": "Rainy, rough seas"
+          },
+          {
+            "suitability": "fair",
+            "note": "Drying out"
+          },
+          {
+            "suitability": "good",
+            "note": "Warm, mostly dry"
+          },
+          {
+            "suitability": "great",
+            "note": "Dry and sunny"
+          },
+          {
+            "suitability": "great",
+            "note": "Dry, calm seas"
+          },
+          {
+            "suitability": "great",
+            "note": "Dry, calm seas"
+          },
+          {
+            "suitability": "great",
+            "note": "Dry, calm seas"
+          },
+          {
+            "suitability": "good",
+            "note": "Hot and dry"
+          },
+          {
+            "suitability": "good",
+            "note": "Hot, dry"
+          },
+          {
+            "suitability": "fair",
+            "note": "Inter-monsoon rain"
+          },
+          {
+            "suitability": "poor",
+            "note": "Rainy"
+          },
+          {
+            "suitability": "poor",
+            "note": "Rainy, rough seas"
+          }
+        ]
+      }
+    ],
+    "info": [
+      {
+        "id": "eta",
+        "title": "ETA / Visa",
+        "body": "Most visitors need an Electronic Travel Authorisation (ETA) before arrival. Apply only through the official government website and carry a printed or digital approval together with your passport, valid for at least 6 months.",
+        "link": {
+          "href": "https://www.eta.gov.lk/",
+          "label": "Official ETA website"
+        }
+      },
+      {
+        "id": "currency",
+        "title": "Currency",
+        "body": "The Sri Lankan Rupee (LKR) is used everywhere. ATMs are widespread in towns, and cards are accepted in hotels and larger restaurants. Carry small notes for tuk-tuks, snacks and tips."
+      },
+      {
+        "id": "sim",
+        "title": "SIM Cards & Internet",
+        "body": "Tourist SIM cards are sold at the airport arrivals hall with data packages from major operators. Coverage is good in towns and tourist areas but patchy in national parks and high hills."
+      },
+      {
+        "id": "etiquette",
+        "title": "Cultural Etiquette",
+        "body": "Dress modestly at temples: cover shoulders and knees and remove shoes and hats. Never pose with your back to a Buddha statue, ask before photographing people, and use your right hand when giving or receiving."
+      }
+    ]
+  },
+  "bookings": [
+    {
+      "id": "b-1",
+      "reference": "BK-255S",
+      "userId": "u-jack",
+      "serviceId": "airport",
+      "packageId": null,
+      "vehicleId": "car",
+      "date": "2026-02-15",
+      "time": "09:30",
+      "flightNumber": "EK650",
+      "pickupLocation": "BIA Katunayake",
+      "dropoffLocation": "",
+      "adults": 2,
+      "children": 0,
+      "bags": 3,
+      "notes": "",
+      "name": "Jack Miller",
+      "email": "jack.miller@example.com",
+      "whatsapp": "+61 412 345 678",
+      "country": "Australia",
+      "tripPlan": null,
+      "status": "completed",
+      "priceUsd": 35,
+      "adminNotes": "",
+      "createdAt": "2026-02-03T09:30:00.000Z",
+      "updatedAt": "2026-02-03T09:30:00.000Z"
+    },
+    {
+      "id": "b-2",
+      "reference": "BK-2B9R",
+      "userId": null,
+      "serviceId": "multi-day",
+      "packageId": "cultural-triangle",
+      "vehicleId": "car",
+      "date": "2026-03-28",
+      "time": "14:15",
+      "flightNumber": "",
+      "pickupLocation": "",
+      "dropoffLocation": "",
+      "adults": 2,
+      "children": 0,
+      "bags": 3,
+      "notes": "",
+      "name": "Sophie Laurent",
+      "email": "sophie.laurent@example.com",
+      "whatsapp": "+33 6 12 34 56 78",
+      "country": "France",
+      "tripPlan": null,
+      "status": "completed",
+      "priceUsd": 330,
+      "adminNotes": "",
+      "createdAt": "2026-03-08T09:30:00.000Z",
+      "updatedAt": "2026-03-08T09:30:00.000Z"
+    },
+    {
+      "id": "b-3",
+      "reference": "BK-2HDQ",
+      "userId": null,
+      "serviceId": "multi-day",
+      "packageId": "wildlife-safari",
+      "vehicleId": "van",
+      "date": "2026-05-08",
+      "time": "06:45",
+      "flightNumber": "",
+      "pickupLocation": "",
+      "dropoffLocation": "",
+      "adults": 4,
+      "children": 1,
+      "bags": 5,
+      "notes": "Please bring a child seat.",
+      "name": "Liam O'Connor",
+      "email": "liam.oconnor@example.com",
+      "whatsapp": "+353 85 123 4567",
+      "country": "Ireland",
+      "tripPlan": null,
+      "status": "completed",
+      "priceUsd": 360,
+      "adminNotes": "",
+      "createdAt": "2026-04-13T09:30:00.000Z",
+      "updatedAt": "2026-04-13T09:30:00.000Z"
+    },
+    {
+      "id": "b-4",
+      "reference": "BK-2NHP",
+      "userId": "u-emma",
+      "serviceId": "airport",
+      "packageId": null,
+      "vehicleId": "car",
+      "date": "2026-05-27",
+      "time": "21:30",
+      "flightNumber": "BA2A",
+      "pickupLocation": "BIA Katunayake",
+      "dropoffLocation": "",
+      "adults": 2,
+      "children": 0,
+      "bags": 3,
+      "notes": "",
+      "name": "Emma Wilson",
+      "email": "emma.wilson@example.com",
+      "whatsapp": "+44 7700 900123",
+      "country": "United Kingdom",
+      "tripPlan": null,
+      "status": "completed",
+      "priceUsd": 35,
+      "adminNotes": "",
+      "createdAt": "2026-05-18T09:30:00.000Z",
+      "updatedAt": "2026-05-18T09:30:00.000Z"
+    },
+    {
+      "id": "b-5",
+      "reference": "BK-2TLO",
+      "userId": null,
+      "serviceId": "multi-day",
+      "packageId": "south-coast-beaches",
+      "vehicleId": "van",
+      "date": "2026-06-22",
+      "time": "09:30",
+      "flightNumber": "",
+      "pickupLocation": "",
+      "dropoffLocation": "",
+      "adults": 3,
+      "children": 1,
+      "bags": 4,
+      "notes": "Please bring a child seat.",
+      "name": "Anna Petrova",
+      "email": "anna.petrova@example.com",
+      "whatsapp": "+7 912 345 67 89",
+      "country": "Russia",
+      "tripPlan": null,
+      "status": "completed",
+      "priceUsd": 380,
+      "adminNotes": "",
+      "createdAt": "2026-05-23T09:30:00.000Z",
+      "updatedAt": "2026-05-23T09:30:00.000Z"
+    },
+    {
+      "id": "b-6",
+      "reference": "BK-2ZPN",
+      "userId": null,
+      "serviceId": "custom",
+      "packageId": null,
+      "vehicleId": "car",
+      "date": "2026-06-20",
+      "time": "14:15",
+      "flightNumber": "",
+      "pickupLocation": "",
+      "dropoffLocation": "",
+      "adults": 2,
+      "children": 0,
+      "bags": 3,
+      "notes": "",
+      "name": "Hannah Becker",
+      "email": "hannah.becker@example.com",
+      "whatsapp": "+1 415 555 0132",
+      "country": "United States",
+      "tripPlan": null,
+      "status": "cancelled",
+      "priceUsd": 180,
+      "adminNotes": "",
+      "createdAt": "2026-06-06T09:30:00.000Z",
+      "updatedAt": "2026-06-06T09:30:00.000Z"
+    },
+    {
+      "id": "b-7",
+      "reference": "BK-35TM",
+      "userId": "u-markus",
+      "serviceId": "day-trip",
+      "packageId": null,
+      "vehicleId": "car",
+      "date": "2026-06-17",
+      "time": "06:45",
+      "flightNumber": "",
+      "pickupLocation": "",
+      "dropoffLocation": "",
+      "adults": 2,
+      "children": 0,
+      "bags": 3,
+      "notes": "",
+      "name": "Markus Weber",
+      "email": "markus.weber@example.com",
+      "whatsapp": "+49 151 2345678",
+      "country": "Germany",
+      "tripPlan": null,
+      "status": "completed",
+      "priceUsd": 90,
+      "adminNotes": "",
+      "createdAt": "2026-06-11T09:30:00.000Z",
+      "updatedAt": "2026-06-11T09:30:00.000Z"
+    },
+    {
+      "id": "b-8",
+      "reference": "BK-3BXL",
+      "userId": "u-priya",
+      "serviceId": "multi-day",
+      "packageId": "grand-tour-14",
+      "vehicleId": "van",
+      "date": "2026-08-25",
+      "time": "21:30",
+      "flightNumber": "",
+      "pickupLocation": "",
+      "dropoffLocation": "",
+      "adults": 5,
+      "children": 0,
+      "bags": 6,
+      "notes": "",
+      "name": "Priya Nair",
+      "email": "priya.nair@example.com",
+      "whatsapp": "+91 98765 43210",
+      "country": "India",
+      "tripPlan": null,
+      "status": "completed",
+      "priceUsd": 1590,
+      "adminNotes": "",
+      "createdAt": "2026-07-16T09:30:00.000Z",
+      "updatedAt": "2026-07-16T09:30:00.000Z"
+    },
+    {
+      "id": "b-9",
+      "reference": "BK-3I1K",
+      "userId": "u-emma",
+      "serviceId": "multi-day",
+      "packageId": "highlights-7",
+      "vehicleId": "car",
+      "date": "2026-09-25",
+      "time": "09:30",
+      "flightNumber": "",
+      "pickupLocation": "",
+      "dropoffLocation": "",
+      "adults": 2,
+      "children": 0,
+      "bags": 3,
+      "notes": "",
+      "name": "Emma Wilson",
+      "email": "emma.wilson@example.com",
+      "whatsapp": "+44 7700 900123",
+      "country": "United Kingdom",
+      "tripPlan": null,
+      "status": "completed",
+      "priceUsd": 790,
+      "adminNotes": "",
+      "createdAt": "2026-08-21T09:30:00.000Z",
+      "updatedAt": "2026-08-21T09:30:00.000Z"
+    },
+    {
+      "id": "b-10",
+      "reference": "BK-3O5J",
+      "userId": "u-markus",
+      "serviceId": "airport",
+      "packageId": null,
+      "vehicleId": "van",
+      "date": "2026-09-29",
+      "time": "14:15",
+      "flightNumber": "LH780",
+      "pickupLocation": "BIA Katunayake",
+      "dropoffLocation": "",
+      "adults": 4,
+      "children": 0,
+      "bags": 5,
+      "notes": "",
+      "name": "Markus Weber",
+      "email": "markus.weber@example.com",
+      "whatsapp": "+49 151 2345678",
+      "country": "Germany",
+      "tripPlan": null,
+      "status": "confirmed",
+      "priceUsd": 35,
+      "adminNotes": "Deposit requested by WhatsApp.",
+      "createdAt": "2026-09-04T09:30:00.000Z",
+      "updatedAt": "2026-09-04T09:30:00.000Z"
+    },
+    {
+      "id": "b-11",
+      "reference": "BK-3U9I",
+      "userId": "u-priya",
+      "serviceId": "day-trip",
+      "packageId": null,
+      "vehicleId": "van",
+      "date": "2026-10-06",
+      "time": "06:45",
+      "flightNumber": "",
+      "pickupLocation": "",
+      "dropoffLocation": "",
+      "adults": 4,
+      "children": 1,
+      "bags": 5,
+      "notes": "Please bring a child seat.",
+      "name": "Priya Nair",
+      "email": "priya.nair@example.com",
+      "whatsapp": "+91 98765 43210",
+      "country": "India",
+      "tripPlan": null,
+      "status": "confirmed",
+      "priceUsd": 90,
+      "adminNotes": "Deposit requested by WhatsApp.",
+      "createdAt": "2026-09-09T09:30:00.000Z",
+      "updatedAt": "2026-09-09T09:30:00.000Z"
+    },
+    {
+      "id": "b-12",
+      "reference": "BK-40DH",
+      "userId": null,
+      "serviceId": "multi-day",
+      "packageId": "hill-country",
+      "vehicleId": "car",
+      "date": "2026-11-04",
+      "time": "21:30",
+      "flightNumber": "",
+      "pickupLocation": "",
+      "dropoffLocation": "",
+      "adults": 2,
+      "children": 0,
+      "bags": 3,
+      "notes": "",
+      "name": "Sophie Laurent",
+      "email": "sophie.laurent@example.com",
+      "whatsapp": "+33 6 12 34 56 78",
+      "country": "France",
+      "tripPlan": null,
+      "status": "confirmed",
+      "priceUsd": 460,
+      "adminNotes": "Deposit requested by WhatsApp.",
+      "createdAt": "2026-10-14T09:30:00.000Z",
+      "updatedAt": "2026-10-14T09:30:00.000Z"
+    },
+    {
+      "id": "b-13",
+      "reference": "BK-46HG",
+      "userId": null,
+      "serviceId": "airport",
+      "packageId": null,
+      "vehicleId": "car",
+      "date": "2026-11-03",
+      "time": "09:30",
+      "flightNumber": "EI334",
+      "pickupLocation": "BIA Katunayake",
+      "dropoffLocation": "",
+      "adults": 2,
+      "children": 0,
+      "bags": 3,
+      "notes": "",
+      "name": "Liam O'Connor",
+      "email": "liam.oconnor@example.com",
+      "whatsapp": "+353 85 123 4567",
+      "country": "Ireland",
+      "tripPlan": null,
+      "status": "pending",
+      "priceUsd": 35,
+      "adminNotes": "",
+      "createdAt": "2026-10-19T09:30:00.000Z",
+      "updatedAt": "2026-10-19T09:30:00.000Z"
+    },
+    {
+      "id": "b-14",
+      "reference": "BK-4CLF",
+      "userId": null,
+      "serviceId": "custom",
+      "packageId": null,
+      "vehicleId": "van",
+      "date": "2026-11-26",
+      "time": "14:15",
+      "flightNumber": "",
+      "pickupLocation": "",
+      "dropoffLocation": "",
+      "adults": 3,
+      "children": 2,
+      "bags": 4,
+      "notes": "Please bring a child seat.",
+      "name": "Anna Petrova",
+      "email": "anna.petrova@example.com",
+      "whatsapp": "+7 912 345 67 89",
+      "country": "Russia",
+      "tripPlan": null,
+      "status": "pending",
+      "priceUsd": 180,
+      "adminNotes": "",
+      "createdAt": "2026-10-24T09:30:00.000Z",
+      "updatedAt": "2026-10-24T09:30:00.000Z"
+    },
+    {
+      "id": "b-15",
+      "reference": "BK-4IPE",
+      "userId": null,
+      "serviceId": "multi-day",
+      "packageId": "wildlife-safari",
+      "vehicleId": "car",
+      "date": "2026-11-21",
+      "time": "06:45",
+      "flightNumber": "",
+      "pickupLocation": "",
+      "dropoffLocation": "",
+      "adults": 2,
+      "children": 0,
+      "bags": 3,
+      "notes": "",
+      "name": "Hannah Becker",
+      "email": "hannah.becker@example.com",
+      "whatsapp": "+1 415 555 0132",
+      "country": "United States",
+      "tripPlan": null,
+      "status": "pending",
+      "priceUsd": 360,
+      "adminNotes": "",
+      "createdAt": "2026-10-07T09:30:00.000Z",
+      "updatedAt": "2026-10-07T09:30:00.000Z"
+    }
+  ],
+  "payments": [
+    {
+      "id": "p-b-1-1",
+      "bookingId": "b-1",
+      "amount": 11,
+      "currency": "USD",
+      "amountUsd": 11,
+      "method": "bank_transfer",
+      "status": "paid",
+      "paidAt": "2026-02-04",
+      "note": "30% deposit",
+      "createdAt": "2026-02-04T09:30:00.000Z"
+    },
+    {
+      "id": "p-b-1-2",
+      "bookingId": "b-1",
+      "amount": 24,
+      "currency": "USD",
+      "amountUsd": 24,
+      "method": "cash",
+      "status": "paid",
+      "paidAt": "2026-02-15",
+      "note": "Balance paid in cash",
+      "createdAt": "2026-02-15T09:30:00.000Z"
+    },
+    {
+      "id": "p-b-2-1",
+      "bookingId": "b-2",
+      "amount": 99,
+      "currency": "USD",
+      "amountUsd": 99,
+      "method": "bank_transfer",
+      "status": "paid",
+      "paidAt": "2026-03-09",
+      "note": "30% deposit",
+      "createdAt": "2026-03-09T09:30:00.000Z"
+    },
+    {
+      "id": "p-b-2-2",
+      "bookingId": "b-2",
+      "amount": 231,
+      "currency": "USD",
+      "amountUsd": 231,
+      "method": "cash",
+      "status": "paid",
+      "paidAt": "2026-03-28",
+      "note": "Balance paid in cash",
+      "createdAt": "2026-03-28T09:30:00.000Z"
+    },
+    {
+      "id": "p-b-3-1",
+      "bookingId": "b-3",
+      "amount": 108,
+      "currency": "USD",
+      "amountUsd": 108,
+      "method": "bank_transfer",
+      "status": "paid",
+      "paidAt": "2026-04-14",
+      "note": "30% deposit",
+      "createdAt": "2026-04-14T09:30:00.000Z"
+    },
+    {
+      "id": "p-b-3-2",
+      "bookingId": "b-3",
+      "amount": 252,
+      "currency": "USD",
+      "amountUsd": 252,
+      "method": "cash",
+      "status": "paid",
+      "paidAt": "2026-05-08",
+      "note": "Balance paid in cash",
+      "createdAt": "2026-05-08T09:30:00.000Z"
+    },
+    {
+      "id": "p-b-4-1",
+      "bookingId": "b-4",
+      "amount": 11,
+      "currency": "USD",
+      "amountUsd": 11,
+      "method": "bank_transfer",
+      "status": "paid",
+      "paidAt": "2026-05-19",
+      "note": "30% deposit",
+      "createdAt": "2026-05-19T09:30:00.000Z"
+    },
+    {
+      "id": "p-b-4-2",
+      "bookingId": "b-4",
+      "amount": 24,
+      "currency": "USD",
+      "amountUsd": 24,
+      "method": "cash",
+      "status": "paid",
+      "paidAt": "2026-05-27",
+      "note": "Balance paid in cash",
+      "createdAt": "2026-05-27T09:30:00.000Z"
+    },
+    {
+      "id": "p-b-5-1",
+      "bookingId": "b-5",
+      "amount": 114,
+      "currency": "USD",
+      "amountUsd": 114,
+      "method": "bank_transfer",
+      "status": "paid",
+      "paidAt": "2026-05-24",
+      "note": "30% deposit",
+      "createdAt": "2026-05-24T09:30:00.000Z"
+    },
+    {
+      "id": "p-b-5-2",
+      "bookingId": "b-5",
+      "amount": 266,
+      "currency": "USD",
+      "amountUsd": 266,
+      "method": "cash",
+      "status": "paid",
+      "paidAt": "2026-06-22",
+      "note": "Balance paid in cash",
+      "createdAt": "2026-06-22T09:30:00.000Z"
+    },
+    {
+      "id": "p-b-7-1",
+      "bookingId": "b-7",
+      "amount": 27,
+      "currency": "USD",
+      "amountUsd": 27,
+      "method": "bank_transfer",
+      "status": "paid",
+      "paidAt": "2026-06-12",
+      "note": "30% deposit",
+      "createdAt": "2026-06-12T09:30:00.000Z"
+    },
+    {
+      "id": "p-b-7-2",
+      "bookingId": "b-7",
+      "amount": 63,
+      "currency": "USD",
+      "amountUsd": 63,
+      "method": "cash",
+      "status": "paid",
+      "paidAt": "2026-06-17",
+      "note": "Balance paid in cash",
+      "createdAt": "2026-06-17T09:30:00.000Z"
+    },
+    {
+      "id": "p-b-8-1",
+      "bookingId": "b-8",
+      "amount": 477,
+      "currency": "USD",
+      "amountUsd": 477,
+      "method": "bank_transfer",
+      "status": "paid",
+      "paidAt": "2026-07-17",
+      "note": "30% deposit",
+      "createdAt": "2026-07-17T09:30:00.000Z"
+    },
+    {
+      "id": "p-b-8-2",
+      "bookingId": "b-8",
+      "amount": 1113,
+      "currency": "USD",
+      "amountUsd": 1113,
+      "method": "cash",
+      "status": "paid",
+      "paidAt": "2026-08-25",
+      "note": "Balance paid in cash",
+      "createdAt": "2026-08-25T09:30:00.000Z"
+    },
+    {
+      "id": "p-b-9-1",
+      "bookingId": "b-9",
+      "amount": 237,
+      "currency": "USD",
+      "amountUsd": 237,
+      "method": "bank_transfer",
+      "status": "paid",
+      "paidAt": "2026-08-22",
+      "note": "30% deposit",
+      "createdAt": "2026-08-22T09:30:00.000Z"
+    },
+    {
+      "id": "p-b-9-2",
+      "bookingId": "b-9",
+      "amount": 553,
+      "currency": "USD",
+      "amountUsd": 553,
+      "method": "cash",
+      "status": "paid",
+      "paidAt": "2026-09-25",
+      "note": "Balance paid in cash",
+      "createdAt": "2026-09-25T09:30:00.000Z"
+    },
+    {
+      "id": "p-b-10-1",
+      "bookingId": "b-10",
+      "amount": 11,
+      "currency": "USD",
+      "amountUsd": 11,
+      "method": "bank_transfer",
+      "status": "paid",
+      "paidAt": "2026-09-05",
+      "note": "30% deposit",
+      "createdAt": "2026-09-05T09:30:00.000Z"
+    },
+    {
+      "id": "p-b-11-1",
+      "bookingId": "b-11",
+      "amount": 27,
+      "currency": "USD",
+      "amountUsd": 27,
+      "method": "bank_transfer",
+      "status": "paid",
+      "paidAt": "2026-09-10",
+      "note": "30% deposit",
+      "createdAt": "2026-09-10T09:30:00.000Z"
+    },
+    {
+      "id": "p-b-12-1",
+      "bookingId": "b-12",
+      "amount": 138,
+      "currency": "USD",
+      "amountUsd": 138,
+      "method": "bank_transfer",
+      "status": "paid",
+      "paidAt": "2026-10-15",
+      "note": "30% deposit",
+      "createdAt": "2026-10-15T09:30:00.000Z"
+    },
+    {
+      "id": "p-lkr-1",
+      "bookingId": "b-10",
+      "amount": 15000,
+      "currency": "LKR",
+      "amountUsd": 50,
+      "method": "cash",
+      "status": "paid",
+      "paidAt": "2026-10-22",
+      "note": "Advance in rupees",
+      "createdAt": "2026-10-22T10:29:51.347Z"
+    }
+  ],
+  "messages": [
+    {
+      "id": "m-1",
+      "name": "Daniel Moore",
+      "email": "daniel.moore@example.com",
+      "message": "Hi, do you do pickups from Colombo Fort railway station? We arrive by train from Kandy on the 14th.",
+      "status": "new",
+      "createdAt": "2026-10-24T05:41:51.347Z",
+      "repliedAt": null
+    },
+    {
+      "id": "m-2",
+      "name": "Mia Johansson",
+      "email": "mia.j@example.com",
+      "message": "We are a family of six with two small children. Can you arrange two child seats and a bigger vehicle?",
+      "status": "new",
+      "createdAt": "2026-10-23T10:29:51.347Z",
+      "repliedAt": null
+    },
+    {
+      "id": "m-3",
+      "name": "Ravi Shankar",
+      "email": "ravi.s@example.com",
+      "message": "Looking for a 3-day tour of Sigiriya and Polonnaruwa in January. What would the price be for two people?",
+      "status": "read",
+      "createdAt": "2026-10-21T10:29:51.347Z",
+      "repliedAt": null
+    },
+    {
+      "id": "m-4",
+      "name": "Chloe Martin",
+      "email": "chloe.martin@example.com",
+      "message": "Thank you for the wonderful trip last week! Please send the photo of the group at Sigiriya if you have it.",
+      "status": "replied",
+      "createdAt": "2026-10-16T10:29:51.347Z",
+      "repliedAt": "2026-10-16T17:41:51.347Z"
+    },
+    {
+      "id": "m-5",
+      "name": "Tom Becker",
+      "email": "tom.becker@example.com",
+      "message": "Is it possible to pay by card or only cash? Also do you offer a discount for 10+ days?",
+      "status": "replied",
+      "createdAt": "2026-10-12T10:29:51.347Z",
+      "repliedAt": "2026-10-12T17:41:51.347Z"
+    }
+  ],
+  "emails": [
+    {
+      "id": "e-b-1-1",
+      "direction": "out",
+      "from": "hello@ceylonroads.example",
+      "to": "jack.miller@example.com",
+      "subject": "We received your booking request BK-255S",
+      "body": "Hi Jack Miller,\n\nThanks for your request. Nuwan Dissanayake will confirm the price and details soon.",
+      "kind": "booking-received",
+      "bookingId": "b-1",
+      "messageId": null,
+      "sentAt": "2026-02-03T09:30:00.000Z"
+    },
+    {
+      "id": "e-b-1-2",
+      "direction": "out",
+      "from": "hello@ceylonroads.example",
+      "to": "hello@ceylonroads.example",
+      "subject": "New booking request BK-255S",
+      "body": "Jack Miller requested a booking for 2026-02-15.",
+      "kind": "booking-notice",
+      "bookingId": "b-1",
+      "messageId": null,
+      "sentAt": "2026-02-03T09:30:00.000Z"
+    },
+    {
+      "id": "e-b-1-3",
+      "direction": "out",
+      "from": "hello@ceylonroads.example",
+      "to": "jack.miller@example.com",
+      "subject": "Your booking BK-255S is confirmed",
+      "body": "Hi Jack Miller,\n\nYour booking is confirmed. Agreed price: $35.",
+      "kind": "booking-confirmed",
+      "bookingId": "b-1",
+      "messageId": null,
+      "sentAt": "2026-02-04T09:30:00.000Z"
+    },
+    {
+      "id": "e-b-2-1",
+      "direction": "out",
+      "from": "hello@ceylonroads.example",
+      "to": "sophie.laurent@example.com",
+      "subject": "We received your booking request BK-2B9R",
+      "body": "Hi Sophie Laurent,\n\nThanks for your request. Nuwan Dissanayake will confirm the price and details soon.",
+      "kind": "booking-received",
+      "bookingId": "b-2",
+      "messageId": null,
+      "sentAt": "2026-03-08T09:30:00.000Z"
+    },
+    {
+      "id": "e-b-2-2",
+      "direction": "out",
+      "from": "hello@ceylonroads.example",
+      "to": "hello@ceylonroads.example",
+      "subject": "New booking request BK-2B9R",
+      "body": "Sophie Laurent requested a booking for 2026-03-28.",
+      "kind": "booking-notice",
+      "bookingId": "b-2",
+      "messageId": null,
+      "sentAt": "2026-03-08T09:30:00.000Z"
+    },
+    {
+      "id": "e-b-2-3",
+      "direction": "out",
+      "from": "hello@ceylonroads.example",
+      "to": "sophie.laurent@example.com",
+      "subject": "Your booking BK-2B9R is confirmed",
+      "body": "Hi Sophie Laurent,\n\nYour booking is confirmed. Agreed price: $330.",
+      "kind": "booking-confirmed",
+      "bookingId": "b-2",
+      "messageId": null,
+      "sentAt": "2026-03-09T09:30:00.000Z"
+    },
+    {
+      "id": "e-b-3-1",
+      "direction": "out",
+      "from": "hello@ceylonroads.example",
+      "to": "liam.oconnor@example.com",
+      "subject": "We received your booking request BK-2HDQ",
+      "body": "Hi Liam O'Connor,\n\nThanks for your request. Nuwan Dissanayake will confirm the price and details soon.",
+      "kind": "booking-received",
+      "bookingId": "b-3",
+      "messageId": null,
+      "sentAt": "2026-04-13T09:30:00.000Z"
+    },
+    {
+      "id": "e-b-3-2",
+      "direction": "out",
+      "from": "hello@ceylonroads.example",
+      "to": "hello@ceylonroads.example",
+      "subject": "New booking request BK-2HDQ",
+      "body": "Liam O'Connor requested a booking for 2026-05-08.",
+      "kind": "booking-notice",
+      "bookingId": "b-3",
+      "messageId": null,
+      "sentAt": "2026-04-13T09:30:00.000Z"
+    },
+    {
+      "id": "e-b-3-3",
+      "direction": "out",
+      "from": "hello@ceylonroads.example",
+      "to": "liam.oconnor@example.com",
+      "subject": "Your booking BK-2HDQ is confirmed",
+      "body": "Hi Liam O'Connor,\n\nYour booking is confirmed. Agreed price: $360.",
+      "kind": "booking-confirmed",
+      "bookingId": "b-3",
+      "messageId": null,
+      "sentAt": "2026-04-14T09:30:00.000Z"
+    },
+    {
+      "id": "e-b-4-1",
+      "direction": "out",
+      "from": "hello@ceylonroads.example",
+      "to": "emma.wilson@example.com",
+      "subject": "We received your booking request BK-2NHP",
+      "body": "Hi Emma Wilson,\n\nThanks for your request. Nuwan Dissanayake will confirm the price and details soon.",
+      "kind": "booking-received",
+      "bookingId": "b-4",
+      "messageId": null,
+      "sentAt": "2026-05-18T09:30:00.000Z"
+    },
+    {
+      "id": "e-b-4-2",
+      "direction": "out",
+      "from": "hello@ceylonroads.example",
+      "to": "hello@ceylonroads.example",
+      "subject": "New booking request BK-2NHP",
+      "body": "Emma Wilson requested a booking for 2026-05-27.",
+      "kind": "booking-notice",
+      "bookingId": "b-4",
+      "messageId": null,
+      "sentAt": "2026-05-18T09:30:00.000Z"
+    },
+    {
+      "id": "e-b-4-3",
+      "direction": "out",
+      "from": "hello@ceylonroads.example",
+      "to": "emma.wilson@example.com",
+      "subject": "Your booking BK-2NHP is confirmed",
+      "body": "Hi Emma Wilson,\n\nYour booking is confirmed. Agreed price: $35.",
+      "kind": "booking-confirmed",
+      "bookingId": "b-4",
+      "messageId": null,
+      "sentAt": "2026-05-19T09:30:00.000Z"
+    },
+    {
+      "id": "e-b-5-1",
+      "direction": "out",
+      "from": "hello@ceylonroads.example",
+      "to": "anna.petrova@example.com",
+      "subject": "We received your booking request BK-2TLO",
+      "body": "Hi Anna Petrova,\n\nThanks for your request. Nuwan Dissanayake will confirm the price and details soon.",
+      "kind": "booking-received",
+      "bookingId": "b-5",
+      "messageId": null,
+      "sentAt": "2026-05-23T09:30:00.000Z"
+    },
+    {
+      "id": "e-b-5-2",
+      "direction": "out",
+      "from": "hello@ceylonroads.example",
+      "to": "hello@ceylonroads.example",
+      "subject": "New booking request BK-2TLO",
+      "body": "Anna Petrova requested a booking for 2026-06-22.",
+      "kind": "booking-notice",
+      "bookingId": "b-5",
+      "messageId": null,
+      "sentAt": "2026-05-23T09:30:00.000Z"
+    },
+    {
+      "id": "e-b-5-3",
+      "direction": "out",
+      "from": "hello@ceylonroads.example",
+      "to": "anna.petrova@example.com",
+      "subject": "Your booking BK-2TLO is confirmed",
+      "body": "Hi Anna Petrova,\n\nYour booking is confirmed. Agreed price: $380.",
+      "kind": "booking-confirmed",
+      "bookingId": "b-5",
+      "messageId": null,
+      "sentAt": "2026-05-24T09:30:00.000Z"
+    },
+    {
+      "id": "e-b-6-1",
+      "direction": "out",
+      "from": "hello@ceylonroads.example",
+      "to": "hannah.becker@example.com",
+      "subject": "We received your booking request BK-2ZPN",
+      "body": "Hi Hannah Becker,\n\nThanks for your request. Nuwan Dissanayake will confirm the price and details soon.",
+      "kind": "booking-received",
+      "bookingId": "b-6",
+      "messageId": null,
+      "sentAt": "2026-06-06T09:30:00.000Z"
+    },
+    {
+      "id": "e-b-6-2",
+      "direction": "out",
+      "from": "hello@ceylonroads.example",
+      "to": "hello@ceylonroads.example",
+      "subject": "New booking request BK-2ZPN",
+      "body": "Hannah Becker requested a booking for 2026-06-20.",
+      "kind": "booking-notice",
+      "bookingId": "b-6",
+      "messageId": null,
+      "sentAt": "2026-06-06T09:30:00.000Z"
+    },
+    {
+      "id": "e-b-6-4",
+      "direction": "out",
+      "from": "hello@ceylonroads.example",
+      "to": "hannah.becker@example.com",
+      "subject": "Your booking BK-2ZPN was cancelled",
+      "body": "Hi Hannah Becker,\n\nYour booking has been cancelled.",
+      "kind": "booking-cancelled",
+      "bookingId": "b-6",
+      "messageId": null,
+      "sentAt": "2026-06-08T09:30:00.000Z"
+    },
+    {
+      "id": "e-b-7-1",
+      "direction": "out",
+      "from": "hello@ceylonroads.example",
+      "to": "markus.weber@example.com",
+      "subject": "We received your booking request BK-35TM",
+      "body": "Hi Markus Weber,\n\nThanks for your request. Nuwan Dissanayake will confirm the price and details soon.",
+      "kind": "booking-received",
+      "bookingId": "b-7",
+      "messageId": null,
+      "sentAt": "2026-06-11T09:30:00.000Z"
+    },
+    {
+      "id": "e-b-7-2",
+      "direction": "out",
+      "from": "hello@ceylonroads.example",
+      "to": "hello@ceylonroads.example",
+      "subject": "New booking request BK-35TM",
+      "body": "Markus Weber requested a booking for 2026-06-17.",
+      "kind": "booking-notice",
+      "bookingId": "b-7",
+      "messageId": null,
+      "sentAt": "2026-06-11T09:30:00.000Z"
+    },
+    {
+      "id": "e-b-7-3",
+      "direction": "out",
+      "from": "hello@ceylonroads.example",
+      "to": "markus.weber@example.com",
+      "subject": "Your booking BK-35TM is confirmed",
+      "body": "Hi Markus Weber,\n\nYour booking is confirmed. Agreed price: $90.",
+      "kind": "booking-confirmed",
+      "bookingId": "b-7",
+      "messageId": null,
+      "sentAt": "2026-06-12T09:30:00.000Z"
+    },
+    {
+      "id": "e-b-8-1",
+      "direction": "out",
+      "from": "hello@ceylonroads.example",
+      "to": "priya.nair@example.com",
+      "subject": "We received your booking request BK-3BXL",
+      "body": "Hi Priya Nair,\n\nThanks for your request. Nuwan Dissanayake will confirm the price and details soon.",
+      "kind": "booking-received",
+      "bookingId": "b-8",
+      "messageId": null,
+      "sentAt": "2026-07-16T09:30:00.000Z"
+    },
+    {
+      "id": "e-b-8-2",
+      "direction": "out",
+      "from": "hello@ceylonroads.example",
+      "to": "hello@ceylonroads.example",
+      "subject": "New booking request BK-3BXL",
+      "body": "Priya Nair requested a booking for 2026-08-25.",
+      "kind": "booking-notice",
+      "bookingId": "b-8",
+      "messageId": null,
+      "sentAt": "2026-07-16T09:30:00.000Z"
+    },
+    {
+      "id": "e-b-8-3",
+      "direction": "out",
+      "from": "hello@ceylonroads.example",
+      "to": "priya.nair@example.com",
+      "subject": "Your booking BK-3BXL is confirmed",
+      "body": "Hi Priya Nair,\n\nYour booking is confirmed. Agreed price: $1590.",
+      "kind": "booking-confirmed",
+      "bookingId": "b-8",
+      "messageId": null,
+      "sentAt": "2026-07-17T09:30:00.000Z"
+    },
+    {
+      "id": "e-b-9-1",
+      "direction": "out",
+      "from": "hello@ceylonroads.example",
+      "to": "emma.wilson@example.com",
+      "subject": "We received your booking request BK-3I1K",
+      "body": "Hi Emma Wilson,\n\nThanks for your request. Nuwan Dissanayake will confirm the price and details soon.",
+      "kind": "booking-received",
+      "bookingId": "b-9",
+      "messageId": null,
+      "sentAt": "2026-08-21T09:30:00.000Z"
+    },
+    {
+      "id": "e-b-9-2",
+      "direction": "out",
+      "from": "hello@ceylonroads.example",
+      "to": "hello@ceylonroads.example",
+      "subject": "New booking request BK-3I1K",
+      "body": "Emma Wilson requested a booking for 2026-09-25.",
+      "kind": "booking-notice",
+      "bookingId": "b-9",
+      "messageId": null,
+      "sentAt": "2026-08-21T09:30:00.000Z"
+    },
+    {
+      "id": "e-b-9-3",
+      "direction": "out",
+      "from": "hello@ceylonroads.example",
+      "to": "emma.wilson@example.com",
+      "subject": "Your booking BK-3I1K is confirmed",
+      "body": "Hi Emma Wilson,\n\nYour booking is confirmed. Agreed price: $790.",
+      "kind": "booking-confirmed",
+      "bookingId": "b-9",
+      "messageId": null,
+      "sentAt": "2026-08-22T09:30:00.000Z"
+    },
+    {
+      "id": "e-b-10-1",
+      "direction": "out",
+      "from": "hello@ceylonroads.example",
+      "to": "markus.weber@example.com",
+      "subject": "We received your booking request BK-3O5J",
+      "body": "Hi Markus Weber,\n\nThanks for your request. Nuwan Dissanayake will confirm the price and details soon.",
+      "kind": "booking-received",
+      "bookingId": "b-10",
+      "messageId": null,
+      "sentAt": "2026-09-04T09:30:00.000Z"
+    },
+    {
+      "id": "e-b-10-2",
+      "direction": "out",
+      "from": "hello@ceylonroads.example",
+      "to": "hello@ceylonroads.example",
+      "subject": "New booking request BK-3O5J",
+      "body": "Markus Weber requested a booking for 2026-09-29.",
+      "kind": "booking-notice",
+      "bookingId": "b-10",
+      "messageId": null,
+      "sentAt": "2026-09-04T09:30:00.000Z"
+    },
+    {
+      "id": "e-b-10-3",
+      "direction": "out",
+      "from": "hello@ceylonroads.example",
+      "to": "markus.weber@example.com",
+      "subject": "Your booking BK-3O5J is confirmed",
+      "body": "Hi Markus Weber,\n\nYour booking is confirmed. Agreed price: $35.",
+      "kind": "booking-confirmed",
+      "bookingId": "b-10",
+      "messageId": null,
+      "sentAt": "2026-09-05T09:30:00.000Z"
+    },
+    {
+      "id": "e-b-11-1",
+      "direction": "out",
+      "from": "hello@ceylonroads.example",
+      "to": "priya.nair@example.com",
+      "subject": "We received your booking request BK-3U9I",
+      "body": "Hi Priya Nair,\n\nThanks for your request. Nuwan Dissanayake will confirm the price and details soon.",
+      "kind": "booking-received",
+      "bookingId": "b-11",
+      "messageId": null,
+      "sentAt": "2026-09-09T09:30:00.000Z"
+    },
+    {
+      "id": "e-b-11-2",
+      "direction": "out",
+      "from": "hello@ceylonroads.example",
+      "to": "hello@ceylonroads.example",
+      "subject": "New booking request BK-3U9I",
+      "body": "Priya Nair requested a booking for 2026-10-06.",
+      "kind": "booking-notice",
+      "bookingId": "b-11",
+      "messageId": null,
+      "sentAt": "2026-09-09T09:30:00.000Z"
+    },
+    {
+      "id": "e-b-11-3",
+      "direction": "out",
+      "from": "hello@ceylonroads.example",
+      "to": "priya.nair@example.com",
+      "subject": "Your booking BK-3U9I is confirmed",
+      "body": "Hi Priya Nair,\n\nYour booking is confirmed. Agreed price: $90.",
+      "kind": "booking-confirmed",
+      "bookingId": "b-11",
+      "messageId": null,
+      "sentAt": "2026-09-10T09:30:00.000Z"
+    },
+    {
+      "id": "e-b-12-1",
+      "direction": "out",
+      "from": "hello@ceylonroads.example",
+      "to": "sophie.laurent@example.com",
+      "subject": "We received your booking request BK-40DH",
+      "body": "Hi Sophie Laurent,\n\nThanks for your request. Nuwan Dissanayake will confirm the price and details soon.",
+      "kind": "booking-received",
+      "bookingId": "b-12",
+      "messageId": null,
+      "sentAt": "2026-10-14T09:30:00.000Z"
+    },
+    {
+      "id": "e-b-12-2",
+      "direction": "out",
+      "from": "hello@ceylonroads.example",
+      "to": "hello@ceylonroads.example",
+      "subject": "New booking request BK-40DH",
+      "body": "Sophie Laurent requested a booking for 2026-11-04.",
+      "kind": "booking-notice",
+      "bookingId": "b-12",
+      "messageId": null,
+      "sentAt": "2026-10-14T09:30:00.000Z"
+    },
+    {
+      "id": "e-b-12-3",
+      "direction": "out",
+      "from": "hello@ceylonroads.example",
+      "to": "sophie.laurent@example.com",
+      "subject": "Your booking BK-40DH is confirmed",
+      "body": "Hi Sophie Laurent,\n\nYour booking is confirmed. Agreed price: $460.",
+      "kind": "booking-confirmed",
+      "bookingId": "b-12",
+      "messageId": null,
+      "sentAt": "2026-10-15T09:30:00.000Z"
+    },
+    {
+      "id": "e-b-13-1",
+      "direction": "out",
+      "from": "hello@ceylonroads.example",
+      "to": "liam.oconnor@example.com",
+      "subject": "We received your booking request BK-46HG",
+      "body": "Hi Liam O'Connor,\n\nThanks for your request. Nuwan Dissanayake will confirm the price and details soon.",
+      "kind": "booking-received",
+      "bookingId": "b-13",
+      "messageId": null,
+      "sentAt": "2026-10-19T09:30:00.000Z"
+    },
+    {
+      "id": "e-b-13-2",
+      "direction": "out",
+      "from": "hello@ceylonroads.example",
+      "to": "hello@ceylonroads.example",
+      "subject": "New booking request BK-46HG",
+      "body": "Liam O'Connor requested a booking for 2026-11-03.",
+      "kind": "booking-notice",
+      "bookingId": "b-13",
+      "messageId": null,
+      "sentAt": "2026-10-19T09:30:00.000Z"
+    },
+    {
+      "id": "e-b-14-1",
+      "direction": "out",
+      "from": "hello@ceylonroads.example",
+      "to": "anna.petrova@example.com",
+      "subject": "We received your booking request BK-4CLF",
+      "body": "Hi Anna Petrova,\n\nThanks for your request. Nuwan Dissanayake will confirm the price and details soon.",
+      "kind": "booking-received",
+      "bookingId": "b-14",
+      "messageId": null,
+      "sentAt": "2026-10-24T09:30:00.000Z"
+    },
+    {
+      "id": "e-b-14-2",
+      "direction": "out",
+      "from": "hello@ceylonroads.example",
+      "to": "hello@ceylonroads.example",
+      "subject": "New booking request BK-4CLF",
+      "body": "Anna Petrova requested a booking for 2026-11-26.",
+      "kind": "booking-notice",
+      "bookingId": "b-14",
+      "messageId": null,
+      "sentAt": "2026-10-24T09:30:00.000Z"
+    },
+    {
+      "id": "e-b-15-1",
+      "direction": "out",
+      "from": "hello@ceylonroads.example",
+      "to": "hannah.becker@example.com",
+      "subject": "We received your booking request BK-4IPE",
+      "body": "Hi Hannah Becker,\n\nThanks for your request. Nuwan Dissanayake will confirm the price and details soon.",
+      "kind": "booking-received",
+      "bookingId": "b-15",
+      "messageId": null,
+      "sentAt": "2026-10-07T09:30:00.000Z"
+    },
+    {
+      "id": "e-b-15-2",
+      "direction": "out",
+      "from": "hello@ceylonroads.example",
+      "to": "hello@ceylonroads.example",
+      "subject": "New booking request BK-4IPE",
+      "body": "Hannah Becker requested a booking for 2026-11-21.",
+      "kind": "booking-notice",
+      "bookingId": "b-15",
+      "messageId": null,
+      "sentAt": "2026-10-07T09:30:00.000Z"
+    },
+    {
+      "id": "e-m-1-ack",
+      "direction": "out",
+      "from": "hello@ceylonroads.example",
+      "to": "daniel.moore@example.com",
+      "subject": "We received your message",
+      "body": "Hi Daniel Moore,\n\nThanks for getting in touch. Nuwan Dissanayake will reply soon.",
+      "kind": "contact-ack",
+      "bookingId": null,
+      "messageId": "m-1",
+      "sentAt": "2026-10-24T05:41:51.347Z"
+    },
+    {
+      "id": "e-m-2-ack",
+      "direction": "out",
+      "from": "hello@ceylonroads.example",
+      "to": "mia.j@example.com",
+      "subject": "We received your message",
+      "body": "Hi Mia Johansson,\n\nThanks for getting in touch. Nuwan Dissanayake will reply soon.",
+      "kind": "contact-ack",
+      "bookingId": null,
+      "messageId": "m-2",
+      "sentAt": "2026-10-23T10:29:51.347Z"
+    },
+    {
+      "id": "e-m-3-ack",
+      "direction": "out",
+      "from": "hello@ceylonroads.example",
+      "to": "ravi.s@example.com",
+      "subject": "We received your message",
+      "body": "Hi Ravi Shankar,\n\nThanks for getting in touch. Nuwan Dissanayake will reply soon.",
+      "kind": "contact-ack",
+      "bookingId": null,
+      "messageId": "m-3",
+      "sentAt": "2026-10-21T10:29:51.347Z"
+    },
+    {
+      "id": "e-m-4-ack",
+      "direction": "out",
+      "from": "hello@ceylonroads.example",
+      "to": "chloe.martin@example.com",
+      "subject": "We received your message",
+      "body": "Hi Chloe Martin,\n\nThanks for getting in touch. Nuwan Dissanayake will reply soon.",
+      "kind": "contact-ack",
+      "bookingId": null,
+      "messageId": "m-4",
+      "sentAt": "2026-10-16T10:29:51.347Z"
+    },
+    {
+      "id": "e-m-4-reply",
+      "direction": "out",
+      "from": "hello@ceylonroads.example",
+      "to": "chloe.martin@example.com",
+      "subject": "Re: your message to Ceylon Roads",
+      "body": "Hi Chloe Martin,\n\nThank you for your message. We are happy to help, please see details below.\n\nNuwan Dissanayake",
+      "kind": "reply",
+      "bookingId": null,
+      "messageId": "m-4",
+      "sentAt": "2026-10-16T17:41:51.347Z"
+    },
+    {
+      "id": "e-m-5-ack",
+      "direction": "out",
+      "from": "hello@ceylonroads.example",
+      "to": "tom.becker@example.com",
+      "subject": "We received your message",
+      "body": "Hi Tom Becker,\n\nThanks for getting in touch. Nuwan Dissanayake will reply soon.",
+      "kind": "contact-ack",
+      "bookingId": null,
+      "messageId": "m-5",
+      "sentAt": "2026-10-12T10:29:51.347Z"
+    },
+    {
+      "id": "e-m-5-reply",
+      "direction": "out",
+      "from": "hello@ceylonroads.example",
+      "to": "tom.becker@example.com",
+      "subject": "Re: your message to Ceylon Roads",
+      "body": "Hi Tom Becker,\n\nThank you for your message. We are happy to help, please see details below.\n\nNuwan Dissanayake",
+      "kind": "reply",
+      "bookingId": null,
+      "messageId": "m-5",
+      "sentAt": "2026-10-12T17:41:51.347Z"
+    }
+  ]
+}
