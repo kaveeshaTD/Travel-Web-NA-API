@@ -8,9 +8,25 @@ public sealed record EmailMessage(
     string Subject,
     string Body,
     Guid? BookingId = null,
-    Guid? ContactMessageId = null);
+    Guid? ContactMessageId = null)
+{
+    /// <summary>
+    /// The text to keep in the email log instead of <see cref="Body"/>. Emails that carry a secret
+    /// (a password reset link) set this to a copy with the secret removed, so the database never holds it.
+    /// </summary>
+    public string? LogBody { get; init; }
+}
 
-public sealed record EmailSendResult(bool Sent, string? ProviderMessageId = null, string? Error = null);
+public enum EmailSendStatus
+{
+    Sent,
+    Failed,
+
+    /// <summary>No provider is set up (testing phase). The email is not sent.</summary>
+    NotConfigured,
+}
+
+public sealed record EmailSendResult(EmailSendStatus Status, string? ProviderMessageId = null, string? Error = null);
 
 public interface IEmailSender
 {

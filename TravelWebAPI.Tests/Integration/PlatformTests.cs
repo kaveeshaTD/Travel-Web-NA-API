@@ -219,12 +219,13 @@ public class PlatformTests(PostgresFixture postgres)
     [Fact]
     public async Task Production_refuses_to_start_when_required_settings_are_missing_and_names_them()
     {
-        await using var factory = ApiFactory.With(new Dictionary<string, string?>(), "Production");
+        await using var factory = ApiFactory.With(new Dictionary<string, string?> { ["Jwt:Key"] = string.Empty, ["App:WebBaseUrl"] = string.Empty }, "Production");
 
         var ex = Assert.Throws<InvalidOperationException>(() => factory.CreateClient());
 
         Assert.Contains("ConnectionStrings:Default", ex.ToString(), StringComparison.Ordinal);
         Assert.Contains("Jwt:Key", ex.ToString(), StringComparison.Ordinal);
+        Assert.Contains("App:WebBaseUrl", ex.ToString(), StringComparison.Ordinal);
         await Task.CompletedTask;
     }
 

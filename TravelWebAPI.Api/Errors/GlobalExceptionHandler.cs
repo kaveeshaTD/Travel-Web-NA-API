@@ -25,6 +25,12 @@ public sealed class GlobalExceptionHandler(ILogger<GlobalExceptionHandler> logge
 
         var (status, message, fields) = Map(exception);
 
+        if (exception is TooManyRequestsException tooMany)
+        {
+            httpContext.Response.Headers.RetryAfter =
+                Math.Ceiling(tooMany.RetryAfter.TotalSeconds).ToString(System.Globalization.CultureInfo.InvariantCulture);
+        }
+
         if (status >= StatusCodes.Status500InternalServerError)
         {
             logger.LogError(exception, "Unhandled exception for {Method} {Path}", httpContext.Request.Method, httpContext.Request.Path);
@@ -48,6 +54,7 @@ public sealed class GlobalExceptionHandler(ILogger<GlobalExceptionHandler> logge
         UnauthorizedException e => (StatusCodes.Status401Unauthorized, e.Message, null),
         ForbiddenException e => (StatusCodes.Status403Forbidden, e.Message, null),
         NotFoundException e => (StatusCodes.Status404NotFound, e.Message, null),
+        TooManyRequestsException e => (StatusCodes.Status429TooManyRequests, e.Message, null),
         DependentsExistException e => (
             StatusCodes.Status409Conflict,
             e.Message,

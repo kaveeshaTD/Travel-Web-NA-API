@@ -1,7 +1,7 @@
 # Ceylon Roads API
 
 .NET 10 Web API for the Ceylon Roads website and admin portal. Clean architecture with the repository pattern,
-PostgreSQL (EF Core + Npgsql), role-based JWT auth (coming in the auth change), SendGrid email (coming later).
+PostgreSQL (EF Core + Npgsql), role-based JWT auth with a rotating refresh cookie, SendGrid email (coming later; until then emails are only recorded in `email_logs`).
 
 ```
 TravelWebAPI.Domain          entities, enums, exceptions (no dependencies)
@@ -58,6 +58,27 @@ dotnet run --project TravelWebAPI.Api --launch-profile http
 - In Development the app applies pending migrations at start and seeds when `Seed:Enabled` is true
   (set in `appsettings.Development.json`).
 
+## Sign in from Swagger or Scalar
+
+1. Run the API (Development) and open `http://localhost:5115/swagger` or `/scalar/v1`.
+2. Call `POST /api/auth/login` with `{ "email": "admin@ceylonroads.example", "password": "Admin@12345" }`.
+3. Copy the `token` from the response, then use **Authorize** (Swagger) or the **Auth** section (Scalar) and paste it as a Bearer token. Calls to protected routes such as `GET /api/auth/me` now work.
+
+The access token lasts about 15 minutes. The browser also receives an httpOnly `refresh_token` cookie; `POST /api/auth/refresh`
+exchanges it for a new token. The cookie only exists for browsers (it is never in a response body).
+
+With curl:
+
+```powershell
+curl.exe -s -X POST http://localhost:5115/api/auth/login -H "Content-Type: application/json" -d "{\"email\":\"admin@ceylonroads.example\",\"password\":\"Admin@12345\"}"
+```
+
+Five wrong passwords lock an account for 15 minutes (HTTP 429). Clear it by waiting, or with a password reset
+(`POST /api/auth/forgot`, then `POST /api/auth/reset`). Until SendGrid is set up the reset email is not sent. In Development the full email, including the reset link, is written
+to the API console (look for `Email not sent (no provider configured)`), so copy the link from there. The `email_logs` table
+deliberately shows `token=[REDACTED]`: reset tokens are never stored or logged in clear, and outside Development the log
+does not contain email bodies (`Email:LogBodies` is only on in `appsettings.Development.json`).
+
 ## Test
 
 ```powershell
@@ -80,10 +101,14 @@ dotnet ef migrations add <Name> --project TravelWebAPI.Infrastructure --startup-
 | --- | --- |
 | `ConnectionStrings:Default` | PostgreSQL connection string (user-secrets or environment variable `ConnectionStrings__Default`) |
 | `Cors:AllowedOrigins` | Exact origins of the website and admin portal (no wildcard) |
-| `Jwt:Key` | Token signing key, at least 32 characters (used by the auth change) |
+| `Jwt:Key` | Token signing key, at least 32 characters. Development has its own key in `appsettings.Development.json`; Production must set it (environment variable `Jwt__Key`) |
+| `App:WebBaseUrl` | Website address used in password reset links. Must be `https` in Production |
+| `Auth:*` | `MaxFailedAttempts` (5), `LockoutMinutes` (15), `RefreshDays` (1), `RefreshDaysRemember` (30), `RefreshGraceSeconds` (10), `ResetTokenMinutes` (60) |
+| `RateLimiting:AuthPermitLimit`, `RateLimiting:AuthWindowSeconds` | Requests per window per client address on register, login, forgot, reset and refresh (10 per 60 s) |
+| `Hosting:UseForwardedHeaders`, `Hosting:KnownProxies` | Turn on only behind a reverse proxy, and list its addresses, so the real client address is used for rate limiting |
 | `Seed:Enabled`, `Seed:IncludeSampleActivity` | Seed at startup, and whether to include sample bookings |
 | `Limits:MaxRequestBodyBytes` | Maximum request body (default 1 MB) |
-| `Email:*` | SendGrid settings. Empty for now: emails are written to the log and `email_logs` instead of being sent |
+| `Email:*` | SendGrid settings. Empty for now: emails are recorded in `email_logs` (marked failed, never resent) instead of being sent. `Email:LogBodies` (true only in Development) also writes email bodies to the console |
 | `Serilog:*` | Log levels and sinks (JSON to the console by default) |
 
 In Production the API refuses to start when the connection string, the JWT key or the allowed origins are missing,

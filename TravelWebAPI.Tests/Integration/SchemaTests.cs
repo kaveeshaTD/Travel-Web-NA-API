@@ -55,7 +55,7 @@ public class SchemaTests(PostgresFixture postgres)
         await db.Database.MigrateAsync();
 
         Assert.Empty(await db.Database.GetPendingMigrationsAsync());
-        Assert.Single(await db.Database.GetAppliedMigrationsAsync());
+        Assert.Equal(db.Database.GetMigrations().Count(), (await db.Database.GetAppliedMigrationsAsync()).Count());
     }
 
     [Fact]
@@ -68,6 +68,23 @@ public class SchemaTests(PostgresFixture postgres)
             "SELECT count(*) FROM information_schema.columns WHERE table_name = 'bookings' AND column_name IN ('travel_date', 'travel_time', 'price_lkr', 'trip_plan', 'user_id')");
 
         Assert.Equal(5, count);
+    }
+
+    [Fact]
+    public async Task Auth_security_columns_exist_with_safe_defaults()
+    {
+        var connection = await postgres.CreateDatabaseAsync();
+        await using var db = PostgresFixture.CreateContext(connection);
+        var user = TestData.User();
+        db.Users.Add(user);
+        await db.SaveChangesAsync();
+        var token = new RefreshToken { UserId = user.Id, TokenHash = "h", ExpiresAt = DateTimeOffset.UtcNow.AddDays(1) };
+        db.RefreshTokens.Add(token);
+        await db.SaveChangesAsync();
+
+        Assert.Equal(0, await PostgresFixture.ScalarAsync<int>(connection, "SELECT failed_login_count FROM users"));
+        Assert.Equal(DBNull.Value, await PostgresFixture.ScalarAsync<object>(connection, "SELECT locked_until FROM users"));
+        Assert.False(await PostgresFixture.ScalarAsync<bool>(connection, "SELECT remember FROM refresh_tokens"));
     }
 
     [Fact]

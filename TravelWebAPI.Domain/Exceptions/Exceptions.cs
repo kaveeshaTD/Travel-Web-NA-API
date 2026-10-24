@@ -32,6 +32,12 @@ public sealed class UnauthorizedException(string message = "Sign in required")
 public sealed class ForbiddenException(string message = "You are not allowed to do this")
     : AppException(message);
 
+/// <summary>The caller must wait before trying again (account lockout). Answered as 429 with a Retry-After header.</summary>
+public sealed class TooManyRequestsException(string message, TimeSpan retryAfter) : AppException(message)
+{
+    public TimeSpan RetryAfter { get; } = retryAfter;
+}
+
 /// <summary>The requested record does not exist.</summary>
 public sealed class NotFoundException(string message = "Not found") : AppException(message)
 {

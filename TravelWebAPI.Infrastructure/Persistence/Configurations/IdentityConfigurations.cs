@@ -24,6 +24,7 @@ internal sealed class UserConfiguration : IEntityTypeConfiguration<User>
         builder.Property(x => x.Status).HasWireConversion().HasDefaultValue(UserStatus.Active);
         builder.Property(x => x.Phone).HasMaxLength(40);
         builder.Property(x => x.Country).HasMaxLength(80);
+        builder.Property(x => x.FailedLoginCount).HasDefaultValue(0);
         builder.Property(x => x.CreatedAt).HasDefaultValueSql("now()");
         builder.Property(x => x.UpdatedAt).HasDefaultValueSql("now()");
 
@@ -44,6 +45,7 @@ internal sealed class RefreshTokenConfiguration : IEntityTypeConfiguration<Refre
         builder.Property(x => x.TokenHash).HasMaxLength(128);
         builder.Property(x => x.CreatedByIp).HasMaxLength(45);
         builder.Property(x => x.UserAgent).HasMaxLength(255);
+        builder.Property(x => x.Remember).HasDefaultValue(false);
         builder.Property(x => x.CreatedAt).HasDefaultValueSql("now()");
 
         builder.HasIndex(x => x.TokenHash).IsUnique();

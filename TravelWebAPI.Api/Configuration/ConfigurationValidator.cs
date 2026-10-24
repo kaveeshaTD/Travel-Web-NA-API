@@ -1,3 +1,5 @@
+using TravelWebAPI.Infrastructure.Services;
+
 namespace TravelWebAPI.Api.Configuration;
 
 /// <summary>
@@ -7,9 +9,10 @@ namespace TravelWebAPI.Api.Configuration;
 public static class ConfigurationValidator
 {
     public const string ConnectionStringKey = "ConnectionStrings:Default";
-    public const string JwtKeyKey = $"{JwtOptions.Section}:{nameof(JwtOptions.Key)}";
+    public const string JwtKeyKey = $"{JwtSettings.Section}:{nameof(JwtSettings.Key)}";
     public const string CorsOriginsKey = $"{CorsOptions.Section}:{nameof(CorsOptions.AllowedOrigins)}";
     public const string MaxBodyKey = $"{LimitsOptions.Section}:{nameof(LimitsOptions.MaxRequestBodyBytes)}";
+    public const string WebBaseUrlKey = "App:WebBaseUrl";
 
     private static readonly string[] PlaceholderMarkers = ["CHANGE_ME", "CHANGEME", "YOUR_", "DESIGN-TIME-ONLY"];
 
@@ -48,15 +51,23 @@ public static class ConfigurationValidator
         {
             problems.Add($"{JwtKeyKey} is missing or still a placeholder");
         }
-        else if (jwtKey!.Length < JwtOptions.MinimumKeyLength)
+        else if (jwtKey!.Length < JwtSettings.MinimumKeyLength)
         {
-            problems.Add($"{JwtKeyKey} must be at least {JwtOptions.MinimumKeyLength} characters");
+            problems.Add($"{JwtKeyKey} must be at least {JwtSettings.MinimumKeyLength} characters");
         }
 
         var origins = configuration.GetSection(CorsOptions.Section).Get<CorsOptions>()?.AllowedOrigins ?? [];
         if (origins.Length == 0 || origins.Any(o => string.IsNullOrWhiteSpace(o) || o.Contains('*', StringComparison.Ordinal)))
         {
             problems.Add($"{CorsOriginsKey} must list the exact allowed origins (no wildcard)");
+        }
+
+        var webBaseUrl = configuration[WebBaseUrlKey];
+        if (IsMissing(webBaseUrl)
+            || !Uri.TryCreate(webBaseUrl, UriKind.Absolute, out var uri)
+            || uri.Scheme != Uri.UriSchemeHttps)
+        {
+            problems.Add($"{WebBaseUrlKey} must be the website's https address (used in password reset links)");
         }
 
         return problems;

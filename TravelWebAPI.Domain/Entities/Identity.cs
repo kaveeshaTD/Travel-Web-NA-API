@@ -18,6 +18,12 @@ public class User : IHasCreatedAt, IHasUpdatedAt
     public string? Phone { get; set; }
     public string? Country { get; set; }
     public DateTimeOffset? LastLoginAt { get; set; }
+
+    /// <summary>Consecutive wrong passwords. Reset by a successful sign in or a password reset.</summary>
+    public int FailedLoginCount { get; set; }
+
+    /// <summary>Sign in is refused until this moment (account lockout).</summary>
+    public DateTimeOffset? LockedUntil { get; set; }
     public DateTimeOffset CreatedAt { get; set; }
     public DateTimeOffset UpdatedAt { get; set; }
 
@@ -34,6 +40,9 @@ public class RefreshToken : IHasCreatedAt
     public string TokenHash { get; set; } = string.Empty;
     public DateTimeOffset ExpiresAt { get; set; }
     public DateTimeOffset? RevokedAt { get; set; }
+
+    /// <summary>True for a 30-day session (remember me); rotated tokens keep the same kind.</summary>
+    public bool Remember { get; set; }
 
     /// <summary>Next token in the rotation chain, used to detect reuse.</summary>
     public Guid? ReplacedById { get; set; }

@@ -7,18 +7,6 @@ public sealed class CorsOptions
     public string[] AllowedOrigins { get; set; } = [];
 }
 
-/// <summary>Auth settings. The signing key is only validated here; the auth change uses it to issue tokens.</summary>
-public sealed class JwtOptions
-{
-    public const string Section = "Jwt";
-    public const int MinimumKeyLength = 32;
-
-    public string Key { get; set; } = string.Empty;
-    public string Issuer { get; set; } = "TravelWebAPI";
-    public string Audience { get; set; } = "TravelWebAPI";
-    public int AccessTokenMinutes { get; set; } = 15;
-}
-
 public sealed class SeedingOptions
 {
     public const string Section = "Seed";
@@ -33,6 +21,26 @@ public sealed class LimitsOptions
     public const long DefaultMaxRequestBodyBytes = 1_048_576;
 
     public long MaxRequestBodyBytes { get; set; } = DefaultMaxRequestBodyBytes;
+}
+
+/// <summary>Rate limit of the sensitive auth routes (register, login, forgot, reset, refresh).</summary>
+public sealed class RateLimitingOptions
+{
+    public const string Section = "RateLimiting";
+
+    public int AuthPermitLimit { get; set; } = 10;
+
+    public int AuthWindowSeconds { get; set; } = 60;
+}
+
+/// <summary>Settings for running behind a reverse proxy. Off by default so a spoofed <c>X-Forwarded-For</c> is ignored.</summary>
+public sealed class HostingOptions
+{
+    public const string Section = "Hosting";
+
+    public bool UseForwardedHeaders { get; set; }
+
+    public string[] KnownProxies { get; set; } = [];
 }
 
 /// <summary>Email settings. Left empty until a SendGrid account exists; the log-only sender is used meanwhile.</summary>

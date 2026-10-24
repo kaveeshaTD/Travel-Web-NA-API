@@ -1,6 +1,8 @@
 using System.ComponentModel.DataAnnotations;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using TravelWebAPI.Application.Abstractions;
 using TravelWebAPI.Domain.Enums;
 using TravelWebAPI.Domain.Exceptions;
 using ValidationException = TravelWebAPI.Domain.Exceptions.ValidationException;
@@ -81,6 +83,18 @@ public sealed class ErrorProbeController : ControllerBase
 
     [HttpDelete("no-content")]
     public IActionResult NoContent_() => NoContent();
+
+    [HttpGet("whoami")]
+    public IActionResult WhoAmI([FromServices] ICurrentUser user)
+        => Ok(new { authenticated = user.IsAuthenticated, userId = user.UserId, email = user.Email, role = user.Role, isAdmin = user.IsAdmin });
+
+    [HttpGet("user-only")]
+    [Authorize]
+    public IActionResult UserOnly() => Ok(new { ok = true });
+
+    [HttpGet("admin-only")]
+    [Authorize(Roles = "admin")]
+    public IActionResult AdminOnly() => Ok(new { ok = true });
 
     [HttpGet("sample")]
     public IActionResult Sample() => Ok(new

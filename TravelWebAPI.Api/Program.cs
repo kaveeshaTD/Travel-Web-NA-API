@@ -10,7 +10,8 @@ builder.Host.UseSerilog(
         .ReadFrom.Configuration(context.Configuration)
         .ReadFrom.Services(services)
         .Enrich.FromLogContext()
-        .Enrich.WithProperty("Environment", context.HostingEnvironment.EnvironmentName));
+        .Enrich.WithProperty("Environment", context.HostingEnvironment.EnvironmentName),
+    preserveStaticLogger: true);
 
 builder.Services.AddApi();
 

@@ -21,8 +21,17 @@ public static class DependencyInjection
         services.AddScoped<IUnitOfWork, UnitOfWork>();
         services.AddScoped(typeof(IRepository<>), typeof(EfRepository<>));
 
+        services.AddScoped<IUserRepository, UserRepository>();
+        services.AddScoped<IRefreshTokenRepository, RefreshTokenRepository>();
+        services.AddScoped<IPasswordResetTokenRepository, PasswordResetTokenRepository>();
+
+        services.AddSingleton<IJwtTokenService, JwtTokenService>();
+        services.AddSingleton<ITokenGenerator, TokenGenerator>();
+        services.AddSingleton<ILoginAttemptTracker, MemoryLoginAttemptTracker>();
+
         // Replaced by the SendGrid implementation once an account and key are configured.
         services.AddSingleton<IEmailSender, LogOnlyEmailSender>();
+        services.AddScoped<IEmailOutbox, EmailOutbox>();
 
         services.AddScoped<DatabaseSeeder>();
 

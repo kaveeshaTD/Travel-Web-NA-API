@@ -19,8 +19,15 @@ public static class WebApplicationExtensions
     /// <summary>The middleware order matters: ids and logging wrap everything, errors are shaped next, then routing, limits, CORS and auth.</summary>
     public static WebApplication UseApiPipeline(this WebApplication app)
     {
+        // Only behind a trusted reverse proxy: then the client address and scheme come from its headers.
+        if (app.Configuration.GetValue<bool>($"{HostingOptions.Section}:{nameof(HostingOptions.UseForwardedHeaders)}"))
+        {
+            app.UseForwardedHeaders();
+        }
+
         app.UseMiddleware<CorrelationIdMiddleware>();
-        app.UseSerilogRequestLogging();
+        // Use this host's own logger, not Serilog's global one (hosts in tests run side by side).
+        app.UseSerilogRequestLogging(options => options.Logger = app.Services.GetRequiredService<Serilog.ILogger>());
 
         app.UseExceptionHandler(new ExceptionHandlerOptions
         {
@@ -44,8 +51,10 @@ public static class WebApplicationExtensions
         }
 
         app.UseRouting();
+        app.UseRateLimiter();
         app.UseMiddleware<RequestSizeLimitMiddleware>();
         app.UseCors(ServiceCollectionExtensions.CorsPolicyName);
+        app.UseAuthentication();
         app.UseAuthorization();
 
         app.MapControllers();

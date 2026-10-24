@@ -12,7 +12,9 @@ namespace TravelWebAPI.Tests.Integration;
 /// </summary>
 public sealed class PostgresFixture : IAsyncLifetime
 {
-    private readonly PostgreSqlContainer _container = new PostgreSqlBuilder("postgres:16-alpine").Build();
+    private readonly PostgreSqlContainer _container = new PostgreSqlBuilder("postgres:16-alpine")
+        .WithCommand("-c", "max_connections=300")
+        .Build();
 
     public async Task InitializeAsync() => await _container.StartAsync();
 
@@ -29,7 +31,8 @@ public sealed class PostgresFixture : IAsyncLifetime
             await command.ExecuteNonQueryAsync();
         }
 
-        var connectionString = new NpgsqlConnectionStringBuilder(_container.GetConnectionString()) { Database = name }.ConnectionString;
+        // No pooling: every test has its own database, and idle pooled connections would pile up and exhaust the server.
+        var connectionString = new NpgsqlConnectionStringBuilder(_container.GetConnectionString()) { Database = name, Pooling = false }.ConnectionString;
 
         if (migrate)
         {
