@@ -1,0 +1,71 @@
+# .NET build output
+[Bb]in/
+[Oo]bj/
+[Ll]og/
+[Ll]ogs/
+artifacts/
+publish/
+*.dll
+*.exe
+*.pdb
+*.nupkg
+*.snupkg
+
+# User-specific files
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+*.rsuser
+
+# Visual Studio / Rider / VS Code
+.vs/
+.idea/
+.vscode/
+*.DotSettings.user
+*.sln.iml
+_ReSharper*/
+*.ncrunch*
+
+# Tests and coverage
+TestResults/
+[Tt]est[Rr]esult*/
+coverage/
+*.coverage
+*.coveragexml
+coverage*.json
+coverage*.xml
+*.trx
+
+# Secrets and local config (never commit keys: SendGrid, JWT signing key, DB password)
+.env
+.env.*
+!.env.example
+appsettings.Local.json
+appsettings.*.local.json
+appsettings.Production.json
+secrets.json
+*.pfx
+*.p12
+*.key
+
+# Runtime data
+uploads/
+App_Data/
+*.log
+
+# EF Core scratch output
+*.db
+*.db-shm
+*.db-wal
+efbundle.exe
+
+# Local tooling (not part of the project)
+.claude/
+CLAUDE.md
+openspec/
+
+# OS files
+.DS_Store
+Thumbs.db
+Desktop.ini
