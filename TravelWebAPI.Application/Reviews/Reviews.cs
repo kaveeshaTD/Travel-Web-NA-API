@@ -4,6 +4,7 @@ using FluentValidation;
 using TravelWebAPI.Application.Abstractions;
 using TravelWebAPI.Application.Auth.Validators;
 using TravelWebAPI.Application.Content;
+using TravelWebAPI.Application.Lists;
 using TravelWebAPI.Domain.Common;
 using TravelWebAPI.Domain.Entities;
 using TravelWebAPI.Domain.Enums;
@@ -71,8 +72,11 @@ public sealed record SubmissionReceipt(string Reference);
 
 public interface IReviewRepository : IRepository<Review>
 {
-    /// <summary>Reviews newest first. With <paramref name="publishedOnly"/> only the published ones.</summary>
-    Task<IReadOnlyList<Review>> ListAsync(bool publishedOnly, CancellationToken cancellationToken = default);
+    /// <summary>One page of reviews, searched, filtered and sorted in the database. Without <c>IncludeEveryStatus</c> only the published ones.</summary>
+    Task<PagedResult<Review>> PageAsync(ReviewListFilter filter, ListQuery query, CancellationToken cancellationToken = default);
+
+    /// <summary>Count, average and rating distribution of the published reviews.</summary>
+    Task<ReviewSummary> SummarizeAsync(CancellationToken cancellationToken = default);
 }
 
 public static class References
@@ -147,11 +151,23 @@ public sealed class ReviewService(
 {
     public const string NotFoundMessage = "Review not found";
 
-    public async Task<IReadOnlyList<ReviewDto>> ListPublishedAsync(CancellationToken cancellationToken = default)
-        => [.. (await reviews.ListAsync(publishedOnly: true, cancellationToken)).Select(ToPublic)];
+    /// <summary>One page of published reviews, newest review date first unless sorted otherwise, without the author.</summary>
+    public async Task<PagedResult<ReviewDto>> ListPublishedAsync(ReviewListRequest request, CancellationToken cancellationToken = default)
+    {
+        var (query, filter) = ReviewLists.Parse(request, admin: false);
+        return (await reviews.PageAsync(filter, query, cancellationToken)).Map(ToPublic);
+    }
 
-    public async Task<IReadOnlyList<AdminReviewDto>> ListAllAsync(CancellationToken cancellationToken = default)
-        => [.. (await reviews.ListAsync(publishedOnly: false, cancellationToken)).Select(ToAdmin)];
+    /// <summary>One page of every review whatever its status, with the author (admin).</summary>
+    public async Task<PagedResult<AdminReviewDto>> ListAllAsync(ReviewListRequest request, CancellationToken cancellationToken = default)
+    {
+        var (query, filter) = ReviewLists.Parse(request, admin: true);
+        return (await reviews.PageAsync(filter, query, cancellationToken)).Map(ToAdmin);
+    }
+
+    /// <summary>How many published reviews there are, their average rating and how many have each rating.</summary>
+    public Task<ReviewSummary> SummaryAsync(CancellationToken cancellationToken = default)
+        => reviews.SummarizeAsync(cancellationToken);
 
     /// <summary>A visitor's review: saved as pending, today's date, linked to the signed-in customer when there is one.</summary>
     public async Task<SubmissionReceipt> SubmitAsync(ReviewSubmission submission, CancellationToken cancellationToken = default)

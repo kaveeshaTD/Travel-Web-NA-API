@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using TravelWebAPI.Api.Auth;
+using TravelWebAPI.Application.Lists;
 using TravelWebAPI.Application.Users;
 
 namespace TravelWebAPI.Api.Controllers;
@@ -11,10 +12,13 @@ namespace TravelWebAPI.Api.Controllers;
 [Authorize(Roles = AuthRoles.Admin)]
 public sealed class UsersController(UserAdminService users) : ControllerBase
 {
-    /// <summary>Every user, newest first, with the number of their bookings.</summary>
+    /// <summary>
+    /// One page of users, newest first, with the number of their bookings. Supports page, pageSize, search, sort, facets and
+    /// the filters role and status.
+    /// </summary>
     [HttpGet]
-    public async Task<IActionResult> List(CancellationToken cancellationToken)
-        => Ok(await users.ListAsync(cancellationToken));
+    public async Task<ActionResult<PagedResult<AdminUserDto>>> List([FromQuery] UserListRequest request, CancellationToken cancellationToken)
+        => Ok(await users.ListAsync(request, cancellationToken));
 
     /// <summary>Creates an account. The answer points at the list because there is no single-user read.</summary>
     [HttpPost]

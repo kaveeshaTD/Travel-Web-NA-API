@@ -268,13 +268,14 @@ public sealed class BookingServiceAdminTests
         _h.AddBooking(userId: BookingHarness.OtherCustomerId, reference: "BK-NEWEST", created: _h.Clock.UtcNow.AddHours(-1));
         var service = _h.Create();
 
-        var all = await service.ListAllAsync();
-        var mine = await service.ListMineAsync();
+        var all = await service.ListAllAsync(new BookingListRequest());
+        var mine = await service.ListMineAsync(new BookingListRequest());
 
-        Assert.Equal(["BK-NEWEST", "BK-OLDER2"], all.Select(b => b.Reference));
-        Assert.All(all, b => Assert.NotNull(b.AdminNotes));
-        Assert.Equal(["BK-OLDER2"], mine.Select(b => b.Reference));
-        Assert.All(mine, b => Assert.Null(b.AdminNotes));
+        Assert.Equal(["BK-NEWEST", "BK-OLDER2"], all.Items.Select(b => b.Reference));
+        Assert.Equal(2, all.TotalCount);
+        Assert.All(all.Items, b => Assert.NotNull(b.AdminNotes));
+        Assert.Equal(["BK-OLDER2"], mine.Items.Select(b => b.Reference));
+        Assert.All(mine.Items, b => Assert.Null(b.AdminNotes));
     }
 
     // ---------------------------------------------------------------- delete and email

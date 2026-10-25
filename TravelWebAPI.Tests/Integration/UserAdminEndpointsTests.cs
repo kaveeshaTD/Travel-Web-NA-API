@@ -70,7 +70,7 @@ public sealed class UserAdminEndpointsTests(PostgresFixture postgres) : ContentT
         Factory.Clock.Advance(TimeSpan.FromHours(1));
         await CreateUserAsync(NewUser());
 
-        var list = await Json(await AsAdmin(HttpMethod.Get, "/api/users"));
+        var list = (await Json(await AsAdmin(HttpMethod.Get, "/api/users"))).GetProperty("items");
 
         Assert.Equal(["new.person@example.com", "booker@example.com"], list.EnumerateArray().Select(u => u.GetProperty("email").GetString()));
         Assert.Equal([0, 2], list.EnumerateArray().Select(u => u.GetProperty("bookingCount").GetInt32()));

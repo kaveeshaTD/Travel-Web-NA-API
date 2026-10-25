@@ -149,7 +149,7 @@ public sealed class ContactEndpointsTests(PostgresFixture postgres) : ContentTes
         var response = await AsAdmin(HttpMethod.Get, "/api/messages");
 
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
-        var list = await Json(response);
+        var list = (await Json(response)).GetProperty("items");
         Assert.Equal(["second@example.com", "first@example.com"], list.EnumerateArray().Select(m => m.GetProperty("email").GetString()));
         var first = list[0];
         Assert.Equal(["id", "name", "email", "message", "status", "createdAt", "repliedAt"], first.EnumerateObject().Select(p => p.Name));
@@ -294,7 +294,7 @@ public sealed class ContactEndpointsTests(PostgresFixture postgres) : ContentTes
         Assert.Equal(1L, await Scalar<long>("SELECT count(*) FROM email_logs"));
         Assert.Equal(DBNull.Value, await Scalar<object>("SELECT contact_message_id FROM email_logs"));
 
-        var emails = await Json(await AsAdmin(HttpMethod.Get, "/api/emails"));
+        var emails = (await Json(await AsAdmin(HttpMethod.Get, "/api/emails"))).GetProperty("items");
         Assert.Equal(1, emails.GetArrayLength());
         Assert.Equal(JsonValueKind.Null, emails[0].GetProperty("messageId").ValueKind);
     }
@@ -308,7 +308,7 @@ public sealed class ContactEndpointsTests(PostgresFixture postgres) : ContentTes
         Factory.Clock.Advance(TimeSpan.FromMinutes(5));
         await SendAsync("second@example.com");
 
-        var list = await Json(await AsAdmin(HttpMethod.Get, "/api/emails"));
+        var list = (await Json(await AsAdmin(HttpMethod.Get, "/api/emails"))).GetProperty("items");
 
         Assert.Equal(["second@example.com", "first@example.com"], list.EnumerateArray().Select(e => e.GetProperty("to").GetString()));
         var entry = list[0];
@@ -324,7 +324,7 @@ public sealed class ContactEndpointsTests(PostgresFixture postgres) : ContentTes
     }
 
     [Fact]
-    public async Task The_limit_selects_the_newest_and_must_be_in_range()
+    public async Task The_page_size_selects_the_newest_and_the_old_limit_option_is_ignored()
     {
         for (var number = 1; number <= 4; number++)
         {
@@ -332,19 +332,15 @@ public sealed class ContactEndpointsTests(PostgresFixture postgres) : ContentTes
             Factory.Clock.Advance(TimeSpan.FromMinutes(1));
         }
 
-        var two = await Json(await AsAdmin(HttpMethod.Get, "/api/emails?limit=2"));
-        var all = await Json(await AsAdmin(HttpMethod.Get, "/api/emails"));
-        var zero = await AsAdmin(HttpMethod.Get, "/api/emails?limit=0");
-        var huge = await AsAdmin(HttpMethod.Get, "/api/emails?limit=5000");
-        var text = await AsAdmin(HttpMethod.Get, "/api/emails?limit=abc");
+        var two = await Json(await AsAdmin(HttpMethod.Get, "/api/emails?pageSize=2"));
+        var withLimit = await Json(await AsAdmin(HttpMethod.Get, "/api/emails?limit=2"));
+        var zero = await AsAdmin(HttpMethod.Get, "/api/emails?pageSize=0");
 
-        Assert.Equal(["v4@example.com", "v3@example.com"], two.EnumerateArray().Select(e => e.GetProperty("to").GetString()));
-        Assert.Equal(4, all.GetArrayLength());
+        Assert.Equal(["v4@example.com", "v3@example.com"], two.GetProperty("items").EnumerateArray().Select(e => e.GetProperty("to").GetString()));
+        Assert.Equal(4, two.GetProperty("totalCount").GetInt32());
+        Assert.Equal(4, withLimit.GetProperty("items").GetArrayLength()); // `limit` no longer means anything
         Assert.Equal(HttpStatusCode.BadRequest, zero.StatusCode);
-        Assert.NotNull(await Field(zero, "limit"));
-        Assert.Equal(HttpStatusCode.BadRequest, huge.StatusCode);
-        Assert.NotNull(await Field(huge, "limit"));
-        Assert.Equal(HttpStatusCode.BadRequest, text.StatusCode);
+        Assert.NotNull(await Field(zero, "pageSize"));
     }
 
     [Fact]
@@ -354,7 +350,7 @@ public sealed class ContactEndpointsTests(PostgresFixture postgres) : ContentTes
         await Api.PostAsync("/api/auth/forgot", new { email = "emma@example.com" });
         var token = Factory.Emails.LatestResetToken();
 
-        var list = await Json(await AsAdmin(HttpMethod.Get, "/api/emails"));
+        var list = (await Json(await AsAdmin(HttpMethod.Get, "/api/emails"))).GetProperty("items");
 
         var reset = list.EnumerateArray().First(e => e.GetProperty("kind").GetString() == "password-reset");
         Assert.Contains("token=[REDACTED]", reset.GetProperty("body").GetString(), StringComparison.Ordinal);
@@ -372,8 +368,8 @@ public sealed class ContactEndpointsTests(PostgresFixture postgres) : ContentTes
             await new DatabaseSeeder(db, new PasswordHasher(iterations: 1_000), NullLogger<DatabaseSeeder>.Instance).SeedAsync(new SeedOptions());
         }
 
-        var messages = await Json(await AsAdmin(HttpMethod.Get, "/api/messages"));
-        var emails = await Json(await AsAdmin(HttpMethod.Get, "/api/emails"));
+        var messages = (await Json(await AsAdmin(HttpMethod.Get, "/api/messages"))).GetProperty("items");
+        var emails = (await Json(await AsAdmin(HttpMethod.Get, "/api/emails"))).GetProperty("items");
 
         Assert.NotEmpty(messages.EnumerateArray());
         Assert.NotEmpty(emails.EnumerateArray());

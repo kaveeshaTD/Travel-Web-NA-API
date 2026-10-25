@@ -2,6 +2,7 @@ using Microsoft.Extensions.Options;
 using TravelWebAPI.Application.Abstractions;
 using TravelWebAPI.Application.Bookings;
 using TravelWebAPI.Application.Contact;
+using TravelWebAPI.Application.Lists;
 using TravelWebAPI.Domain.Entities;
 using TravelWebAPI.Domain.Enums;
 
@@ -168,8 +169,12 @@ public sealed class BookingHarness : IBookingRepository, IEmailLogRepository, IE
         => Task.FromResult(Bookings.FirstOrDefault(b =>
             string.Equals(b.Reference, idOrReference, StringComparison.OrdinalIgnoreCase) || b.Id.ToString() == idOrReference));
 
-    public Task<IReadOnlyList<Booking>> ListAsync(Guid? userId, CancellationToken cancellationToken = default)
-        => Task.FromResult<IReadOnlyList<Booking>>([.. Bookings.Where(b => userId is null || b.UserId == userId).OrderByDescending(b => b.CreatedAt)]);
+    /// <summary>A plain in-memory page (newest first); the real filtering, sorting and searching are tested against PostgreSQL.</summary>
+    public Task<PagedResult<Booking>> PageAsync(Guid? userId, BookingListFilter filter, ListQuery query, CancellationToken cancellationToken = default)
+    {
+        var rows = Bookings.Where(b => userId is null || b.UserId == userId).OrderByDescending(b => b.CreatedAt).ToList();
+        return Task.FromResult(Paged.Of<Booking>([.. rows.Skip(query.Skip).Take(query.PageSize)], query, rows.Count));
+    }
 
     public Task<IReadOnlyDictionary<Guid, decimal>> PaidTotalsAsync(IReadOnlyCollection<Guid> bookingIds, CancellationToken cancellationToken = default)
         => Task.FromResult<IReadOnlyDictionary<Guid, decimal>>(
@@ -183,8 +188,11 @@ public sealed class BookingHarness : IBookingRepository, IEmailLogRepository, IE
 
     // ---------------------------------------------------------------- IEmailLogRepository
 
-    public Task<IReadOnlyList<EmailLog>> ListAsync(int limit, CancellationToken cancellationToken = default)
-        => Task.FromResult<IReadOnlyList<EmailLog>>([.. Logs.OrderByDescending(l => l.CreatedAt).Take(limit)]);
+    public Task<PagedResult<EmailLog>> PageAsync(EmailListFilter filter, ListQuery query, CancellationToken cancellationToken = default)
+    {
+        var rows = Logs.OrderByDescending(l => l.CreatedAt).ToList();
+        return Task.FromResult(Paged.Of<EmailLog>([.. rows.Skip(query.Skip).Take(query.PageSize)], query, rows.Count));
+    }
 
     public Task<EmailLog?> GetAsync(Guid id, CancellationToken cancellationToken = default)
         => Task.FromResult(Logs.FirstOrDefault(l => l.Id == id));

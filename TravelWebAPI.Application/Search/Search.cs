@@ -64,8 +64,7 @@ public static class SearchRules
     }
 
     /// <summary>A "contains" pattern in which percent, underscore and backslash in the text are plain characters.</summary>
-    public static string ContainsPattern(string text)
-        => "%" + text.Replace("\\", "\\\\", StringComparison.Ordinal).Replace("%", "\\%", StringComparison.Ordinal).Replace("_", "\\_", StringComparison.Ordinal) + "%";
+    public static string ContainsPattern(string text) => Lists.LikePattern.Contains(text);
 }
 
 /// <summary>The admin's global search over bookings, packages, destinations and users.</summary>

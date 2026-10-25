@@ -106,7 +106,7 @@ public sealed class BookingAdminEndpointsTests(PostgresFixture postgres) : Conte
         Factory.Clock.Advance(TimeSpan.FromMinutes(10));
         var second = await BookAsync(two, new { packageId = "cultural-triangle" });
 
-        var list = await Json(await AsAdmin(HttpMethod.Get, "/api/bookings"));
+        var list = (await Json(await AsAdmin(HttpMethod.Get, "/api/bookings"))).GetProperty("items");
 
         Assert.Equal([second, first], list.EnumerateArray().Select(b => b.GetProperty("reference").GetString()));
         Assert.All(list.EnumerateArray(), booking =>
@@ -364,9 +364,11 @@ public sealed class BookingAdminEndpointsTests(PostgresFixture postgres) : Conte
             await new DatabaseSeeder(db, new PasswordHasher(iterations: 1_000), NullLogger<DatabaseSeeder>.Instance).SeedAsync(new SeedOptions());
         }
 
-        var list = await Json(await AsAdmin(HttpMethod.Get, "/api/bookings"));
+        var page = await Json(await AsAdmin(HttpMethod.Get, "/api/bookings?pageSize=100"));
+        var list = page.GetProperty("items");
         var seeded = await Scalar<long>("SELECT count(*) FROM bookings");
 
+        Assert.Equal(seeded, page.GetProperty("totalCount").GetInt64());
         Assert.Equal(seeded, list.GetArrayLength());
         foreach (var booking in list.EnumerateArray())
         {

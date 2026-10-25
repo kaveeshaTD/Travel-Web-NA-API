@@ -40,6 +40,7 @@ internal sealed class BookingConfiguration : IEntityTypeConfiguration<Booking>
         builder.Property(x => x.UpdatedAt).HasDefaultValueSql("now()");
 
         builder.HasIndex(x => x.Reference).IsUnique();
+        builder.HasIndex(x => x.CreatedAt);
         builder.HasIndex(x => x.UserId);
         builder.HasIndex(x => new { x.Status, x.CreatedAt });
         builder.HasIndex(x => x.TravelDate);
@@ -95,7 +96,8 @@ internal sealed class PaymentConfiguration : IEntityTypeConfiguration<Payment>
         builder.Property(x => x.UpdatedAt).HasDefaultValueSql("now()");
 
         builder.HasIndex(x => x.BookingId);
-        builder.HasIndex(x => x.PaidAt);
+        // The payment list is newest paid first, then newest entered.
+        builder.HasIndex(x => new { x.PaidAt, x.CreatedAt });
         builder.HasIndex(x => x.Status);
 
         builder.HasOne(x => x.Booking)
@@ -119,6 +121,7 @@ internal sealed class ContactMessageConfiguration : IEntityTypeConfiguration<Con
         builder.Property(x => x.CreatedAt).HasDefaultValueSql("now()");
 
         builder.HasIndex(x => new { x.Status, x.CreatedAt });
+        builder.HasIndex(x => x.CreatedAt);
     }
 }
 

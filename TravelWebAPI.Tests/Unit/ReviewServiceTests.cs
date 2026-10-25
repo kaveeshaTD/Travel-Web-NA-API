@@ -1,4 +1,5 @@
 using TravelWebAPI.Application.Abstractions;
+using TravelWebAPI.Application.Lists;
 using TravelWebAPI.Application.Reviews;
 using TravelWebAPI.Domain.Entities;
 using TravelWebAPI.Domain.Enums;
@@ -172,8 +173,8 @@ public sealed class ReviewServiceTests
         _reviews.Items.Add(Stored());
         _reviews.Items[0].UserId = CustomerId;
 
-        var publicList = await _service.ListPublishedAsync();
-        var adminList = await _service.ListAllAsync();
+        var publicList = (await _service.ListPublishedAsync(new ReviewListRequest())).Items;
+        var adminList = (await _service.ListAllAsync(new ReviewListRequest())).Items;
 
         Assert.Equal(CustomerId, adminList.Single().UserId);
         Assert.DoesNotContain("UserId", typeof(ReviewDto).GetProperties().Select(p => p.Name));
@@ -184,11 +185,13 @@ public sealed class ReviewServiceTests
     [Fact]
     public async Task The_public_list_only_asks_for_published_reviews()
     {
-        await _service.ListPublishedAsync();
+        await _service.ListPublishedAsync(new ReviewListRequest { Status = "pending" });
         Assert.True(_reviews.LastPublishedOnly);
+        Assert.Null(_reviews.LastFilter!.Status); // the public cannot ask for other statuses
 
-        await _service.ListAllAsync();
+        await _service.ListAllAsync(new ReviewListRequest { Status = "pending" });
         Assert.False(_reviews.LastPublishedOnly);
+        Assert.Equal(ReviewStatus.Pending, _reviews.LastFilter!.Status);
     }
 
     // ---------------------------------------------------------------- admin add
@@ -344,11 +347,19 @@ public sealed class ReviewServiceTests
 
         public bool LastPublishedOnly { get; private set; }
 
-        public Task<IReadOnlyList<Review>> ListAsync(bool publishedOnly, CancellationToken cancellationToken = default)
+        public ReviewListFilter? LastFilter { get; private set; }
+
+        /// <summary>A plain in-memory page; the real filtering, sorting and searching are tested against PostgreSQL.</summary>
+        public Task<PagedResult<Review>> PageAsync(ReviewListFilter filter, ListQuery query, CancellationToken cancellationToken = default)
         {
-            LastPublishedOnly = publishedOnly;
-            return Task.FromResult<IReadOnlyList<Review>>([.. Items.Where(r => !publishedOnly || r.Status == ReviewStatus.Published)]);
+            LastFilter = filter;
+            LastPublishedOnly = !filter.IncludeEveryStatus;
+            var rows = Items.Where(r => filter.IncludeEveryStatus || r.Status == ReviewStatus.Published).ToList();
+            return Task.FromResult(Paged.Of<Review>([.. rows.Skip(query.Skip).Take(query.PageSize)], query, rows.Count));
         }
+
+        public Task<ReviewSummary> SummarizeAsync(CancellationToken cancellationToken = default)
+            => Task.FromResult(new ReviewSummary(0, 0, new Dictionary<string, int>()));
 
         public Task<Review?> GetByIdAsync(object id, CancellationToken cancellationToken = default)
             => Task.FromResult(Items.FirstOrDefault(r => r.Id == (Guid)id));

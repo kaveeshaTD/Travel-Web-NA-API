@@ -1,4 +1,5 @@
 using TravelWebAPI.Application.Abstractions;
+using TravelWebAPI.Application.Lists;
 using TravelWebAPI.Application.Payments;
 using TravelWebAPI.Application.Rates;
 using TravelWebAPI.Domain.Entities;
@@ -58,11 +59,19 @@ public sealed class PaymentHarness : IPaymentRepository, IExchangeRates, IUnitOf
     public Task<Payment?> FindAsync(Guid id, CancellationToken cancellationToken = default)
         => Task.FromResult(Payments.FirstOrDefault(p => p.Id == id));
 
-    public Task<IReadOnlyList<Payment>> ListWithBookingAsync(CancellationToken cancellationToken = default)
-        => Task.FromResult<IReadOnlyList<Payment>>([.. Payments
+    /// <summary>A plain in-memory page (newest paid first); the real filtering, sorting and searching are tested against PostgreSQL.</summary>
+    public Task<PagedResult<Payment>> PageAsync(PaymentListFilter filter, ListQuery query, CancellationToken cancellationToken = default)
+    {
+        var rows = Payments
             .Select(p => { p.Booking = Bookings.Bookings.FirstOrDefault(b => b.Id == p.BookingId); return p; })
             .OrderByDescending(p => p.PaidAt)
-            .ThenByDescending(p => p.CreatedAt)]);
+            .ThenByDescending(p => p.CreatedAt)
+            .ToList();
+        return Task.FromResult(Paged.Of<Payment>([.. rows.Skip(query.Skip).Take(query.PageSize)], query, rows.Count));
+    }
+
+    public Task<PaymentSummary> SummarizeAsync(PaymentListFilter filter, CancellationToken cancellationToken = default)
+        => Task.FromResult(new PaymentSummary(0, 0, 0, 0, Payments.Count));
 
     public Task<CurrentRates> GetCurrentAsync(CancellationToken cancellationToken = default)
     {
@@ -407,10 +416,10 @@ public sealed class PaymentServiceTests
         var newer = _h.AddPayment(booking.Id);
         newer.PaidAt = new DateOnly(2026, 10, 20);
 
-        var list = await _h.Create().ListAsync();
+        var list = await _h.Create().ListAsync(new PaymentListRequest());
 
-        Assert.Equal([newer.Id, older.Id], list.Select(p => p.Id));
-        Assert.All(list, p =>
+        Assert.Equal([newer.Id, older.Id], list.Items.Select(p => p.Id));
+        Assert.All(list.Items, p =>
         {
             Assert.Equal(booking.Reference, p.BookingReference);
             Assert.Equal("Emma Wilson", p.CustomerName);

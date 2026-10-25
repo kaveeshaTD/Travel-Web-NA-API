@@ -159,6 +159,9 @@ namespace TravelWebAPI.Infrastructure.Persistence.Migrations
                     b.HasKey("Id")
                         .HasName("pk_bookings");
 
+                    b.HasIndex("CreatedAt")
+                        .HasDatabaseName("ix_bookings_created_at");
+
                     b.HasIndex("Email")
                         .HasDatabaseName("ix_bookings_email");
 
@@ -243,6 +246,9 @@ namespace TravelWebAPI.Infrastructure.Persistence.Migrations
 
                     b.HasKey("Id")
                         .HasName("pk_contact_messages");
+
+                    b.HasIndex("CreatedAt")
+                        .HasDatabaseName("ix_contact_messages_created_at");
 
                     b.HasIndex("Status", "CreatedAt")
                         .HasDatabaseName("ix_contact_messages_status_created_at");
@@ -1027,11 +1033,11 @@ namespace TravelWebAPI.Infrastructure.Persistence.Migrations
                     b.HasIndex("BookingId")
                         .HasDatabaseName("ix_payments_booking_id");
 
-                    b.HasIndex("PaidAt")
-                        .HasDatabaseName("ix_payments_paid_at");
-
                     b.HasIndex("Status")
                         .HasDatabaseName("ix_payments_status");
+
+                    b.HasIndex("PaidAt", "CreatedAt")
+                        .HasDatabaseName("ix_payments_paid_at_created_at");
 
                     b.ToTable("payments", null, t =>
                         {
@@ -1189,6 +1195,9 @@ namespace TravelWebAPI.Infrastructure.Persistence.Migrations
 
                     b.HasKey("Id")
                         .HasName("pk_reviews");
+
+                    b.HasIndex("ReviewDate")
+                        .HasDatabaseName("ix_reviews_review_date");
 
                     b.HasIndex("Status")
                         .HasDatabaseName("ix_reviews_status");
@@ -1513,6 +1522,9 @@ namespace TravelWebAPI.Infrastructure.Persistence.Migrations
 
                     b.HasKey("Id")
                         .HasName("pk_users");
+
+                    b.HasIndex("CreatedAt")
+                        .HasDatabaseName("ix_users_created_at");
 
                     b.HasIndex("Email")
                         .IsUnique()

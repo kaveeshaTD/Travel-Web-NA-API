@@ -56,7 +56,7 @@ public sealed class ReviewEndpointsTests(PostgresFixture postgres) : ContentTest
     }
 
     private async Task<List<string>> PublicNamesAsync() =>
-        (await Json(await Api.GetAsync("/api/reviews"))).EnumerateArray().Select(r => r.GetProperty("name").GetString()!).ToList();
+        (await Json(await Api.GetAsync("/api/reviews"))).GetProperty("items").EnumerateArray().Select(r => r.GetProperty("name").GetString()!).ToList();
 
     private async Task AddCustomerAsync(Guid id)
     {
@@ -70,12 +70,15 @@ public sealed class ReviewEndpointsTests(PostgresFixture postgres) : ContentTest
     // ---------------------------------------------------------------- reading
 
     [Fact]
-    public async Task An_empty_list_is_an_empty_array()
+    public async Task An_empty_list_is_an_empty_page()
     {
         var response = await Api.GetAsync("/api/reviews");
 
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
-        Assert.Empty((await Json(response)).EnumerateArray());
+        var page = await Json(response);
+        Assert.Empty(page.GetProperty("items").EnumerateArray());
+        Assert.Equal(0, page.GetProperty("totalCount").GetInt32());
+        Assert.Equal(0, page.GetProperty("totalPages").GetInt32());
     }
 
     [Fact]
@@ -87,7 +90,7 @@ public sealed class ReviewEndpointsTests(PostgresFixture postgres) : ContentTest
         await AddAsync("Waiting", "2026-04-01", status: "pending");
         await AddAsync("Refused", "2026-05-01", status: "rejected");
 
-        var list = await Json(await Api.GetAsync("/api/reviews"));
+        var list = (await Json(await Api.GetAsync("/api/reviews"))).GetProperty("items");
 
         Assert.Equal(["Newest", "Middle", "Older"], list.EnumerateArray().Select(r => r.GetProperty("name").GetString()));
         var first = list[0];
@@ -116,7 +119,7 @@ public sealed class ReviewEndpointsTests(PostgresFixture postgres) : ContentTest
         await AddAsync("Waiting", status: "pending");
         await AddAsync("Refused", status: "rejected");
 
-        var list = await Json(await AsAdmin(HttpMethod.Get, "/api/reviews?all=1"));
+        var list = (await Json(await AsAdmin(HttpMethod.Get, "/api/reviews?all=1"))).GetProperty("items");
 
         Assert.Equal(3, list.GetArrayLength());
         Assert.Equal(["pending", "published", "rejected"], list.EnumerateArray().Select(r => r.GetProperty("status").GetString()).Order(StringComparer.Ordinal));
@@ -133,8 +136,8 @@ public sealed class ReviewEndpointsTests(PostgresFixture postgres) : ContentTest
         await AddAsync("Live");
         await AddAsync("Waiting", status: "pending");
 
-        var anonymous = await Json(await Api.GetAsync("/api/reviews?all=1"));
-        var customer = await Json(await Api.GetAsync("/api/reviews?all=1", CustomerToken));
+        var anonymous = (await Json(await Api.GetAsync("/api/reviews?all=1"))).GetProperty("items");
+        var customer = (await Json(await Api.GetAsync("/api/reviews?all=1", CustomerToken))).GetProperty("items");
 
         Assert.Equal(1, anonymous.GetArrayLength());
         Assert.Equal(1, customer.GetArrayLength());
@@ -147,7 +150,7 @@ public sealed class ReviewEndpointsTests(PostgresFixture postgres) : ContentTest
         await AddAsync("Live");
         await AddAsync("Waiting", status: "pending");
 
-        var list = await Json(await Api.GetAsync("/api/reviews", AdminToken));
+        var list = (await Json(await Api.GetAsync("/api/reviews", AdminToken))).GetProperty("items");
 
         Assert.Equal(1, list.GetArrayLength());
     }
@@ -335,7 +338,7 @@ public sealed class ReviewEndpointsTests(PostgresFixture postgres) : ContentTest
         var rejected = await AsAdmin(HttpMethod.Put, $"/api/reviews/{id}", new { status = "rejected" });
         Assert.Equal("rejected", (await Json(rejected)).GetProperty("status").GetString());
         Assert.Empty(await PublicNamesAsync());
-        Assert.Equal(1, (await Json(await AsAdmin(HttpMethod.Get, "/api/reviews?all=1"))).GetArrayLength());
+        Assert.Equal(1, (await Json(await AsAdmin(HttpMethod.Get, "/api/reviews?all=1"))).GetProperty("items").GetArrayLength());
     }
 
     [Fact]
@@ -416,8 +419,8 @@ public sealed class ReviewEndpointsTests(PostgresFixture postgres) : ContentTest
             await new DatabaseSeeder(db, new PasswordHasher(iterations: 1_000), NullLogger<DatabaseSeeder>.Instance).SeedAsync(new SeedOptions());
         }
 
-        var publicList = await Json(await Api.GetAsync("/api/reviews"));
-        var all = await Json(await AsAdmin(HttpMethod.Get, "/api/reviews?all=1"));
+        var publicList = (await Json(await Api.GetAsync("/api/reviews?pageSize=100"))).GetProperty("items");
+        var all = (await Json(await AsAdmin(HttpMethod.Get, "/api/reviews?all=1&pageSize=100"))).GetProperty("items");
 
         Assert.NotEmpty(publicList.EnumerateArray());
         Assert.All(publicList.EnumerateArray(), review =>

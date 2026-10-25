@@ -3,6 +3,7 @@ using TravelWebAPI.Application.Abstractions;
 using TravelWebAPI.Application.Auth.Validators;
 using TravelWebAPI.Application.Bookings;
 using TravelWebAPI.Application.Content;
+using TravelWebAPI.Application.Lists;
 using TravelWebAPI.Application.Rates;
 using TravelWebAPI.Domain.Common;
 using TravelWebAPI.Domain.Entities;
@@ -55,8 +56,11 @@ public interface IPaymentRepository : IRepository<Payment>
     /// <summary>Finds a payment by id. Tracked, so callers can change it.</summary>
     Task<Payment?> FindAsync(Guid id, CancellationToken cancellationToken = default);
 
-    /// <summary>Every payment with its booking, newest paid date first (then newest entered).</summary>
-    Task<IReadOnlyList<Payment>> ListWithBookingAsync(CancellationToken cancellationToken = default);
+    /// <summary>One page of payments with their booking, searched, filtered and sorted in the database.</summary>
+    Task<PagedResult<Payment>> PageAsync(PaymentListFilter filter, ListQuery query, CancellationToken cancellationToken = default);
+
+    /// <summary>The sums per status over every payment matching the filter (no paging).</summary>
+    Task<PaymentSummary> SummarizeAsync(PaymentListFilter filter, CancellationToken cancellationToken = default);
 }
 
 public static class PaymentRules
@@ -146,9 +150,16 @@ public sealed class PaymentService(
         return PaymentDto.Of(payment);
     }
 
-    /// <summary>Every payment with its booking reference and customer name, newest paid first.</summary>
-    public async Task<IReadOnlyList<PaymentListItemDto>> ListAsync(CancellationToken cancellationToken = default)
-        => [.. (await payments.ListWithBookingAsync(cancellationToken)).Select(PaymentListItemDto.Of)];
+    /// <summary>One page of payments with their booking reference and customer name, newest paid first unless sorted otherwise.</summary>
+    public async Task<PagedResult<PaymentListItemDto>> ListAsync(PaymentListRequest request, CancellationToken cancellationToken = default)
+    {
+        var (query, filter) = PaymentLists.Parse(request);
+        return (await payments.PageAsync(filter, query, cancellationToken)).Map(PaymentListItemDto.Of);
+    }
+
+    /// <summary>The totals of all matching payments (not just one page): paid, pending, refunded and net, in LKR.</summary>
+    public async Task<PaymentSummary> SummaryAsync(PaymentSummaryRequest request, CancellationToken cancellationToken = default)
+        => await payments.SummarizeAsync(PaymentLists.ParseSummary(request), cancellationToken);
 
     /// <summary>
     /// Edits a payment: what is not sent keeps its value, then the whole payment is validated. The stored rate is kept unless

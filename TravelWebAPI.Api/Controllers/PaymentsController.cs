@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using TravelWebAPI.Api.Auth;
+using TravelWebAPI.Application.Lists;
 using TravelWebAPI.Application.Payments;
 
 namespace TravelWebAPI.Api.Controllers;
@@ -18,10 +19,18 @@ public sealed class PaymentsController(PaymentService payments) : ControllerBase
         return Created($"/api/bookings/{payment.BookingId}", payment);
     }
 
-    /// <summary>Every payment with its booking reference and customer name, newest paid first.</summary>
+    /// <summary>
+    /// One page of payments with their booking reference and customer name, newest paid first. Supports page, pageSize,
+    /// search, sort, facets and the filters status, method, currency, booking, from and to.
+    /// </summary>
     [HttpGet("api/payments")]
-    public async Task<IActionResult> List(CancellationToken cancellationToken)
-        => Ok(await payments.ListAsync(cancellationToken));
+    public async Task<ActionResult<PagedResult<PaymentListItemDto>>> List([FromQuery] PaymentListRequest request, CancellationToken cancellationToken)
+        => Ok(await payments.ListAsync(request, cancellationToken));
+
+    /// <summary>The totals over all matching payments (paid, pending, refunded, net), in LKR. Filters: method, currency, from, to.</summary>
+    [HttpGet("api/payments/summary")]
+    public async Task<ActionResult<PaymentSummary>> Summary([FromQuery] PaymentSummaryRequest request, CancellationToken cancellationToken)
+        => Ok(await payments.SummaryAsync(request, cancellationToken));
 
     /// <summary>Edits a payment: what is not sent keeps its value; the rate changes only when the currency does.</summary>
     [HttpPut("api/payments/{id}")]

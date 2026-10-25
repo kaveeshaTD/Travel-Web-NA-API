@@ -192,7 +192,7 @@ public sealed class PaymentEndpointsTests(PostgresFixture postgres) : ContentTes
         await RecordAsync(new { amount = 100 });
 
         await AddRatesAsync(400m, 450m, 500m, Factory.Clock.UtcNow.AddDays(1));
-        var list = await Json(await AsAdmin(HttpMethod.Get, "/api/payments"));
+        var list = (await Json(await AsAdmin(HttpMethod.Get, "/api/payments"))).GetProperty("items");
 
         Assert.Equal(330m, list[0].GetProperty("exchangeRate").GetDecimal());
         Assert.Equal(33_000m, list[0].GetProperty("amountLkr").GetDecimal());
@@ -309,7 +309,7 @@ public sealed class PaymentEndpointsTests(PostgresFixture postgres) : ContentTes
         await RecordAsync(new { amount = 2, currency = "LKR", paidAt = "2026-10-20" }, "BK-XYZ789");
         await RecordAsync(new { amount = 3, currency = "LKR", paidAt = "2026-10-10" });
 
-        var list = await Json(await AsAdmin(HttpMethod.Get, "/api/payments"));
+        var list = (await Json(await AsAdmin(HttpMethod.Get, "/api/payments"))).GetProperty("items");
 
         Assert.Equal([2m, 3m, 1m], list.EnumerateArray().Select(p => p.GetProperty("amount").GetDecimal()));
         Assert.Equal(["BK-XYZ789", Reference, Reference], list.EnumerateArray().Select(p => p.GetProperty("bookingReference").GetString()));
@@ -319,7 +319,7 @@ public sealed class PaymentEndpointsTests(PostgresFixture postgres) : ContentTes
     [Fact]
     public async Task With_no_payments_the_list_is_empty()
     {
-        var list = await Json(await AsAdmin(HttpMethod.Get, "/api/payments"));
+        var list = (await Json(await AsAdmin(HttpMethod.Get, "/api/payments"))).GetProperty("items");
 
         Assert.Equal(0, list.GetArrayLength());
     }
@@ -349,8 +349,8 @@ public sealed class PaymentEndpointsTests(PostgresFixture postgres) : ContentTes
         await AsAdmin(HttpMethod.Put, $"/api/payments/{paid.GetProperty("id").GetString()}", new { amount = 130_000 });
         Assert.Equal((120_000m, 0m), await TotalsAsync());
 
-        var list = await Json(await AsAdmin(HttpMethod.Get, "/api/bookings"));
-        var mine = await Json(await Api.GetAsync("/api/bookings/mine", bearer: bookerToken));
+        var list = (await Json(await AsAdmin(HttpMethod.Get, "/api/bookings"))).GetProperty("items");
+        var mine = (await Json(await Api.GetAsync("/api/bookings/mine", bearer: bookerToken))).GetProperty("items");
         Assert.Equal(120_000m, list[0].GetProperty("paidLkr").GetDecimal());
         Assert.Equal(120_000m, mine[0].GetProperty("paidLkr").GetDecimal());
         Assert.Equal(0m, mine[0].GetProperty("balanceLkr").GetDecimal());

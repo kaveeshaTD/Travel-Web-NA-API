@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using TravelWebAPI.Api.Auth;
 using TravelWebAPI.Application.Bookings;
+using TravelWebAPI.Application.Lists;
 
 namespace TravelWebAPI.Api.Controllers;
 
@@ -22,17 +23,23 @@ public sealed class BookingsController(BookingService bookings) : ControllerBase
         return Created($"/api/bookings/{receipt.Reference}", receipt);
     }
 
-    /// <summary>The signed-in user's own bookings, newest first.</summary>
+    /// <summary>
+    /// One page of the signed-in user's own bookings, newest first. Supports page, pageSize, search, sort, facets and the
+    /// filters status, serviceId, from and to.
+    /// </summary>
     [HttpGet("mine")]
     [Authorize]
-    public async Task<IActionResult> Mine(CancellationToken cancellationToken)
-        => Ok(await bookings.ListMineAsync(cancellationToken));
+    public async Task<ActionResult<PagedResult<BookingDto>>> Mine([FromQuery] BookingListRequest request, CancellationToken cancellationToken)
+        => Ok(await bookings.ListMineAsync(request, cancellationToken));
 
-    /// <summary>Every booking (admin).</summary>
+    /// <summary>
+    /// One page of every booking (admin), newest first. Supports page, pageSize, search, sort, facets and the filters
+    /// status, serviceId, from and to.
+    /// </summary>
     [HttpGet]
     [Authorize(Roles = AuthRoles.Admin)]
-    public async Task<IActionResult> List(CancellationToken cancellationToken)
-        => Ok(await bookings.ListAllAsync(cancellationToken));
+    public async Task<ActionResult<PagedResult<BookingDto>>> List([FromQuery] BookingListRequest request, CancellationToken cancellationToken)
+        => Ok(await bookings.ListAllAsync(request, cancellationToken));
 
     /// <summary>One booking by id or reference. A customer only gets their own; the admin gets the full detail.</summary>
     [HttpGet("{idOrReference}")]

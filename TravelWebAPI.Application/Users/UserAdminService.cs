@@ -3,6 +3,7 @@ using TravelWebAPI.Application.Abstractions;
 using TravelWebAPI.Application.Auth;
 using TravelWebAPI.Application.Auth.Validators;
 using TravelWebAPI.Application.Content;
+using TravelWebAPI.Application.Lists;
 using TravelWebAPI.Domain.Common;
 using TravelWebAPI.Domain.Entities;
 using TravelWebAPI.Domain.Enums;
@@ -59,8 +60,8 @@ public sealed record UserWithBookingCount(User User, int BookingCount);
 
 public interface IUserAdminRepository
 {
-    /// <summary>Every user, newest first, with the number of their bookings (one grouped query).</summary>
-    Task<IReadOnlyList<UserWithBookingCount>> ListWithBookingCountsAsync(CancellationToken cancellationToken = default);
+    /// <summary>One page of users with the number of their bookings, searched, filtered and sorted in the database.</summary>
+    Task<PagedResult<UserWithBookingCount>> PageAsync(UserListFilter filter, ListQuery query, CancellationToken cancellationToken = default);
 
     Task<int> CountBookingsAsync(Guid userId, CancellationToken cancellationToken = default);
 }
@@ -113,8 +114,12 @@ public sealed class UserAdminService(
     IValidator<CreateUserDraft> createValidator,
     IValidator<UserUpdateDraft> updateValidator)
 {
-    public async Task<IReadOnlyList<AdminUserDto>> ListAsync(CancellationToken cancellationToken = default)
-        => [.. (await userQueries.ListWithBookingCountsAsync(cancellationToken)).Select(row => AdminUserDto.Of(row.User, row.BookingCount))];
+    /// <summary>One page of users, newest first unless sorted otherwise.</summary>
+    public async Task<PagedResult<AdminUserDto>> ListAsync(UserListRequest request, CancellationToken cancellationToken = default)
+    {
+        var (query, filter) = UserLists.Parse(request);
+        return (await userQueries.PageAsync(filter, query, cancellationToken)).Map(row => AdminUserDto.Of(row.User, row.BookingCount));
+    }
 
     /// <summary>Creates an active account. The email is lower-cased and must be new; the password is stored as a hash.</summary>
     public async Task<AdminUserDto> CreateAsync(CreateUserRequest request, CancellationToken cancellationToken = default)

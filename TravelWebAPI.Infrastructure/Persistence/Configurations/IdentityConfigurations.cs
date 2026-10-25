@@ -31,6 +31,7 @@ internal sealed class UserConfiguration : IEntityTypeConfiguration<User>
         builder.HasIndex(x => x.Email).IsUnique();
         builder.HasIndex(x => x.Role);
         builder.HasIndex(x => x.Status);
+        builder.HasIndex(x => x.CreatedAt);
     }
 }
 

@@ -88,6 +88,39 @@ public class PlatformTests(PostgresFixture postgres)
     }
 
     [Fact]
+    public async Task Docs_describe_the_list_parameters_in_camel_case_and_the_paged_answer()
+    {
+        var connection = await postgres.CreateDatabaseAsync();
+        await using var factory = ApiFactory.With(
+            new Dictionary<string, string?> { ["ConnectionStrings:Default"] = connection },
+            "Development");
+        using var client = factory.CreateClient();
+
+        using var document = System.Text.Json.JsonDocument.Parse(await client.GetStringAsync("/openapi/v1.json"));
+
+        foreach (var (path, expected) in new (string, string[])[]
+        {
+            ("/api/bookings", ["page", "pageSize", "search", "sort", "facets", "status", "serviceId", "from", "to"]),
+            ("/api/bookings/mine", ["page", "pageSize", "search", "sort", "facets", "status", "serviceId", "from", "to"]),
+            ("/api/payments", ["page", "pageSize", "search", "sort", "facets", "status", "method", "currency", "booking", "from", "to"]),
+            ("/api/payments/summary", ["method", "currency", "from", "to"]),
+            ("/api/users", ["page", "pageSize", "search", "sort", "facets", "role", "status"]),
+            ("/api/messages", ["page", "pageSize", "search", "sort", "facets", "status"]),
+            ("/api/emails", ["page", "pageSize", "search", "sort", "facets", "status", "kind", "booking"]),
+            ("/api/reviews", ["all", "rating", "status", "page", "pageSize", "search", "sort", "facets"]),
+        })
+        {
+            var names = document.RootElement.GetProperty("paths").GetProperty(path).GetProperty("get").GetProperty("parameters")
+                .EnumerateArray().Select(p => p.GetProperty("name").GetString()!).ToList();
+            Assert.Equal(expected.Order(StringComparer.Ordinal), names.Order(StringComparer.Ordinal));
+        }
+
+        var bookings = document.RootElement.GetProperty("paths").GetProperty("/api/bookings").GetProperty("get").GetProperty("responses").GetProperty("200").ToString();
+        Assert.Contains("PagedResult", bookings, StringComparison.Ordinal);
+        Assert.Contains("\"/api/reviews/summary\"", document.RootElement.GetProperty("paths").ToString(), StringComparison.Ordinal);
+    }
+
+    [Fact]
     public async Task Docs_are_not_served_in_Production()
     {
         await using var factory = await ProductionAsync();

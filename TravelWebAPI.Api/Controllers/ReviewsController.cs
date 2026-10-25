@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.RateLimiting;
 using TravelWebAPI.Api.Auth;
 using TravelWebAPI.Application.Abstractions;
+using TravelWebAPI.Application.Lists;
 using TravelWebAPI.Application.Reviews;
 using TravelWebAPI.Domain.Exceptions;
 
@@ -13,13 +14,23 @@ namespace TravelWebAPI.Api.Controllers;
 [Route("api/reviews")]
 public sealed class ReviewsController(ReviewService reviews, ICurrentUser currentUser) : ControllerBase
 {
-    /// <summary>Published reviews, newest first. An admin who adds <c>?all=1</c> gets every review with its author.</summary>
+    /// <summary>
+    /// One page of published reviews, newest first. An admin who adds <c>?all=1</c> gets every review with its author and may
+    /// filter by status. Supports page, pageSize, search, sort, facets and the filter rating.
+    /// </summary>
     [HttpGet]
     [AllowAnonymous]
-    public async Task<IActionResult> List([FromQuery] string? all, CancellationToken cancellationToken)
-        => all == "1" && currentUser.IsAdmin
-            ? Ok(await reviews.ListAllAsync(cancellationToken))
-            : Ok(await reviews.ListPublishedAsync(cancellationToken));
+    [ProducesResponseType(typeof(PagedResult<ReviewDto>), StatusCodes.Status200OK)]
+    public async Task<IActionResult> List([FromQuery] ReviewListRequest request, CancellationToken cancellationToken)
+        => request.All == "1" && currentUser.IsAdmin
+            ? Ok(await reviews.ListAllAsync(request, cancellationToken))
+            : Ok(await reviews.ListPublishedAsync(request, cancellationToken));
+
+    /// <summary>Number of published reviews, their average rating and how many have each rating from 1 to 5.</summary>
+    [HttpGet("summary")]
+    [AllowAnonymous]
+    public async Task<ActionResult<ReviewSummary>> Summary(CancellationToken cancellationToken)
+        => Ok(await reviews.SummaryAsync(cancellationToken));
 
     /// <summary>A visitor's review (guests allowed). It waits as <c>pending</c> until an admin publishes it.</summary>
     [HttpPost]

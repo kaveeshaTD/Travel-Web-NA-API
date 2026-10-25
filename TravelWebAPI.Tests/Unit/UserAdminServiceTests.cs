@@ -1,4 +1,5 @@
 using TravelWebAPI.Application.Abstractions;
+using TravelWebAPI.Application.Lists;
 using TravelWebAPI.Application.Users;
 using TravelWebAPI.Domain.Entities;
 using TravelWebAPI.Domain.Enums;
@@ -70,9 +71,12 @@ public sealed class UserAdminHarness : IUserRepository, IUserAdminRepository, IR
 
     public void Remove(User entity) => Users.Remove(entity);
 
-    public Task<IReadOnlyList<UserWithBookingCount>> ListWithBookingCountsAsync(CancellationToken cancellationToken = default)
-        => Task.FromResult<IReadOnlyList<UserWithBookingCount>>(
-            [.. Users.OrderByDescending(u => u.CreatedAt).Select(u => new UserWithBookingCount(u, Bookings.GetValueOrDefault(u.Id)))]);
+    /// <summary>A plain in-memory page (newest first); the real filtering, sorting and searching are tested against PostgreSQL.</summary>
+    public Task<PagedResult<UserWithBookingCount>> PageAsync(UserListFilter filter, ListQuery query, CancellationToken cancellationToken = default)
+    {
+        var rows = Users.OrderByDescending(u => u.CreatedAt).Select(u => new UserWithBookingCount(u, Bookings.GetValueOrDefault(u.Id))).ToList();
+        return Task.FromResult(Paged.Of<UserWithBookingCount>([.. rows.Skip(query.Skip).Take(query.PageSize)], query, rows.Count));
+    }
 
     public Task<int> CountBookingsAsync(Guid userId, CancellationToken cancellationToken = default)
         => Task.FromResult(Bookings.GetValueOrDefault(userId));
@@ -127,10 +131,12 @@ public sealed class UserAdminServiceTests
         var newer = _h.AddUser("newer@example.com", UserRole.Admin);
         _h.Bookings[older.Id] = 3;
 
-        var list = await _h.Create().ListAsync();
+        var page = await _h.Create().ListAsync(new UserListRequest());
+        var list = page.Items;
 
         Assert.Equal([newer.Id, older.Id], list.Select(u => u.Id));
         Assert.Equal([0, 3], list.Select(u => u.BookingCount));
+        Assert.Equal(2, page.TotalCount);
         Assert.DoesNotContain(typeof(AdminUserDto).GetProperties(), p => p.Name.Contains("Password", StringComparison.OrdinalIgnoreCase));
     }
 

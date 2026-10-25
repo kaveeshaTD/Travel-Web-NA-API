@@ -309,6 +309,7 @@ internal sealed class ReviewConfiguration : IEntityTypeConfiguration<Review>
 
         builder.HasIndex(x => x.Status);
         builder.HasIndex(x => new { x.Status, x.ReviewDate });
+        builder.HasIndex(x => x.ReviewDate);
 
         builder.HasOne<User>()
             .WithMany()

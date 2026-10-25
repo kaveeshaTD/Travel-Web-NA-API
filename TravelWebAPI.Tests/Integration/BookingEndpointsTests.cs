@@ -394,7 +394,7 @@ public sealed class BookingEndpointsTests(PostgresFixture postgres) : ContentTes
         var response = await Api.GetAsync("/api/bookings/mine", mine);
 
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
-        var list = await Json(response);
+        var list = (await Json(response)).GetProperty("items");
         Assert.Equal([second, first], list.EnumerateArray().Select(b => b.GetProperty("reference").GetString()));
         Assert.All(list.EnumerateArray(), booking =>
         {
@@ -420,7 +420,9 @@ public sealed class BookingEndpointsTests(PostgresFixture postgres) : ContentTes
         var empty = await Api.GetAsync("/api/bookings/mine", token);
 
         Assert.Equal(HttpStatusCode.Unauthorized, anonymous.StatusCode);
-        Assert.Empty((await Json(empty)).EnumerateArray());
+        var emptyPage = await Json(empty);
+        Assert.Empty(emptyPage.GetProperty("items").EnumerateArray());
+        Assert.Equal(0, emptyPage.GetProperty("totalCount").GetInt32());
     }
 
     // ---------------------------------------------------------------- one booking
@@ -493,7 +495,7 @@ public sealed class BookingEndpointsTests(PostgresFixture postgres) : ContentTes
         }
 
         var booking = await Json(await Api.GetAsync($"/api/bookings/{reference}", token));
-        var list = await Json(await Api.GetAsync("/api/bookings/mine", token));
+        var list = (await Json(await Api.GetAsync("/api/bookings/mine", token))).GetProperty("items");
 
         Assert.Equal(99000m, booking.GetProperty("priceLkr").GetDecimal());
         Assert.Equal(45000m, booking.GetProperty("paidLkr").GetDecimal());

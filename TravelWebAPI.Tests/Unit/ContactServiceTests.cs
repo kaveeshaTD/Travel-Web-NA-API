@@ -1,5 +1,6 @@
 using TravelWebAPI.Application.Abstractions;
 using TravelWebAPI.Application.Contact;
+using TravelWebAPI.Application.Lists;
 using TravelWebAPI.Domain.Entities;
 using TravelWebAPI.Domain.Enums;
 using TravelWebAPI.Domain.Exceptions;
@@ -141,9 +142,10 @@ public sealed class ContactServiceTests
     {
         await _service.SubmitAsync(Valid());
 
-        var inbox = await _service.ListAsync();
+        var inbox = await _service.ListAsync(new MessageListRequest());
 
-        var message = Assert.Single(inbox);
+        Assert.Equal(1, inbox.TotalCount);
+        var message = Assert.Single(inbox.Items);
         Assert.Equal("new", message.Status);
         Assert.Equal("Sam Visitor", message.Name);
         Assert.Null(message.RepliedAt);
@@ -287,30 +289,29 @@ public sealed class ContactServiceTests
     }
 
     [Fact]
-    public async Task The_email_log_defaults_to_500_and_takes_a_limit_between_1_and_2000()
+    public async Task The_email_log_is_a_page_of_dtos_with_the_totals()
     {
-        var logs = new EmailLogService(_store);
+        await _service.SubmitAsync(Valid());
 
-        await logs.ListAsync(null);
-        Assert.Equal(500, _store.LastLimit);
+        var page = await new EmailLogService(_store).ListAsync(new EmailListRequest { PageSize = "1" });
 
-        await logs.ListAsync(2000);
-        Assert.Equal(2000, _store.LastLimit);
-
-        await logs.ListAsync(1);
-        Assert.Equal(1, _store.LastLimit);
+        Assert.Equal(1, page.PageSize);
+        Assert.True(page.TotalCount >= 1);
+        Assert.All(page.Items, entry => Assert.False(string.IsNullOrEmpty(entry.Kind)));
     }
 
     [Theory]
-    [InlineData(0)]
-    [InlineData(-5)]
-    [InlineData(2001)]
-    [InlineData(5000)]
-    public async Task A_limit_outside_the_range_is_a_validation_error(int limit)
+    [InlineData("status", "done", "Status must be one of: queued, sent, failed")]
+    [InlineData("kind", "newsletter", "Kind must be one of: welcome, password-reset, booking-received, booking-notice, booking-confirmed, booking-cancelled, booking-completed, contact-ack, reply, custom")]
+    [InlineData("booking", "not-an-id", "Booking must be a valid id")]
+    public void A_wrong_email_filter_is_a_validation_error(string field, string value, string message)
     {
-        var error = Invalid(() => new EmailLogService(_store).ListAsync(limit));
+        var request = new EmailListRequest();
+        typeof(EmailListRequest).GetProperty(char.ToUpperInvariant(field[0]) + field[1..])!.SetValue(request, value);
 
-        Assert.Equal(EmailLogService.LimitMessage, error.Fields["limit"]);
+        var error = Invalid(() => new EmailLogService(_store).ListAsync(request));
+
+        Assert.Equal(message, error.Fields[field]);
     }
 
     // ---------------------------------------------------------------- fakes
@@ -330,12 +331,14 @@ public sealed class ContactServiceTests
 
         public int DispatchCalls { get; private set; }
 
-        public int LastLimit { get; private set; }
-
         public bool DeliverEmails { get; set; }
 
-        public Task<IReadOnlyList<ContactMessage>> ListAsync(CancellationToken cancellationToken = default)
-            => Task.FromResult<IReadOnlyList<ContactMessage>>([.. Messages.OrderByDescending(m => m.CreatedAt)]);
+        /// <summary>A plain in-memory page (newest first); the real filtering, sorting and searching are tested against PostgreSQL.</summary>
+        public Task<PagedResult<ContactMessage>> PageAsync(MessageListFilter filter, ListQuery query, CancellationToken cancellationToken = default)
+        {
+            var rows = Messages.OrderByDescending(m => m.CreatedAt).ToList();
+            return Task.FromResult(Paged.Of<ContactMessage>([.. rows.Skip(query.Skip).Take(query.PageSize)], query, rows.Count));
+        }
 
         Task<ContactMessage?> IRepository<ContactMessage>.GetByIdAsync(object id, CancellationToken cancellationToken)
             => Task.FromResult(Messages.FirstOrDefault(m => m.Id == (Guid)id));
@@ -358,10 +361,10 @@ public sealed class ContactServiceTests
         {
         }
 
-        public Task<IReadOnlyList<EmailLog>> ListAsync(int limit, CancellationToken cancellationToken = default)
+        public Task<PagedResult<EmailLog>> PageAsync(EmailListFilter filter, ListQuery query, CancellationToken cancellationToken = default)
         {
-            LastLimit = limit;
-            return Task.FromResult<IReadOnlyList<EmailLog>>([.. Logs.OrderByDescending(l => l.CreatedAt).Take(limit)]);
+            var rows = Logs.OrderByDescending(l => l.CreatedAt).ToList();
+            return Task.FromResult(Paged.Of<EmailLog>([.. rows.Skip(query.Skip).Take(query.PageSize)], query, rows.Count));
         }
 
         public Task<EmailLog?> GetAsync(Guid id, CancellationToken cancellationToken = default)

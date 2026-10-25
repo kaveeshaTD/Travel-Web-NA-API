@@ -78,7 +78,20 @@ public static class ServiceCollectionExtensions
         services.AddApiRateLimiting();
         services.AddApiForwardedHeaders();
         services.AddApiHealthChecks();
-        services.AddOpenApi();
+        services.AddOpenApi(options => options.AddOperationTransformer((operation, _, _) =>
+        {
+            // The list request classes have PascalCase properties, but the API reads and documents camelCase query names
+            // (page, pageSize, search, ...), like the JSON it answers with.
+            foreach (var parameter in operation.Parameters ?? [])
+            {
+                if (parameter is Microsoft.OpenApi.OpenApiParameter { In: Microsoft.OpenApi.ParameterLocation.Query, Name: { Length: > 0 } name } concrete)
+                {
+                    concrete.Name = char.ToLowerInvariant(name[0]) + name[1..];
+                }
+            }
+
+            return Task.CompletedTask;
+        }));
 
         return services;
     }

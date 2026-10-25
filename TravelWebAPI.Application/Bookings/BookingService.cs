@@ -6,6 +6,7 @@ using TravelWebAPI.Application.Auth.Validators;
 using TravelWebAPI.Application.Contact;
 using TravelWebAPI.Application.Content;
 using TravelWebAPI.Application.Email;
+using TravelWebAPI.Application.Lists;
 using TravelWebAPI.Application.Reviews;
 using TravelWebAPI.Domain.Common;
 using TravelWebAPI.Domain.Entities;
@@ -22,8 +23,8 @@ public interface IBookingRepository : IRepository<Booking>
     /// <summary>Finds a booking by its id or its <c>BK-</c> reference. Tracked, so callers can change it.</summary>
     Task<Booking?> FindAsync(string idOrReference, CancellationToken cancellationToken = default);
 
-    /// <summary>Bookings newest first, all of them or only those of one user.</summary>
-    Task<IReadOnlyList<Booking>> ListAsync(Guid? userId, CancellationToken cancellationToken = default);
+    /// <summary>One page of bookings, all of them or only those of one user, searched, filtered and sorted in the database.</summary>
+    Task<PagedResult<Booking>> PageAsync(Guid? userId, BookingListFilter filter, ListQuery query, CancellationToken cancellationToken = default);
 
     /// <summary>What was paid per booking (paid payments minus refunds, in LKR). Bookings without payments are absent.</summary>
     Task<IReadOnlyDictionary<Guid, decimal>> PaidTotalsAsync(IReadOnlyCollection<Guid> bookingIds, CancellationToken cancellationToken = default);
@@ -170,11 +171,11 @@ public sealed class BookingService(
         return new SubmissionReceipt(booking.Reference);
     }
 
-    /// <summary>The signed-in user's bookings, newest first, without admin notes.</summary>
-    public async Task<IReadOnlyList<BookingDto>> ListMineAsync(CancellationToken cancellationToken = default)
+    /// <summary>One page of the signed-in user's bookings (newest first unless sorted otherwise), without admin notes.</summary>
+    public async Task<PagedResult<BookingDto>> ListMineAsync(BookingListRequest request, CancellationToken cancellationToken = default)
     {
         var userId = currentUser.UserId ?? throw new UnauthorizedException();
-        return await ToDtosAsync(await bookings.ListAsync(userId, cancellationToken), admin: false, cancellationToken);
+        return await PageAsync(userId, request, admin: false, cancellationToken);
     }
 
     /// <summary>
@@ -201,8 +202,9 @@ public sealed class BookingService(
 
     // ---------------------------------------------------------------- admin
 
-    public async Task<IReadOnlyList<BookingDto>> ListAllAsync(CancellationToken cancellationToken = default)
-        => await ToDtosAsync(await bookings.ListAsync(userId: null, cancellationToken), admin: true, cancellationToken);
+    /// <summary>One page of every customer's bookings, searched, filtered and sorted.</summary>
+    public async Task<PagedResult<BookingDto>> ListAllAsync(BookingListRequest request, CancellationToken cancellationToken = default)
+        => await PageAsync(userId: null, request, admin: true, cancellationToken);
 
     /// <summary>
     /// Edits a booking: what is not sent keeps its value, then the whole edit is validated. A real change of status to
@@ -397,10 +399,14 @@ public sealed class BookingService(
     private async Task<string> ServiceTitleAsync(Booking booking, CancellationToken cancellationToken)
         => (await services.GetByIdAsync(booking.ServiceId, cancellationToken))?.Title ?? "trip";
 
-    private async Task<IReadOnlyList<BookingDto>> ToDtosAsync(IReadOnlyList<Booking> list, bool admin, CancellationToken cancellationToken)
+    private async Task<PagedResult<BookingDto>> PageAsync(Guid? userId, BookingListRequest request, bool admin, CancellationToken cancellationToken)
     {
-        var totals = await bookings.PaidTotalsAsync([.. list.Select(b => b.Id)], cancellationToken);
-        return [.. list.Select(b => ToDto(b, totals.GetValueOrDefault(b.Id), admin))];
+        var (query, filter) = BookingLists.Parse(request);
+        var page = await bookings.PageAsync(userId, filter, query, cancellationToken);
+
+        // The paid amounts are worked out only for the bookings on this page.
+        var totals = await bookings.PaidTotalsAsync([.. page.Items.Select(b => b.Id)], cancellationToken);
+        return page.Map(b => ToDto(b, totals.GetValueOrDefault(b.Id), admin));
     }
 
     private async Task<BookingDto> ToDetailAsync(Booking booking, CancellationToken cancellationToken)

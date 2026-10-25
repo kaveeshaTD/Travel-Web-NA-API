@@ -117,6 +117,15 @@ cannot demote or deactivate themselves), `GET /api/stats/dashboard` (figures in 
 `GET /api/search?q=` (bookings, packages, destinations and users). There is no configuration. A deactivated user's current
 access token works until it expires (15 minutes); sign-in and refresh are refused at once.
 
+## Lists: paging, sorting, search
+
+The lists that can grow (bookings, payments, users, messages, emails, reviews) are paged on the server with one shared
+contract: `page`, `pageSize` (default 20, at most 100), `search`, `sort` (for example `-createdAt,name`), per-list filters
+(`status`, `role`, `from`, `to`, ...) and `facets` (counts per value for filter tabs). The answer is
+`{ items, page, pageSize, totalCount, totalPages, facets? }`. Swagger and Scalar show the parameters of each list. The
+curated content lists (packages, destinations, vehicles, services, FAQs, gallery) stay plain arrays. Small summaries:
+`GET /api/payments/summary` and `GET /api/reviews/summary`. There is no configuration; the limits are constants.
+
 ## Test
 
 ```powershell

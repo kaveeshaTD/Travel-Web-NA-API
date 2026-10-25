@@ -1,3 +1,4 @@
+using TravelWebAPI.Application.Lists;
 using TravelWebAPI.Domain.Common;
 using TravelWebAPI.Domain.Entities;
 using TravelWebAPI.Domain.Exceptions;
@@ -39,8 +40,8 @@ public sealed record EmailLogDto(
 
 public interface IEmailLogRepository
 {
-    /// <summary>The newest entries first, at most <paramref name="limit"/>.</summary>
-    Task<IReadOnlyList<EmailLog>> ListAsync(int limit, CancellationToken cancellationToken = default);
+    /// <summary>One page of entries, searched, filtered and sorted in the database.</summary>
+    Task<PagedResult<EmailLog>> PageAsync(EmailListFilter filter, ListQuery query, CancellationToken cancellationToken = default);
 
     /// <summary>One entry as it is stored now (not a tracked copy), or null.</summary>
     Task<EmailLog?> GetAsync(Guid id, CancellationToken cancellationToken = default);
@@ -55,18 +56,10 @@ public interface IEmailLogRepository
 /// <summary>Reading the email log.</summary>
 public sealed class EmailLogService(IEmailLogRepository emailLogs)
 {
-    public const int DefaultLimit = 500;
-    public const int MaxLimit = 2000;
-    public const string LimitMessage = "Limit must be a whole number from 1 to 2000";
-
-    public async Task<IReadOnlyList<EmailLogDto>> ListAsync(int? limit, CancellationToken cancellationToken = default)
+    /// <summary>One page of the log, newest first unless sorted otherwise.</summary>
+    public async Task<PagedResult<EmailLogDto>> ListAsync(EmailListRequest request, CancellationToken cancellationToken = default)
     {
-        var take = limit ?? DefaultLimit;
-        if (take is < 1 or > MaxLimit)
-        {
-            throw new ValidationException("limit", LimitMessage);
-        }
-
-        return [.. (await emailLogs.ListAsync(take, cancellationToken)).Select(EmailLogDto.Of)];
+        var (query, filter) = EmailLists.Parse(request);
+        return (await emailLogs.PageAsync(filter, query, cancellationToken)).Map(EmailLogDto.Of);
     }
 }

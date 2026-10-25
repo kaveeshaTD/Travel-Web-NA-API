@@ -3,6 +3,7 @@ using TravelWebAPI.Application.Abstractions;
 using TravelWebAPI.Application.Auth.Validators;
 using TravelWebAPI.Application.Content;
 using TravelWebAPI.Application.Email;
+using TravelWebAPI.Application.Lists;
 using TravelWebAPI.Application.Reviews;
 using TravelWebAPI.Domain.Common;
 using TravelWebAPI.Domain.Entities;
@@ -33,8 +34,8 @@ public sealed record ReplyDraft(string Subject, string Body);
 
 public interface IContactMessageRepository : IRepository<ContactMessage>
 {
-    /// <summary>Every message, newest first.</summary>
-    Task<IReadOnlyList<ContactMessage>> ListAsync(CancellationToken cancellationToken = default);
+    /// <summary>One page of messages, searched, filtered and sorted in the database.</summary>
+    Task<PagedResult<ContactMessage>> PageAsync(MessageListFilter filter, ListQuery query, CancellationToken cancellationToken = default);
 }
 
 public sealed class ContactDraftValidator : AbstractValidator<ContactDraft>
@@ -127,8 +128,12 @@ public sealed class ContactService(
         return new SubmissionReceipt(References.For("MSG", message.Id));
     }
 
-    public async Task<IReadOnlyList<MessageDto>> ListAsync(CancellationToken cancellationToken = default)
-        => [.. (await messages.ListAsync(cancellationToken)).Select(ToDto)];
+    /// <summary>One page of the inbox, newest first unless sorted otherwise.</summary>
+    public async Task<PagedResult<MessageDto>> ListAsync(MessageListRequest request, CancellationToken cancellationToken = default)
+    {
+        var (query, filter) = MessageLists.Parse(request);
+        return (await messages.PageAsync(filter, query, cancellationToken)).Map(ToDto);
+    }
 
     public async Task<MessageDto> SetStatusAsync(Guid id, MessageStatusRequest request, CancellationToken cancellationToken = default)
     {

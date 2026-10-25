@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.RateLimiting;
 using TravelWebAPI.Api.Auth;
 using TravelWebAPI.Application.Contact;
+using TravelWebAPI.Application.Lists;
 using TravelWebAPI.Domain.Exceptions;
 
 namespace TravelWebAPI.Api.Controllers;
@@ -26,10 +27,10 @@ public sealed class ContactController(ContactService contact) : ControllerBase
 [Authorize(Roles = AuthRoles.Admin)]
 public sealed class MessagesController(ContactService contact) : ControllerBase
 {
-    /// <summary>Every message, newest first.</summary>
+    /// <summary>One page of messages, newest first. Supports page, pageSize, search, sort, facets and the filter status.</summary>
     [HttpGet]
-    public async Task<IActionResult> List(CancellationToken cancellationToken)
-        => Ok(await contact.ListAsync(cancellationToken));
+    public async Task<ActionResult<PagedResult<MessageDto>>> List([FromQuery] MessageListRequest request, CancellationToken cancellationToken)
+        => Ok(await contact.ListAsync(request, cancellationToken));
 
     /// <summary>Sets the status to <c>new</c>, <c>read</c> or <c>replied</c>.</summary>
     [HttpPut("{id}")]
@@ -58,8 +59,10 @@ public sealed class MessagesController(ContactService contact) : ControllerBase
 [Authorize(Roles = AuthRoles.Admin)]
 public sealed class EmailsController(EmailLogService emails) : ControllerBase
 {
-    /// <summary>Newest first. <c>?limit=</c> sets how many (default 500, at most 2000).</summary>
+    /// <summary>
+    /// One page of the log, newest first. Supports page, pageSize, search, sort, facets and the filters status, kind and booking.
+    /// </summary>
     [HttpGet]
-    public async Task<IActionResult> List([FromQuery] int? limit, CancellationToken cancellationToken)
-        => Ok(await emails.ListAsync(limit, cancellationToken));
+    public async Task<ActionResult<PagedResult<EmailLogDto>>> List([FromQuery] EmailListRequest request, CancellationToken cancellationToken)
+        => Ok(await emails.ListAsync(request, cancellationToken));
 }
