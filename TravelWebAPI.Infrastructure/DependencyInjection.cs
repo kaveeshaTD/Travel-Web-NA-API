@@ -7,6 +7,9 @@ using TravelWebAPI.Application.Bookings;
 using TravelWebAPI.Application.Payments;
 using TravelWebAPI.Application.Content;
 using TravelWebAPI.Application.Rates;
+using TravelWebAPI.Application.Search;
+using TravelWebAPI.Application.Stats;
+using TravelWebAPI.Application.Users;
 using TravelWebAPI.Application.Reviews;
 using TravelWebAPI.Domain.Entities;
 using TravelWebAPI.Infrastructure.Persistence;
@@ -29,6 +32,9 @@ public static class DependencyInjection
         services.AddScoped(typeof(IRepository<>), typeof(EfRepository<>));
 
         services.AddScoped<IUserRepository, UserRepository>();
+        services.AddScoped<IUserAdminRepository, UserAdminRepository>();
+        services.AddScoped<IDashboardRepository, DashboardRepository>();
+        services.AddScoped<ISearchRepository, SearchRepository>();
         services.AddScoped<IRefreshTokenRepository, RefreshTokenRepository>();
         services.AddScoped<IPasswordResetTokenRepository, PasswordResetTokenRepository>();
 

@@ -8,6 +8,9 @@ using TravelWebAPI.Application.Content;
 using TravelWebAPI.Application.Payments;
 using TravelWebAPI.Application.Rates;
 using TravelWebAPI.Application.Reviews;
+using TravelWebAPI.Application.Search;
+using TravelWebAPI.Application.Stats;
+using TravelWebAPI.Application.Users;
 
 namespace TravelWebAPI.Application;
 
@@ -55,6 +58,13 @@ public static class DependencyInjection
 
         services.AddSingleton<IValidator<PaymentDraft>, PaymentDraftValidator>();
         services.AddScoped<PaymentService>();
+
+        services.AddSingleton<IValidator<CreateUserDraft>, CreateUserDraftValidator>();
+        services.AddSingleton<IValidator<UserUpdateDraft>, UserUpdateDraftValidator>();
+        services.AddScoped<UserAdminService>();
+
+        services.AddScoped<DashboardService>();
+        services.AddScoped<SearchService>();
 
         services.AddScoped<ExchangeRateService>();
         services.AddScoped<IExchangeRates>(sp => sp.GetRequiredService<ExchangeRateService>());

@@ -18,7 +18,11 @@ public sealed record ContactRequest(string? Name = null, string? Email = null, s
 public sealed record ContactDraft(string Name, string Email, string Message);
 
 /// <summary>A message in the admin inbox.</summary>
-public sealed record MessageDto(Guid Id, string Name, string Email, string Message, string Status, DateTimeOffset CreatedAt, DateTimeOffset? RepliedAt);
+public sealed record MessageDto(Guid Id, string Name, string Email, string Message, string Status, DateTimeOffset CreatedAt, DateTimeOffset? RepliedAt)
+{
+    public static MessageDto Of(ContactMessage m)
+        => new(m.Id, m.Name, m.Email, m.Message, EnumWire.ToWire(m.Status), m.CreatedAt, m.RepliedAt);
+}
 
 public sealed record MessageStatusRequest(string? Status = null);
 
@@ -181,6 +185,5 @@ public sealed class ContactService(
     private static string SiteName(SiteSettings? settings)
         => string.IsNullOrWhiteSpace(settings?.Name) ? DefaultSiteName : settings.Name;
 
-    private static MessageDto ToDto(ContactMessage m)
-        => new(m.Id, m.Name, m.Email, m.Message, EnumWire.ToWire(m.Status), m.CreatedAt, m.RepliedAt);
+    private static MessageDto ToDto(ContactMessage m) => MessageDto.Of(m);
 }
