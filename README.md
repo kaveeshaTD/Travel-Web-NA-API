@@ -79,6 +79,21 @@ to the API console (look for `Email not sent (no provider configured)`), so copy
 deliberately shows `token=[REDACTED]`: reset tokens are never stored or logged in clear, and outside Development the log
 does not contain email bodies (`Email:LogBodies` is only on in `appsettings.Development.json`).
 
+## Content and uploads
+
+The website content (packages, destinations, vehicles, services, FAQs, gallery), the site settings and the travel tips are
+read without signing in and managed by an admin (`/api/packages`, `/api/destinations`, `/api/vehicles`, `/api/services`,
+`/api/faqs`, `/api/gallery`, `/api/settings`, `/api/tips`). All prices are in LKR.
+
+To try an upload from Scalar or Swagger, sign in as the admin (see above), then call `POST /api/uploads` with a
+`multipart/form-data` body that has one file in the field `file` (JPEG, PNG or WebP, up to 5 MB). The answer is
+`{ "url": "/uploads/<name>" }`; open that path on the API address to see the image, and use the same path as an image
+value in a package, destination, vehicle, service or gallery record.
+
+Uploaded files are kept in the folder set by `Storage:UploadsPath` (default `uploads` next to the app, ignored by git).
+**In production, point it at storage that survives restarts and redeploys** (a mounted volume or disk); otherwise uploaded
+images disappear with the container. The API refuses to start when that folder cannot be created or written to.
+
 ## Test
 
 ```powershell
@@ -107,7 +122,8 @@ dotnet ef migrations add <Name> --project TravelWebAPI.Infrastructure --startup-
 | `RateLimiting:AuthPermitLimit`, `RateLimiting:AuthWindowSeconds` | Requests per window per client address on register, login, forgot, reset and refresh (10 per 60 s) |
 | `Hosting:UseForwardedHeaders`, `Hosting:KnownProxies` | Turn on only behind a reverse proxy, and list its addresses, so the real client address is used for rate limiting |
 | `Seed:Enabled`, `Seed:IncludeSampleActivity` | Seed at startup, and whether to include sample bookings |
-| `Limits:MaxRequestBodyBytes` | Maximum request body (default 1 MB) |
+| `Limits:MaxRequestBodyBytes` | Maximum request body (default 1 MB). `POST /api/uploads` has its own limit (5 MB plus the form envelope) |
+| `Storage:UploadsPath` | Folder for uploaded images (default `uploads`). Must be persistent in Production |
 | `Email:*` | SendGrid settings. Empty for now: emails are recorded in `email_logs` (marked failed, never resent) instead of being sent. `Email:LogBodies` (true only in Development) also writes email bodies to the console |
 | `Serilog:*` | Log levels and sinks (JSON to the console by default) |
 

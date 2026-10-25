@@ -54,6 +54,7 @@ public sealed class GlobalExceptionHandler(ILogger<GlobalExceptionHandler> logge
         UnauthorizedException e => (StatusCodes.Status401Unauthorized, e.Message, null),
         ForbiddenException e => (StatusCodes.Status403Forbidden, e.Message, null),
         NotFoundException e => (StatusCodes.Status404NotFound, e.Message, null),
+        PayloadTooLargeException e => (StatusCodes.Status413PayloadTooLarge, e.Message, null),
         TooManyRequestsException e => (StatusCodes.Status429TooManyRequests, e.Message, null),
         DependentsExistException e => (
             StatusCodes.Status409Conflict,

@@ -67,3 +67,9 @@ public sealed class DependentsExistException : ConflictException
     /// <summary>Names of the records that still use the target. Returned to the caller as <c>fields.dependents</c>.</summary>
     public IReadOnlyList<string> Dependents { get; }
 }
+
+/// <summary>An uploaded file is larger than allowed. Answered as 413.</summary>
+public sealed class PayloadTooLargeException(string message = "Request body is too large") : AppException(message);
+
+/// <summary>A save broke a uniqueness rule of the database, for example two records created with the same id at the same moment.</summary>
+public sealed class DuplicateKeyException(string message = "That record already exists, please try again") : ConflictException(message);

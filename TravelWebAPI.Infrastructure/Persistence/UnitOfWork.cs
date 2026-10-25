@@ -1,11 +1,27 @@
+using Microsoft.EntityFrameworkCore;
+using Npgsql;
 using TravelWebAPI.Application.Abstractions;
+using TravelWebAPI.Domain.Exceptions;
 
 namespace TravelWebAPI.Infrastructure.Persistence;
 
 public sealed class UnitOfWork(AppDbContext context) : IUnitOfWork
 {
-    public Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
-        => context.SaveChangesAsync(cancellationToken);
+    public async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
+    {
+        try
+        {
+            return await context.SaveChangesAsync(cancellationToken);
+        }
+        catch (DbUpdateException exception) when (exception.InnerException is PostgresException { SqlState: PostgresErrorCodes.UniqueViolation })
+        {
+            throw new DuplicateKeyException();
+        }
+        catch (DbUpdateException exception) when (exception.InnerException is PostgresException { SqlState: PostgresErrorCodes.ForeignKeyViolation })
+        {
+            throw new ConflictException("This record is still in use or refers to something that no longer exists");
+        }
+    }
 
     public async Task ExecuteInTransactionAsync(Func<CancellationToken, Task> operation, CancellationToken cancellationToken = default)
     {

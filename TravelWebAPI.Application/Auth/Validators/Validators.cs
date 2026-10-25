@@ -53,17 +53,23 @@ public static class ValidationExtensions
     /// <summary>Throws a <see cref="Domain.Exceptions.ValidationException"/> with the first message of each invalid field (camelCase names).</summary>
     public static void ThrowIfInvalid<T>(this IValidator<T> validator, T instance)
     {
-        var result = validator.Validate(instance);
-        if (result.IsValid)
+        var fields = validator.Check(instance);
+        if (fields.Count > 0)
         {
-            return;
+            throw new Domain.Exceptions.ValidationException(fields);
         }
-
-        throw new Domain.Exceptions.ValidationException(ToFields(result));
     }
+
+    /// <summary>The first message of each invalid field (camelCase names); empty when the instance is valid.</summary>
+    public static Dictionary<string, string> Check<T>(this IValidator<T> validator, T instance)
+        => ToFields(validator.Validate(instance));
 
     private static Dictionary<string, string> ToFields(ValidationResult result)
         => result.Errors
-            .GroupBy(e => JsonNamingPolicy.CamelCase.ConvertName(e.PropertyName))
+            .GroupBy(e => CamelCasePath(e.PropertyName))
             .ToDictionary(g => g.Key, g => g.First().ErrorMessage);
+
+    /// <summary><c>Trust.Rating</c> becomes <c>trust.rating</c> and <c>Regions[0].Months</c> becomes <c>regions[0].months</c>.</summary>
+    private static string CamelCasePath(string path)
+        => string.Join('.', path.Split('.').Select(segment => JsonNamingPolicy.CamelCase.ConvertName(segment)));
 }

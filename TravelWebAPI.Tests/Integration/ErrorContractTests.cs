@@ -88,6 +88,17 @@ public sealed class ErrorContractTests : IClassFixture<ApiFactory>
     }
 
     [Fact]
+    public async Task An_oversized_file_is_413_and_a_duplicate_key_is_409()
+    {
+        var large = await ReadErrorAsync(await _client.GetAsync("/api/_probe/too-large"), HttpStatusCode.RequestEntityTooLarge);
+        var duplicate = await ReadErrorAsync(await _client.PostAsync("/api/_probe/duplicate-key", null), HttpStatusCode.Conflict);
+
+        Assert.Equal("Request body is too large", large.GetProperty("message").GetString());
+        Assert.False(large.TryGetProperty("fields", out _));
+        Assert.Equal("That record already exists, please try again", duplicate.GetProperty("message").GetString());
+    }
+
+    [Fact]
     public async Task Unexpected_errors_are_a_generic_500_and_logged_with_the_correlation_id()
     {
         var response = await _client.GetAsync("/api/_probe/boom");

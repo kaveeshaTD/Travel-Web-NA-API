@@ -2,6 +2,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using TravelWebAPI.Application.Abstractions;
+using TravelWebAPI.Application.Content;
+using TravelWebAPI.Domain.Entities;
 using TravelWebAPI.Infrastructure.Persistence;
 using TravelWebAPI.Infrastructure.Seed;
 using TravelWebAPI.Infrastructure.Services;
@@ -24,6 +26,16 @@ public static class DependencyInjection
         services.AddScoped<IUserRepository, UserRepository>();
         services.AddScoped<IRefreshTokenRepository, RefreshTokenRepository>();
         services.AddScoped<IPasswordResetTokenRepository, PasswordResetTokenRepository>();
+
+        services.AddScoped<IContentRepository<Faq>, FaqRepository>();
+        services.AddScoped<IContentRepository<GalleryImage>, GalleryImageRepository>();
+        services.AddScoped<IContentRepository<Vehicle>, VehicleRepository>();
+        services.AddScoped<IContentRepository<Service>, ServiceRepository>();
+        services.AddScoped<IContentRepository<Destination>, DestinationRepository>();
+        services.AddScoped<IContentRepository<Package>, PackageRepository>();
+        services.AddScoped<IPackageRepository, PackageRepository>();
+
+        services.AddSingleton<IFileStorage, LocalFileStorage>();
 
         services.AddSingleton<IJwtTokenService, JwtTokenService>();
         services.AddSingleton<ITokenGenerator, TokenGenerator>();

@@ -69,3 +69,6 @@ openspec/
 .DS_Store
 Thumbs.db
 Desktop.ini
+
+# Images uploaded while developing
+TravelWebAPI.Api/uploads/

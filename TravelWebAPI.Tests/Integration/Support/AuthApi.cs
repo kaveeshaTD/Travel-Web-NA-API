@@ -73,6 +73,8 @@ public sealed class AuthApi(HttpClient client)
         return await client.SendAsync(request);
     }
 
+    public Task<HttpResponseMessage> SendAsync(HttpRequestMessage request) => client.SendAsync(request);
+
     public Task<HttpResponseMessage> GetAsync(string path, string? bearer = null, string? refreshCookie = null)
         => SendAsync(HttpMethod.Get, path, null, refreshCookie, bearer);
 

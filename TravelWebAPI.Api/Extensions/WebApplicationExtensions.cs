@@ -1,6 +1,9 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics;
+using Microsoft.AspNetCore.StaticFiles;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.FileProviders;
+using Microsoft.Extensions.Options;
 using Scalar.AspNetCore;
 using Serilog;
 using TravelWebAPI.Api.Configuration;
@@ -8,6 +11,7 @@ using TravelWebAPI.Api.Errors;
 using TravelWebAPI.Api.Middleware;
 using TravelWebAPI.Infrastructure.Persistence;
 using TravelWebAPI.Infrastructure.Seed;
+using TravelWebAPI.Infrastructure.Services;
 
 namespace TravelWebAPI.Api.Extensions;
 
@@ -50,6 +54,8 @@ public static class WebApplicationExtensions
             app.UseHttpsRedirection();
         }
 
+        app.UseUploadedFiles();
+
         app.UseRouting();
         app.UseRateLimiter();
         app.UseMiddleware<RequestSizeLimitMiddleware>();
@@ -73,6 +79,35 @@ public static class WebApplicationExtensions
         }
 
         return app;
+    }
+
+    /// <summary>
+    /// Serves the uploaded images publicly at <c>/uploads/...</c>. Only the three image types are served, only from the
+    /// uploads folder, and browsers are told not to guess the type and to keep the files (names never change content).
+    /// A folder that cannot be written to stops the start-up.
+    /// </summary>
+    private static void UseUploadedFiles(this WebApplication app)
+    {
+        var folder = app.Services.GetRequiredService<IOptions<StorageOptions>>().Value.UploadsPath;
+        LocalFileStorage.EnsureReady(folder);
+
+        app.UseStaticFiles(new StaticFileOptions
+        {
+            FileProvider = new PhysicalFileProvider(Path.GetFullPath(folder)),
+            RequestPath = "/uploads",
+            ServeUnknownFileTypes = false,
+            ContentTypeProvider = new FileExtensionContentTypeProvider(new Dictionary<string, string>
+            {
+                [".jpg"] = "image/jpeg",
+                [".png"] = "image/png",
+                [".webp"] = "image/webp",
+            }),
+            OnPrepareResponse = context =>
+            {
+                context.Context.Response.Headers.XContentTypeOptions = "nosniff";
+                context.Context.Response.Headers.CacheControl = "public,max-age=31536000,immutable";
+            },
+        });
     }
 
     /// <summary>

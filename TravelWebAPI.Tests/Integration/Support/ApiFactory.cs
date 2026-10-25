@@ -34,6 +34,9 @@ public sealed class ApiFactory : WebApplicationFactory<Program>
         _realHasher = realHasher;
     }
 
+    /// <summary>A throw-away uploads folder for this host, removed when the host is disposed.</summary>
+    public string UploadsPath { get; } = Path.Combine(Path.GetTempPath(), "ceylon-roads-tests", Guid.NewGuid().ToString("N"));
+
     public CapturingLogSink Logs { get; } = new();
 
     /// <summary>The emails the API handed to the email provider, with their real text (the database copy has secrets removed).</summary>
@@ -57,6 +60,7 @@ public sealed class ApiFactory : WebApplicationFactory<Program>
                 ["Cors:AllowedOrigins:0"] = "http://localhost:5173",
                 ["Jwt:Key"] = JwtKey,
                 ["App:WebBaseUrl"] = "http://localhost:5173",
+                ["Storage:UploadsPath"] = UploadsPath,
 
                 // Tests share one client address, so the limit is only low in the tests about the limit.
                 ["RateLimiting:AuthPermitLimit"] = "100000",
@@ -86,6 +90,23 @@ public sealed class ApiFactory : WebApplicationFactory<Program>
                 services.AddSingleton<IPasswordHasher>(new PasswordHasher(iterations: 1_000));
             }
         });
+    }
+
+    protected override void Dispose(bool disposing)
+    {
+        base.Dispose(disposing);
+
+        if (disposing && Directory.Exists(UploadsPath))
+        {
+            try
+            {
+                Directory.Delete(UploadsPath, recursive: true);
+            }
+            catch (IOException)
+            {
+                // A leftover temp folder is harmless.
+            }
+        }
     }
 
     /// <summary>Settings that satisfy the Production start-up checks.</summary>

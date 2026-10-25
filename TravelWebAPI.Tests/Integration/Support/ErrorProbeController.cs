@@ -50,6 +50,12 @@ public sealed class ErrorProbeController : ControllerBase
     [HttpDelete("dependents")]
     public IActionResult Dependents() => throw new DependentsExistException("Destination", ["cultural-triangle", "hill-country"]);
 
+    [HttpGet("too-large")]
+    public IActionResult TooLarge() => throw new PayloadTooLargeException();
+
+    [HttpPost("duplicate-key")]
+    public IActionResult DuplicateKey() => throw new DuplicateKeyException();
+
     [HttpGet("boom")]
     public IActionResult Boom() => throw new InvalidOperationException("secret-connection-string password=hunter2");
 

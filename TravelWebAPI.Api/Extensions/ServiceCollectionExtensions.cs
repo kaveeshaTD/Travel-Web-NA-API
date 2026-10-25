@@ -32,6 +32,10 @@ public static class ServiceCollectionExtensions
         services.AddOptions<HostingOptions>().BindConfiguration(HostingOptions.Section);
         services.AddOptions<JwtSettings>().BindConfiguration(JwtSettings.Section);
         services.AddOptions<EmailOutboxOptions>().BindConfiguration(EmailOutboxOptions.Section);
+        services.AddOptions<StorageOptions>()
+            .BindConfiguration(StorageOptions.Section)
+            .PostConfigure<IHostEnvironment>((options, environment) =>
+                options.UploadsPath = Path.GetFullPath(options.UploadsPath, environment.ContentRootPath));
         services.AddOptions<AuthOptions>()
             .BindConfiguration(AuthOptions.Section)
             .Configure<IConfiguration>((options, configuration) =>

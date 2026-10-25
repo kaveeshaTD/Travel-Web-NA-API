@@ -4,7 +4,7 @@ using TravelWebAPI.Domain.Enums;
 namespace TravelWebAPI.Domain.Entities;
 
 /// <summary>Service shown on the website and chosen in the booking form. The id is a slug.</summary>
-public class Service : IHasCreatedAt, IHasUpdatedAt
+public class Service : IOrdered, IHasCreatedAt, IHasUpdatedAt
 {
     public string Id { get; set; } = string.Empty;
     public string Title { get; set; } = string.Empty;
@@ -26,7 +26,7 @@ public class ServiceDetail
     public int SortOrder { get; set; }
 }
 
-public class Vehicle : IHasCreatedAt, IHasUpdatedAt
+public class Vehicle : IOrdered, IHasCreatedAt, IHasUpdatedAt
 {
     public string Id { get; set; } = string.Empty;
     public VehicleType Type { get; set; }
@@ -43,7 +43,7 @@ public class Vehicle : IHasCreatedAt, IHasUpdatedAt
     public DateTimeOffset UpdatedAt { get; set; }
 }
 
-public class Destination : IHasCreatedAt, IHasUpdatedAt
+public class Destination : IOrdered, IHasCreatedAt, IHasUpdatedAt
 {
     public string Id { get; set; } = string.Empty;
     public string Name { get; set; } = string.Empty;
@@ -69,7 +69,7 @@ public class DestinationImage
     public int SortOrder { get; set; }
 }
 
-public class Package : IHasCreatedAt, IHasUpdatedAt
+public class Package : IOrdered, IHasCreatedAt, IHasUpdatedAt
 {
     public string Id { get; set; } = string.Empty;
     public string Name { get; set; } = string.Empty;
@@ -137,7 +137,7 @@ public class PackageItem
     public int SortOrder { get; set; }
 }
 
-public class GalleryImage : IHasCreatedAt
+public class GalleryImage : IOrdered, IHasCreatedAt
 {
     public string Id { get; set; } = string.Empty;
     public string Src { get; set; } = string.Empty;
@@ -151,7 +151,7 @@ public class GalleryImage : IHasCreatedAt
     public DateTimeOffset CreatedAt { get; set; }
 }
 
-public class Faq
+public class Faq : IOrdered
 {
     public string Id { get; set; } = string.Empty;
     public string Question { get; set; } = string.Empty;
