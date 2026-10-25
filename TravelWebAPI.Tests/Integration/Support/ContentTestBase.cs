@@ -1,6 +1,7 @@
 using System.Net;
 using System.Net.Http.Json;
 using System.Text.Json;
+using Microsoft.Extensions.DependencyInjection;
 using TravelWebAPI.Domain.Entities;
 using TravelWebAPI.Domain.Enums;
 using TravelWebAPI.Tests.Integration;
@@ -25,13 +26,18 @@ public abstract class ContentTestBase(PostgresFixture postgres) : IAsyncLifetime
     public virtual async Task InitializeAsync()
     {
         Connection = await postgres.CreateDatabaseAsync();
-        Factory = ApiFactory.With(Settings());
+        Factory = ApiFactory.With(Settings(), configure: ConfigureServices);
         Api = new AuthApi(AuthApi.CreateClient(Factory));
     }
 
     public virtual async Task DisposeAsync() => await Factory.DisposeAsync();
 
     protected virtual Dictionary<string, string?> Settings() => new() { ["ConnectionStrings:Default"] = Connection };
+
+    /// <summary>Lets a test class swap services of the running API, for example the exchange-rate sources.</summary>
+    protected virtual void ConfigureServices(IServiceCollection services)
+    {
+    }
 
     protected Task<T> Scalar<T>(string sql) => PostgresFixture.ScalarAsync<T>(Connection, sql);
 

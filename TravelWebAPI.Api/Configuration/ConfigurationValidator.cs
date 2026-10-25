@@ -1,3 +1,4 @@
+using TravelWebAPI.Application.Rates;
 using TravelWebAPI.Infrastructure.Services;
 
 namespace TravelWebAPI.Api.Configuration;
@@ -35,9 +36,25 @@ public static class ConfigurationValidator
             problems.Add($"{MaxBodyKey} must be greater than 0");
         }
 
+        var rates = configuration.GetSection(ExchangeRateOptions.Section).Get<ExchangeRateOptions>() ?? new ExchangeRateOptions();
+        if (rates.RefreshHours <= 0 || rates.MaxChangePercent <= 0 || rates.StartupDelaySeconds < 0 || rates.RequestTimeoutSeconds <= 0)
+        {
+            problems.Add($"{ExchangeRateOptions.Section}: RefreshHours, MaxChangePercent and RequestTimeoutSeconds must be greater than 0, and StartupDelaySeconds must not be negative");
+        }
+
         if (!environment.IsProduction())
         {
             return problems;
+        }
+
+        if (rates.Fallback.Usd <= 0 || rates.Fallback.Eur <= 0 || rates.Fallback.Gbp <= 0)
+        {
+            problems.Add($"{ExchangeRateOptions.Section}:{nameof(ExchangeRateOptions.Fallback)} rates for USD, EUR and GBP must be greater than 0");
+        }
+
+        if (rates.Enabled && (!IsHttps(rates.PrimaryUrl) || !IsHttps(rates.FallbackUrl)))
+        {
+            problems.Add($"{ExchangeRateOptions.Section}:{nameof(ExchangeRateOptions.PrimaryUrl)} and {nameof(ExchangeRateOptions.FallbackUrl)} must be https addresses");
         }
 
         var connection = configuration[ConnectionStringKey];
@@ -72,6 +89,9 @@ public static class ConfigurationValidator
 
         return problems;
     }
+
+    private static bool IsHttps(string? value)
+        => Uri.TryCreate(value, UriKind.Absolute, out var uri) && uri.Scheme == Uri.UriSchemeHttps;
 
     private static bool IsMissing(string? value)
         => string.IsNullOrWhiteSpace(value)

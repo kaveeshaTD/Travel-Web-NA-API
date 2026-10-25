@@ -3,6 +3,7 @@ using Microsoft.Extensions.DependencyInjection;
 using TravelWebAPI.Application.Auth;
 using TravelWebAPI.Application.Auth.Validators;
 using TravelWebAPI.Application.Content;
+using TravelWebAPI.Application.Rates;
 
 namespace TravelWebAPI.Application;
 
@@ -35,6 +36,9 @@ public static class DependencyInjection
         services.AddScoped<UploadService>();
         services.AddScoped<SettingsService>();
         services.AddScoped<TipsService>();
+
+        services.AddScoped<ExchangeRateService>();
+        services.AddScoped<IExchangeRates>(sp => sp.GetRequiredService<ExchangeRateService>());
 
         return services;
     }

@@ -2,7 +2,10 @@ using System.Text.RegularExpressions;
 using FluentValidation;
 using TravelWebAPI.Application.Abstractions;
 using TravelWebAPI.Application.Auth.Validators;
+using TravelWebAPI.Application.Rates;
+using TravelWebAPI.Domain.Common;
 using TravelWebAPI.Domain.Entities;
+using TravelWebAPI.Domain.Enums;
 
 namespace TravelWebAPI.Application.Content;
 
@@ -29,7 +32,11 @@ public sealed record SocialLinkDto(string Label, string Href);
 
 public sealed record TrustDto(int YearsExperience, int TripsCompleted, decimal Rating, string Licensed);
 
-/// <summary>The site settings as the website and the admin see them.</summary>
+/// <summary>
+/// The site settings as the website and the admin see them. The three rate fields are read-only: they are filled from the
+/// stored exchange rates when the settings are read (<c>currencyRates</c> is LKR per 1 unit, LKR itself is 1) and are
+/// never taken from a request.
+/// </summary>
 public sealed record SettingsDto(
     string Name,
     string Tagline,
@@ -42,7 +49,10 @@ public sealed record SettingsDto(
     IReadOnlyList<SocialLinkDto> Socials,
     TrustDto Trust,
     IReadOnlyList<string> Languages,
-    IReadOnlyList<string> Licenses);
+    IReadOnlyList<string> Licenses,
+    IReadOnlyDictionary<string, decimal>? CurrencyRates = null,
+    DateTimeOffset? CurrencyRatesAsOf = null,
+    string? CurrencyRatesSource = null);
 
 public sealed partial class SettingsDtoValidator : AbstractValidator<SettingsDto>
 {
@@ -93,10 +103,14 @@ public sealed partial class SettingsDtoValidator : AbstractValidator<SettingsDto
 }
 
 /// <summary>The single site-settings document: read by everybody, replaced by an admin.</summary>
-public sealed class SettingsService(IRepository<SiteSettings> settings, IUnitOfWork unitOfWork, IValidator<SettingsDto> validator)
+public sealed class SettingsService(
+    IRepository<SiteSettings> settings,
+    IUnitOfWork unitOfWork,
+    IValidator<SettingsDto> validator,
+    IExchangeRates exchangeRates)
 {
     public async Task<SettingsDto> GetAsync(CancellationToken cancellationToken = default)
-        => ToDto(await settings.GetByIdAsync(SiteSettings.SingletonId, cancellationToken));
+        => await WithRatesAsync(ToDto(await settings.GetByIdAsync(SiteSettings.SingletonId, cancellationToken)), cancellationToken);
 
     public async Task<SettingsDto> UpdateAsync(SettingsRequest request, CancellationToken cancellationToken = default)
     {
@@ -127,7 +141,21 @@ public sealed class SettingsService(IRepository<SiteSettings> settings, IUnitOfW
         row.Socials = [.. draft.Socials.Select(link => new SocialLink(link.Label, link.Href))];
 
         await unitOfWork.SaveChangesAsync(cancellationToken);
-        return ToDto(row);
+        return await WithRatesAsync(ToDto(row), cancellationToken);
+    }
+
+    /// <summary><c>currencyRates</c> in the order LKR, USD, EUR, GBP, with the time they were fetched and where from.</summary>
+    private async Task<SettingsDto> WithRatesAsync(SettingsDto dto, CancellationToken cancellationToken)
+    {
+        var current = await exchangeRates.GetCurrentAsync(cancellationToken);
+
+        var rates = new Dictionary<string, decimal> { [EnumWire.ToWire(CurrencyCode.Lkr)] = 1m };
+        foreach (var currency in RateCheck.Currencies)
+        {
+            rates[EnumWire.ToWire(currency)] = current.RatesLkr[currency];
+        }
+
+        return dto with { CurrencyRates = rates, CurrencyRatesAsOf = current.AsOf, CurrencyRatesSource = current.Source };
     }
 
     /// <summary>The request with text trimmed, blank list entries and incomplete social links dropped, and missing values made empty.</summary>

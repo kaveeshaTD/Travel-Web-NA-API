@@ -94,6 +94,15 @@ Uploaded files are kept in the folder set by `Storage:UploadsPath` (default `upl
 **In production, point it at storage that survives restarts and redeploys** (a mounted volume or disk); otherwise uploaded
 images disappear with the container. The API refuses to start when that folder cannot be created or written to.
 
+## Exchange rates
+
+Prices are in LKR. The server fetches USD, EUR and GBP rates about 10 seconds after it starts and then whenever the stored
+rates are more than 24 hours old (it checks every hour), keeps every fetch in the `exchange_rates` table and serves the
+newest ones in `GET /api/settings` (`currencyRates` is LKR per 1 unit, with `currencyRatesAsOf` and `currencyRatesSource`).
+If both free sources are unreachable, the last stored rates stay in use and a warning is written to the log; on a brand-new
+database the `ExchangeRates:Fallback` numbers are shown, marked `fallback`. Set `ExchangeRates:Enabled` to `false` to stop all
+outgoing requests.
+
 ## Test
 
 ```powershell
@@ -123,6 +132,7 @@ dotnet ef migrations add <Name> --project TravelWebAPI.Infrastructure --startup-
 | `Hosting:UseForwardedHeaders`, `Hosting:KnownProxies` | Turn on only behind a reverse proxy, and list its addresses, so the real client address is used for rate limiting |
 | `Seed:Enabled`, `Seed:IncludeSampleActivity` | Seed at startup, and whether to include sample bookings |
 | `Limits:MaxRequestBodyBytes` | Maximum request body (default 1 MB). `POST /api/uploads` has its own limit (5 MB plus the form envelope) |
+| `ExchangeRates:*` | Automatic exchange rates. `Enabled` (true), `RefreshHours` (24), `StartupDelaySeconds` (10), `MaxChangePercent` (25), `RequestTimeoutSeconds` (10), `PrimaryUrl`, `FallbackUrl` and `Fallback:{Usd,Eur,Gbp}` (rates used until the first fetch). The API needs outbound HTTPS to `open.er-api.com` and `cdn.jsdelivr.net`. Rates cannot be edited through the API |
 | `Storage:UploadsPath` | Folder for uploaded images (default `uploads`). Must be persistent in Production |
 | `Email:*` | SendGrid settings. Empty for now: emails are recorded in `email_logs` (marked failed, never resent) instead of being sent. `Email:LogBodies` (true only in Development) also writes email bodies to the console |
 | `Serilog:*` | Log levels and sinks (JSON to the console by default) |

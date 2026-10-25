@@ -90,7 +90,7 @@ public sealed class SettingsAndTipsTests(PostgresFixture postgres) : ContentTest
         Assert.Equal("Facebook", social.GetProperty("label").GetString());
         Assert.StartsWith("https://", social.GetProperty("href").GetString(), StringComparison.Ordinal);
         Assert.Equal(["English", "Sinhala"], Strings(settings.GetProperty("languages")));
-        Assert.False(settings.TryGetProperty("currencyRates", out _));
+        Assert.Equal(1m, settings.GetProperty("currencyRates").GetProperty("LKR").GetDecimal());
         Assert.False(settings.TryGetProperty("updatedAt", out _));
     }
 
@@ -136,7 +136,8 @@ public sealed class SettingsAndTipsTests(PostgresFixture postgres) : ContentTest
         var socials = saved.GetProperty("socials");
         Assert.Equal(1, socials.GetArrayLength());
         Assert.Equal("https://facebook.com/ceylonroads", socials[0].GetProperty("href").GetString());
-        Assert.False(saved.TryGetProperty("currencyRates", out _));
+        Assert.Equal(330m, saved.GetProperty("currencyRates").GetProperty("USD").GetDecimal());
+        Assert.Equal(0L, await Scalar<long>("SELECT count(*) FROM exchange_rates"));
         Assert.DoesNotContain("currency", await Scalar<string>("SELECT row_to_json(site_settings)::text FROM site_settings"), StringComparison.OrdinalIgnoreCase);
     }
 

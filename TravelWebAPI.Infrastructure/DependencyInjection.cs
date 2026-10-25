@@ -3,6 +3,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using TravelWebAPI.Application.Abstractions;
 using TravelWebAPI.Application.Content;
+using TravelWebAPI.Application.Rates;
 using TravelWebAPI.Domain.Entities;
 using TravelWebAPI.Infrastructure.Persistence;
 using TravelWebAPI.Infrastructure.Seed;
@@ -36,6 +37,16 @@ public static class DependencyInjection
         services.AddScoped<IPackageRepository, PackageRepository>();
 
         services.AddSingleton<IFileStorage, LocalFileStorage>();
+
+        services.AddScoped<IExchangeRateRepository, ExchangeRateRepository>();
+        services.AddHttpClient<PrimaryExchangeRateProvider>(ExchangeRateHttpClient.Configure)
+            .ConfigurePrimaryHttpMessageHandler(() => new SocketsHttpHandler { UseCookies = false, MaxAutomaticRedirections = 3 });
+        services.AddHttpClient<FallbackExchangeRateProvider>(ExchangeRateHttpClient.Configure)
+            .ConfigurePrimaryHttpMessageHandler(() => new SocketsHttpHandler { UseCookies = false, MaxAutomaticRedirections = 3 });
+
+        // The order matters: the primary source is asked first.
+        services.AddTransient<IExchangeRateProvider>(sp => sp.GetRequiredService<PrimaryExchangeRateProvider>());
+        services.AddTransient<IExchangeRateProvider>(sp => sp.GetRequiredService<FallbackExchangeRateProvider>());
 
         services.AddSingleton<IJwtTokenService, JwtTokenService>();
         services.AddSingleton<ITokenGenerator, TokenGenerator>();

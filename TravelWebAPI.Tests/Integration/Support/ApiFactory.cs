@@ -21,17 +21,19 @@ public sealed class ApiFactory : WebApplicationFactory<Program>
     private readonly string _environment;
     private readonly IDictionary<string, string?>? _settings;
     private readonly bool _realHasher;
+    private readonly Action<IServiceCollection>? _configure;
 
     /// <summary>The single public constructor, as xUnit requires for fixtures.</summary>
-    public ApiFactory() : this("Staging", null, realHasher: false)
+    public ApiFactory() : this("Staging", null, realHasher: false, configure: null)
     {
     }
 
-    private ApiFactory(string environment, IDictionary<string, string?>? settings, bool realHasher)
+    private ApiFactory(string environment, IDictionary<string, string?>? settings, bool realHasher, Action<IServiceCollection>? configure)
     {
         _environment = environment;
         _settings = settings;
         _realHasher = realHasher;
+        _configure = configure;
     }
 
     /// <summary>A throw-away uploads folder for this host, removed when the host is disposed.</summary>
@@ -45,8 +47,13 @@ public sealed class ApiFactory : WebApplicationFactory<Program>
     /// <summary>Starts at the real current time so tokens stay valid; tests move it forward to test expiry.</summary>
     public FakeClock Clock { get; } = new(DateTimeOffset.UtcNow);
 
-    public static ApiFactory With(IDictionary<string, string?> settings, string environment = "Staging", bool realHasher = false)
-        => new(environment, settings, realHasher);
+    /// <param name="configure">Changes the services after the API registered its own, for example to swap in a fake rate source.</param>
+    public static ApiFactory With(
+        IDictionary<string, string?> settings,
+        string environment = "Staging",
+        bool realHasher = false,
+        Action<IServiceCollection>? configure = null)
+        => new(environment, settings, realHasher, configure);
 
     protected override void ConfigureWebHost(IWebHostBuilder builder)
     {
@@ -61,6 +68,9 @@ public sealed class ApiFactory : WebApplicationFactory<Program>
                 ["Jwt:Key"] = JwtKey,
                 ["App:WebBaseUrl"] = "http://localhost:5173",
                 ["Storage:UploadsPath"] = UploadsPath,
+
+                // Tests never call the real rate sources; the tests about rates switch this on with a fake source.
+                ["ExchangeRates:Enabled"] = "false",
 
                 // Tests share one client address, so the limit is only low in the tests about the limit.
                 ["RateLimiting:AuthPermitLimit"] = "100000",
@@ -89,6 +99,8 @@ public sealed class ApiFactory : WebApplicationFactory<Program>
                 services.RemoveAll<IPasswordHasher>();
                 services.AddSingleton<IPasswordHasher>(new PasswordHasher(iterations: 1_000));
             }
+
+            _configure?.Invoke(services);
         });
     }
 
