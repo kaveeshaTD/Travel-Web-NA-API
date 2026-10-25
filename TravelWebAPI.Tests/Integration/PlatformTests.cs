@@ -74,7 +74,15 @@ public class PlatformTests(PostgresFixture postgres)
         var swagger = await client.GetAsync("/swagger/index.html");
 
         Assert.Equal(HttpStatusCode.OK, document.StatusCode);
-        Assert.Contains("openapi", await document.Content.ReadAsStringAsync(), StringComparison.Ordinal);
+        var text = await document.Content.ReadAsStringAsync();
+        Assert.Contains("openapi", text, StringComparison.Ordinal);
+
+        // Every route of the API is described, including the ones with a custom body converter (bookings).
+        foreach (var path in new[] { "/api/auth/login", "/api/packages", "/api/uploads", "/api/settings", "/api/reviews", "/api/messages", "/api/emails", "/api/bookings", "/api/bookings/{id}/email" })
+        {
+            Assert.Contains($"\"{path}\"", text, StringComparison.Ordinal);
+        }
+
         Assert.Equal(HttpStatusCode.OK, page.StatusCode);
         Assert.Equal(HttpStatusCode.OK, swagger.StatusCode);
     }

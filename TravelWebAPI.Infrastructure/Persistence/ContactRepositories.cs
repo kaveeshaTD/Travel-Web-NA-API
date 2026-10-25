@@ -29,6 +29,14 @@ public sealed class EmailLogRepository(AppDbContext context) : IEmailLogReposito
     public Task<EmailLog?> GetAsync(Guid id, CancellationToken cancellationToken = default)
         => context.EmailLogs.AsNoTracking().FirstOrDefaultAsync(log => log.Id == id, cancellationToken);
 
+    public async Task<IReadOnlyList<EmailLog>> ListForBookingAsync(Guid bookingId, CancellationToken cancellationToken = default)
+        => await context.EmailLogs
+            .AsNoTracking()
+            .Where(log => log.BookingId == bookingId)
+            .OrderByDescending(log => log.CreatedAt)
+            .ThenByDescending(log => log.Id)
+            .ToListAsync(cancellationToken);
+
     public Task<bool> AcknowledgedSinceAsync(string address, DateTimeOffset since, CancellationToken cancellationToken = default)
         => context.EmailLogs.AnyAsync(
             log => log.Kind == EmailKind.ContactAck && log.ToAddress == address && log.CreatedAt > since,

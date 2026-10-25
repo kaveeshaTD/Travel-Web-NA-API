@@ -45,6 +45,9 @@ public interface IEmailLogRepository
     /// <summary>One entry as it is stored now (not a tracked copy), or null.</summary>
     Task<EmailLog?> GetAsync(Guid id, CancellationToken cancellationToken = default);
 
+    /// <summary>The entries linked to a booking, newest first.</summary>
+    Task<IReadOnlyList<EmailLog>> ListForBookingAsync(Guid bookingId, CancellationToken cancellationToken = default);
+
     /// <summary>Whether an acknowledgement (<c>contact-ack</c>) to <paramref name="address"/> was recorded after <paramref name="since"/> (an entry made exactly at that time no longer counts).</summary>
     Task<bool> AcknowledgedSinceAsync(string address, DateTimeOffset since, CancellationToken cancellationToken = default);
 }

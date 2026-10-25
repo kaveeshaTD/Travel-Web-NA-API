@@ -367,6 +367,9 @@ public sealed class ContactServiceTests
         public Task<EmailLog?> GetAsync(Guid id, CancellationToken cancellationToken = default)
             => Task.FromResult(Logs.FirstOrDefault(l => l.Id == id));
 
+        public Task<IReadOnlyList<EmailLog>> ListForBookingAsync(Guid bookingId, CancellationToken cancellationToken = default)
+            => Task.FromResult<IReadOnlyList<EmailLog>>([.. Logs.Where(l => l.BookingId == bookingId)]);
+
         public Task<bool> AcknowledgedSinceAsync(string address, DateTimeOffset since, CancellationToken cancellationToken = default)
             => Task.FromResult(Logs.Any(l => l.Kind == EmailKind.ContactAck
                 && string.Equals(l.ToAddress, address, StringComparison.OrdinalIgnoreCase)

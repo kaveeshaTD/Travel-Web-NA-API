@@ -3,6 +3,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using TravelWebAPI.Application.Abstractions;
 using TravelWebAPI.Application.Contact;
+using TravelWebAPI.Application.Bookings;
 using TravelWebAPI.Application.Content;
 using TravelWebAPI.Application.Rates;
 using TravelWebAPI.Application.Reviews;
@@ -41,6 +42,7 @@ public static class DependencyInjection
         services.AddSingleton<IFileStorage, LocalFileStorage>();
 
         services.AddScoped<IReviewRepository, ReviewRepository>();
+        services.AddScoped<IBookingRepository, BookingRepository>();
         services.AddScoped<IContactMessageRepository, ContactMessageRepository>();
         services.AddScoped<IEmailLogRepository, EmailLogRepository>();
 

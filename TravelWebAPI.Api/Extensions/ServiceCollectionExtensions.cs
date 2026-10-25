@@ -14,6 +14,7 @@ using TravelWebAPI.Api.Services;
 using TravelWebAPI.Application;
 using TravelWebAPI.Application.Abstractions;
 using TravelWebAPI.Application.Auth;
+using TravelWebAPI.Application.Bookings;
 using TravelWebAPI.Application.Rates;
 using TravelWebAPI.Infrastructure;
 using TravelWebAPI.Infrastructure.Services;
@@ -34,6 +35,8 @@ public static class ServiceCollectionExtensions
         services.AddOptions<HostingOptions>().BindConfiguration(HostingOptions.Section);
         services.AddOptions<JwtSettings>().BindConfiguration(JwtSettings.Section);
         services.AddOptions<EmailOutboxOptions>().BindConfiguration(EmailOutboxOptions.Section);
+        services.AddOptions<BookingOptions>().BindConfiguration(BookingOptions.Section);
+        services.AddOptions<OwnerEmailOptions>().BindConfiguration(OwnerEmailOptions.Section);
         services.AddOptions<ExchangeRateOptions>().BindConfiguration(ExchangeRateOptions.Section);
         services.AddOptions<StorageOptions>()
             .BindConfiguration(StorageOptions.Section)
