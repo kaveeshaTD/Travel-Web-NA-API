@@ -2,8 +2,10 @@ using FluentValidation;
 using Microsoft.Extensions.DependencyInjection;
 using TravelWebAPI.Application.Auth;
 using TravelWebAPI.Application.Auth.Validators;
+using TravelWebAPI.Application.Contact;
 using TravelWebAPI.Application.Content;
 using TravelWebAPI.Application.Rates;
+using TravelWebAPI.Application.Reviews;
 
 namespace TravelWebAPI.Application;
 
@@ -26,6 +28,10 @@ public static class DependencyInjection
         services.AddSingleton<IValidator<PackageDraft>, PackageDraftValidator>();
         services.AddSingleton<IValidator<SettingsDto>, SettingsDtoValidator>();
         services.AddSingleton<IValidator<TipsDto>, TipsDtoValidator>();
+        services.AddSingleton<IValidator<ReviewSubmissionDraft>, ReviewSubmissionDraftValidator>();
+        services.AddSingleton<IValidator<ReviewDraft>, ReviewDraftValidator>();
+        services.AddSingleton<IValidator<ContactDraft>, ContactDraftValidator>();
+        services.AddSingleton<IValidator<ReplyDraft>, ReplyDraftValidator>();
 
         services.AddScoped<FaqService>();
         services.AddScoped<GalleryService>();
@@ -36,6 +42,10 @@ public static class DependencyInjection
         services.AddScoped<UploadService>();
         services.AddScoped<SettingsService>();
         services.AddScoped<TipsService>();
+
+        services.AddScoped<ReviewService>();
+        services.AddScoped<ContactService>();
+        services.AddScoped<EmailLogService>();
 
         services.AddScoped<ExchangeRateService>();
         services.AddScoped<IExchangeRates>(sp => sp.GetRequiredService<ExchangeRateService>());

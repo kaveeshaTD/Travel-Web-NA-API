@@ -31,6 +31,11 @@ public sealed class RateLimitingOptions
     public int AuthPermitLimit { get; set; } = 10;
 
     public int AuthWindowSeconds { get; set; } = 60;
+
+    /// <summary>Public forms (a review, a contact message): requests per window per client address.</summary>
+    public int SubmitPermitLimit { get; set; } = 5;
+
+    public int SubmitWindowSeconds { get; set; } = 600;
 }
 
 /// <summary>Settings for running behind a reverse proxy. Off by default so a spoofed <c>X-Forwarded-For</c> is ignored.</summary>

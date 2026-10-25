@@ -11,4 +11,7 @@ public static class RateLimitPolicies
 {
     /// <summary>Limit shared by register, login, forgot, reset and refresh.</summary>
     public const string Auth = "auth";
+
+    /// <summary>Limit shared by the public forms: submitting a review and sending a contact message.</summary>
+    public const string Submit = "submit";
 }

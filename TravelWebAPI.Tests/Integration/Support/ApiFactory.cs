@@ -74,6 +74,7 @@ public sealed class ApiFactory : WebApplicationFactory<Program>
 
                 // Tests share one client address, so the limit is only low in the tests about the limit.
                 ["RateLimiting:AuthPermitLimit"] = "100000",
+                ["RateLimiting:SubmitPermitLimit"] = "100000",
             };
 
             configuration.AddInMemoryCollection(defaults);

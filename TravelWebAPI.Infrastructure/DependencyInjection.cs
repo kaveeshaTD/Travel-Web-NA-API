@@ -2,8 +2,10 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using TravelWebAPI.Application.Abstractions;
+using TravelWebAPI.Application.Contact;
 using TravelWebAPI.Application.Content;
 using TravelWebAPI.Application.Rates;
+using TravelWebAPI.Application.Reviews;
 using TravelWebAPI.Domain.Entities;
 using TravelWebAPI.Infrastructure.Persistence;
 using TravelWebAPI.Infrastructure.Seed;
@@ -37,6 +39,10 @@ public static class DependencyInjection
         services.AddScoped<IPackageRepository, PackageRepository>();
 
         services.AddSingleton<IFileStorage, LocalFileStorage>();
+
+        services.AddScoped<IReviewRepository, ReviewRepository>();
+        services.AddScoped<IContactMessageRepository, ContactMessageRepository>();
+        services.AddScoped<IEmailLogRepository, EmailLogRepository>();
 
         services.AddScoped<IExchangeRateRepository, ExchangeRateRepository>();
         services.AddHttpClient<PrimaryExchangeRateProvider>(ExchangeRateHttpClient.Configure)

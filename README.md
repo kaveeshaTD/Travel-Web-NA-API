@@ -128,6 +128,7 @@ dotnet ef migrations add <Name> --project TravelWebAPI.Infrastructure --startup-
 | `Jwt:Key` | Token signing key, at least 32 characters. Development has its own key in `appsettings.Development.json`; Production must set it (environment variable `Jwt__Key`) |
 | `App:WebBaseUrl` | Website address used in password reset links. Must be `https` in Production |
 | `Auth:*` | `MaxFailedAttempts` (5), `LockoutMinutes` (15), `RefreshDays` (1), `RefreshDaysRemember` (30), `RefreshGraceSeconds` (10), `ResetTokenMinutes` (60) |
+| `RateLimiting:SubmitPermitLimit`, `RateLimiting:SubmitWindowSeconds` | Requests per window per client address on the public forms, a review and a contact message sharing one counter (5 per 600 s) |
 | `RateLimiting:AuthPermitLimit`, `RateLimiting:AuthWindowSeconds` | Requests per window per client address on register, login, forgot, reset and refresh (10 per 60 s) |
 | `Hosting:UseForwardedHeaders`, `Hosting:KnownProxies` | Turn on only behind a reverse proxy, and list its addresses, so the real client address is used for rate limiting |
 | `Seed:Enabled`, `Seed:IncludeSampleActivity` | Seed at startup, and whether to include sample bookings |

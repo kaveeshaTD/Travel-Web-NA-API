@@ -148,6 +148,22 @@ public static class ServiceCollectionExtensions
                     });
             });
 
+            // The public forms (a review, a contact message) share one counter per client address.
+            options.AddPolicy(RateLimitPolicies.Submit, context =>
+            {
+                var settings = context.RequestServices.GetRequiredService<IOptions<RateLimitingOptions>>().Value;
+
+                return RateLimitPartition.GetFixedWindowLimiter(
+                    context.Connection.RemoteIpAddress?.ToString() ?? "unknown",
+                    _ => new FixedWindowRateLimiterOptions
+                    {
+                        PermitLimit = settings.SubmitPermitLimit,
+                        Window = TimeSpan.FromSeconds(settings.SubmitWindowSeconds),
+                        QueueLimit = 0,
+                        AutoReplenishment = true,
+                    });
+            });
+
             options.OnRejected = async (context, cancellationToken) =>
             {
                 if (context.Lease.TryGetMetadata(MetadataName.RetryAfter, out var retryAfter))
