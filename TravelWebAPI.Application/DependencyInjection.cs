@@ -5,6 +5,7 @@ using TravelWebAPI.Application.Auth.Validators;
 using TravelWebAPI.Application.Bookings;
 using TravelWebAPI.Application.Contact;
 using TravelWebAPI.Application.Content;
+using TravelWebAPI.Application.Payments;
 using TravelWebAPI.Application.Rates;
 using TravelWebAPI.Application.Reviews;
 
@@ -51,6 +52,9 @@ public static class DependencyInjection
         services.AddScoped<ContactService>();
         services.AddScoped<EmailLogService>();
         services.AddScoped<BookingService>();
+
+        services.AddSingleton<IValidator<PaymentDraft>, PaymentDraftValidator>();
+        services.AddScoped<PaymentService>();
 
         services.AddScoped<ExchangeRateService>();
         services.AddScoped<IExchangeRates>(sp => sp.GetRequiredService<ExchangeRateService>());

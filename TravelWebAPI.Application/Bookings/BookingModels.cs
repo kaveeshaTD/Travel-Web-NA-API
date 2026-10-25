@@ -1,5 +1,7 @@
 using System.Text.Json.Serialization;
 using TravelWebAPI.Application.Contact;
+using TravelWebAPI.Domain.Common;
+using TravelWebAPI.Domain.Entities;
 
 namespace TravelWebAPI.Application.Bookings;
 
@@ -110,7 +112,21 @@ public sealed record PaymentDto(
     string Status,
     string PaidAt,
     string Note,
-    DateTimeOffset CreatedAt);
+    DateTimeOffset CreatedAt)
+{
+    public static PaymentDto Of(Payment p) => new(
+        p.Id,
+        p.BookingId,
+        p.Amount,
+        EnumWire.ToWire(p.Currency),
+        p.ExchangeRate,
+        p.AmountLkr,
+        EnumWire.ToWire(p.Method),
+        EnumWire.ToWire(p.Status),
+        BookingFormats.Date(p.PaidAt),
+        p.Notes ?? string.Empty,
+        p.CreatedAt);
+}
 
 /// <summary>
 /// A booking. Optional text is <c>""</c> when empty, <c>date</c> is <c>YYYY-MM-DD</c> and <c>time</c> is <c>HH:mm</c>.

@@ -411,7 +411,7 @@ public sealed class BookingService(
 
         return ToDto(booking, BookingMoney.Paid(payments), admin: true) with
         {
-            Payments = [.. payments.Select(ToPaymentDto)],
+            Payments = [.. payments.Select(PaymentDto.Of)],
             Emails = [.. emails.Select(EmailLogDto.Of)],
             Customer = customer is null ? null : new CustomerDto(customer.Id, customer.Name, customer.Email, customer.Phone ?? string.Empty, customer.Country ?? string.Empty),
         };
@@ -452,19 +452,6 @@ public sealed class BookingService(
             AdminNotes = admin ? b.AdminNotes ?? string.Empty : null,
         };
     }
-
-    private static PaymentDto ToPaymentDto(Payment p) => new(
-        p.Id,
-        p.BookingId,
-        p.Amount,
-        EnumWire.ToWire(p.Currency),
-        p.ExchangeRate,
-        p.AmountLkr,
-        EnumWire.ToWire(p.Method),
-        EnumWire.ToWire(p.Status),
-        BookingFormats.Date(p.PaidAt),
-        p.Notes ?? string.Empty,
-        p.CreatedAt);
 
     private static string? NullIfEmpty(string value) => value.Length == 0 ? null : value;
 }

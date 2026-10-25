@@ -4,6 +4,7 @@ using Microsoft.Extensions.DependencyInjection.Extensions;
 using TravelWebAPI.Application.Abstractions;
 using TravelWebAPI.Application.Contact;
 using TravelWebAPI.Application.Bookings;
+using TravelWebAPI.Application.Payments;
 using TravelWebAPI.Application.Content;
 using TravelWebAPI.Application.Rates;
 using TravelWebAPI.Application.Reviews;
@@ -43,7 +44,8 @@ public static class DependencyInjection
 
         services.AddScoped<IReviewRepository, ReviewRepository>();
         services.AddScoped<IBookingRepository, BookingRepository>();
-        services.AddScoped<IContactMessageRepository, ContactMessageRepository>();
+        services.AddScoped<IPaymentRepository, PaymentRepository>();
+        services.AddScoped<IContactMessageRepository,ContactMessageRepository>();
         services.AddScoped<IEmailLogRepository, EmailLogRepository>();
 
         services.AddScoped<IExchangeRateRepository, ExchangeRateRepository>();

@@ -103,6 +103,13 @@ If both free sources are unreachable, the last stored rates stay in use and a wa
 database the `ExchangeRates:Fallback` numbers are shown, marked `fallback`. Set `ExchangeRates:Enabled` to `false` to stop all
 outgoing requests.
 
+## Payments
+
+The admin records money received for a booking: `POST /api/bookings/{id}/payments`, `GET /api/payments`, `PUT /api/payments/{id}`
+and `DELETE /api/payments/{id}` (admin only). Each payment keeps the amount and currency it was paid in, the exchange rate
+of the day it was entered and the value in LKR, so later rate changes never alter it. Editing keeps the rate unless the
+currency changes. A booking's `paidLkr` and `balanceLkr` come from its payments on every read. There is no configuration.
+
 ## Test
 
 ```powershell
